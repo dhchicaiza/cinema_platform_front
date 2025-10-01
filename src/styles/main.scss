@@ -1,0 +1,20 @@
+// ============================================
+// MAIN SCSS - Cinema Platform
+// ============================================
+
+// Abstracts
+@import './abstracts/variables';
+@import './abstracts/mixins';
+
+// Base
+@import './base/reset';
+
+// Components (se irán agregando conforme se creen)
+// @import './components/button';
+// @import './components/card';
+// @import './components/form';
+
+// Layouts (se irán agregando conforme se creen)
+// @import './layouts/header';
+// @import './layouts/footer';
+// @import './layouts/grid';
