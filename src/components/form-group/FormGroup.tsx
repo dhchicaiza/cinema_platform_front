@@ -1,4 +1,5 @@
 import React from 'react'
+import './FormGroup.scss'
 
 const FormGroup: React.FC = (props: any) => {
   return (
