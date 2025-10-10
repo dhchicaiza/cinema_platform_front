@@ -1,0 +1,140 @@
+.login {
+    color: white;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 200px);
+    padding: 1rem;
+
+    &__container {
+        background: #2D3236;
+        border-radius: 20px;
+        padding: 2.5rem 2rem;
+        width: 90%;
+        max-width: 400px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        margin-top: 0.75rem;
+
+        // Tablet
+        @media (max-width: 768px) {
+            width: 95%;
+            padding: 2rem 1.5rem;
+            border-radius: 15px;
+        }
+
+        // Mobile
+        @media (max-width: 480px) {
+            width: 100%;
+            padding: 1.5rem 1rem;
+            border-radius: 10px;
+            margin-top: 0.5rem;
+        }
+    }
+
+    &__logo {
+        width: 150px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        overflow: hidden;
+
+        .logo__image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        // Mobile
+        @media (max-width: 480px) {
+            width: 120px;
+            height: 65px;
+            margin-bottom: 1rem;
+        }
+    }
+
+    &__back-link {
+        color: #4fc3f7;
+        text-decoration: none;
+        font-size: 0.9rem;
+        margin-bottom: 2rem;
+        display: inline-block;
+        transition: color 0.3s ease;
+
+        &:hover {
+            color: #29b6f6;
+        }
+
+        // Mobile
+        @media (max-width: 480px) {
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+        }
+    }
+
+    &__title {
+        font-size: 2.5rem;
+        font-weight: bold;
+        background: linear-gradient(90deg, #4fc3f7, #26c6da);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 2.5rem;
+
+        // Tablet
+        @media (max-width: 768px) {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        // Mobile
+        @media (max-width: 480px) {
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        // Small mobile
+        @media (max-width: 360px) {
+            font-size: 1.5rem;
+        }
+    }
+
+    &__form {
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+
+        // Mobile
+        @media (max-width: 480px) {
+            gap: 1rem;
+        }
+    }
+
+    // Landscape mobile
+    @media (max-height: 600px) and (orientation: landscape) {
+        min-height: auto;
+        padding: 0.5rem;
+
+        .login__container {
+            padding: 1rem;
+            margin-top: 0.25rem;
+        }
+
+        .login__logo {
+            width: 100px;
+            height: 55px;
+            margin-bottom: 0.5rem;
+        }
+
+        .login__title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+    }
+}
+

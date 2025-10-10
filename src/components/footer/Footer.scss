@@ -1,0 +1,27 @@
+.footer {
+  background-color: #2a2a2a;
+  padding: 1.5rem;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  border-top: 1px solid #3a3a3a;
+}
+.footer__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+.footer__text {
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 400;
+  text-align: center;
+  margin: 0;
+  
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+  }
+}

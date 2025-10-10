@@ -1,0 +1,11 @@
+.register {
+    min-height: 100vh;
+    background: #2E3338;
+    color: white;
+    font-family: 'Arial', sans-serif;
+    padding-top: 100px;
+    padding-bottom: 80px; // Espacio para el footer fijo
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

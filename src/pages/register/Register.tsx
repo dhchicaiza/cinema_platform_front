@@ -3,7 +3,12 @@ import './Register.scss'
 
 const Register: React.FC = () => {
   return (
-    <div>Register</div>
+    <section className="register">
+      <div className="register__container">
+        <h1 className="register__title">Crear Cuenta</h1>
+      </div>
+      
+    </section>
   )
 }
 
