@@ -62,7 +62,7 @@ const Login: React.FC = () => {
  
           <button type="submit" style={{ width: '60%', margin: '0 auto' }} className="btn btn--primary">Iniciar Sesión</button>
 
-          <a href="#" className="form__link">¿Olvidaste tu contraseña?</a>
+          <a href="/contraseña" className="form__link">¿Olvidaste tu contraseña?</a>
 
           <div className="form__divider"></div>
 

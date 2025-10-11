@@ -10,8 +10,11 @@ const FormGroup: React.FC = (props: any) => {
               id={props.id}
               className="form__input"
               placeholder={props.placeholder}
-              value={props.value}
+
+              value={props.value || ''}
               onChange={props.onChange}
+              readOnly={props.readOnly}
+              name={props.name}
             />
           </div>
   )

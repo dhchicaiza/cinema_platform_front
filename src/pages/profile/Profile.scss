@@ -1,0 +1,222 @@
+.profile {
+  background: #2E3338;
+  min-height: 100vh;
+  color: white;
+  font-family: 'Arial', sans-serif;
+  padding: 2rem;
+
+  &__container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  &__card {
+    background: #2E3338;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  }
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+  }
+
+  &__back {
+    background: none;
+    border: none;
+    color: #64b5f6;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.3s ease;
+
+    &:hover {
+      color: #90caf9;
+      transform: translateX(-2px);
+    }
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  &__info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  &__avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #8B5CF6, #26c6da);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: white;
+    margin: 0 0 0.5rem 0;
+  }
+
+  &__subtitle {
+    font-size: 0.9rem;
+    color: #9CA3AF;
+    margin: 0;
+  }
+
+  &__form {
+    margin-bottom: 2rem;
+  }
+
+  .form__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+  }
+
+  .form__group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .form__label {
+    font-size: 0.9rem;
+    color: #9CA3AF;
+    font-weight: 500;
+  }
+
+  .form__input {
+    padding: 0.8rem 1rem;
+    background: #4B5563;
+    border: 1px solid #8B5CF6;
+    border-radius: 8px;
+    color: #D1D5DB;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+
+    &:focus {
+      outline: none;
+      border-color: #9d4edd;
+      box-shadow: 0 0 0 3px rgba(157, 78, 221, 0.1);
+    }
+
+    &:disabled {
+      background: #374151;
+      border-color: #4B5563;
+      color: #9CA3AF;
+      cursor: not-allowed;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-start;
+
+    @media (max-width: 480px) {
+      flex-direction: column;
+    }
+  }
+}
+
+
+
+ .btn {
+   padding: 0.75rem 1.5rem;
+   border-radius: 8px;
+   text-decoration: none;
+   font-weight: 500;
+   font-size: 0.95rem;
+   transition: all 0.3s ease;
+   border: none;
+   cursor: pointer;
+
+   &--edit {
+     background: linear-gradient(90deg, #9d4edd, #26c6da);
+     color: #ffffff;
+     box-shadow: none;
+
+   }
+
+   &--save {
+    background: linear-gradient(90deg, #9d4edd, #26c6da);
+    color: #ffffff;
+     box-shadow: none;
+
+   }
+
+   &--cancel {
+     background: #33303B;
+     color: #ffffff;
+     border: none;
+     box-shadow: none;
+
+
+   }
+ }
+
+// Responsive design
+@media (max-width: 768px) {
+  .profile {
+    padding: 1rem;
+
+    &__header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    &__info {
+      width: 100%;
+    }
+
+    &__card {
+      padding: 1.5rem;
+    }
+  }
+
+  .back__button {
+    margin-right: 0;
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile {
+    &__title {
+      font-size: 1.5rem;
+    }
+
+    &__card {
+      padding: 1rem;
+    }
+
+    .form__row {
+      gap: 0.8rem;
+    }
+  }
+}
