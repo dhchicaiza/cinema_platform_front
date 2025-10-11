@@ -9,7 +9,7 @@ const Contraseña: React.FC = () => {
         <h1 className="contraseña__title">Actualiza tu contraseña</h1>
         <form className="contraseña__form">
           <FormGroup label="Correo Electrónico" type="email" id="email" placeholder="tu@gmail.com" />
-          <FormGroup label="Contraseña" type="password" id="password" placeholder="Mínimo 8 caracteres" />
+          <button type="submit" style={{ width: '60%', margin: '0 auto' }} className="btn btn--primary">Enviar</button>
         </form>
       </div>
     </section>

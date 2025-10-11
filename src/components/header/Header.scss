@@ -61,7 +61,112 @@
     gap: 1rem;
     align-items: center;
   }
+
+  &__user {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    position: relative;
+
+    .user__name {
+      color: #ffffff;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .user__dropdown {
+      position: relative;
+    }
+
+    .user__avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #8B5CF6, #26c6da);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 1rem;
+      box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+
+      &--button {
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+          transform: scale(1.1);
+          box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+        }
+
+        &:active {
+          transform: scale(0.95);
+        }
+      }
+    }
+
+    .dropdown__menu {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 0.5rem;
+      background: #374151;
+      border: 1px solid #4B5563;
+      border-radius: 8px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+      min-width: 150px;
+      overflow: hidden;
+      animation: dropdownFadeIn 0.2s ease-out;
+    }
+
+    .dropdown__item {
+      display: block;
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: none;
+      border: none;
+      color: #ffffff;
+      font-size: 0.9rem;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-bottom: 1px solid #4B5563;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &:hover {
+        background: #4B5563;
+        color: #ffffff;
+      }
+
+      &--logout {
+        color: #ef4444;
+
+        &:hover {
+          background: #ef4444;
+          color: #ffffff;
+        }
+      }
+    }
+  }
 }
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 
 .btn {
   padding: 0.75rem 1.5rem;
