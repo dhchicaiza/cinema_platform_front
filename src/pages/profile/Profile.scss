@@ -11,7 +11,7 @@
   }
 
   &__card {
-    background: #374151;
+    background: #2E3338;
     border-radius: 15px;
     padding: 2rem;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
@@ -22,6 +22,25 @@
     align-items: flex-start;
     justify-content: space-between;
     margin-bottom: 2rem;
+  }
+
+  &__back {
+    background: none;
+    border: none;
+    color: #64b5f6;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.3s ease;
+
+    &:hover {
+      color: #90caf9;
+      transform: translateX(-2px);
+    }
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
   }
 
   &__info {
@@ -124,68 +143,41 @@
   }
 }
 
-.back__button {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 1.5rem;
-  cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 50%;
-  transition: all 0.3s ease;
-  margin-right: 1rem;
 
-  &:hover {
-    background: #4B5563;
-    transform: scale(1.1);
-  }
-}
 
-.btn {
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 0.95rem;
-  transition: all 0.3s ease;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+ .btn {
+   padding: 0.75rem 1.5rem;
+   border-radius: 8px;
+   text-decoration: none;
+   font-weight: 500;
+   font-size: 0.95rem;
+   transition: all 0.3s ease;
+   border: none;
+   cursor: pointer;
 
-  &--edit {
+   &--edit {
+     background: linear-gradient(90deg, #9d4edd, #26c6da);
+     color: #ffffff;
+     box-shadow: none;
+
+   }
+
+   &--save {
     background: linear-gradient(90deg, #9d4edd, #26c6da);
-    color: #fff;
-    box-shadow: 0 4px 15px rgba(157, 78, 221, 0.3);
+    color: #ffffff;
+     box-shadow: none;
 
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(157, 78, 221, 0.4);
-    }
-  }
+   }
 
-  &--save {
-    background: linear-gradient(90deg, #9d4edd, #26c6da);
-    color: #fff;
-    box-shadow: 0 4px 15px rgba(157, 78, 221, 0.3);
+   &--cancel {
+     background: #33303B;
+     color: #ffffff;
+     border: none;
+     box-shadow: none;
 
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(157, 78, 221, 0.4);
-    }
-  }
 
-  &--cancel {
-    background: #4B5563;
-    color: #fff;
-    border: 1px solid #6B7280;
-
-    &:hover {
-      background: #5A6573;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    }
-  }
-}
+   }
+ }
 
 // Responsive design
 @media (max-width: 768px) {

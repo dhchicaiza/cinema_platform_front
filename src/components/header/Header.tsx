@@ -62,13 +62,19 @@ const Header: React.FC = () => {
         setIsMenuOpen(!isMenuOpen)
     }
 
+    const handleViewProfile = () => {
+        window.location.href = '/profile'
+    }
+
+    const handleLogout = () => {
+        window.location.href = '/login'
+    }
+
     // Páginas que deben mostrar botones de login/register
     const showLoginButtons = ['/', '/login', '/register'].includes(currentPage)
     console.log('¿Mostrar botones de login?', showLoginButtons, 'Página actual:', currentPage)
     
-    // Debug: mostrar siempre el usuario en catálogo
-    const isCatalog = currentPage === '/catalog'
-    console.log('¿Es catálogo?', isCatalog)
+
 
     
   return (
@@ -105,10 +111,17 @@ const Header: React.FC = () => {
                             
                             {isMenuOpen && (
                                 <div className="dropdown__menu">
-                                    <button className="dropdown__item">
+                                    <button 
+                                        className="dropdown__item"
+                                        onClick={handleViewProfile}
+                                    >
                                         Ver Perfil
                                     </button>
-                                    <button className="dropdown__item dropdown__item--logout">
+                                    <button 
+                                        className="dropdown__item dropdown__item--logout"
+                                        onClick={handleLogout}
+                                        title="Cerrar Sesión"
+                                    >
                                         Cerrar Sesión
                                     </button>
                                 </div>
