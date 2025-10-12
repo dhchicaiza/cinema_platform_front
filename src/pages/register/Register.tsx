@@ -3,6 +3,7 @@ import './Register.scss'
 import FormGroup from '../../components/form-group/FormGroup'
 import { ROUTES } from '../../constants'
 import { useNavigate } from 'react-router'
+import Alert from '../../components/alert/Alert'
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
@@ -12,10 +13,11 @@ const Register: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState<string | null>(null);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertType, setAlertType] = useState<'success' | 'error' | 'info'>('success');
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
           e.preventDefault();
-          setError(null);
   
           console.log('Datos que se enviarán al backend:', { email, password, firstName,lastName,confirmPassword,age });
   
@@ -31,23 +33,40 @@ const Register: React.FC = () => {
               });
   
               const data = await response.json();
-              navigate(ROUTES.LOGIN);
-  
+
               if (!response.ok) {
-                  throw new Error(data.message || 'Credenciales incorrectas. Por favor, intenta de nuevo.');
+                  throw new Error(data.message || 'Error al crear la cuenta. Por favor, intenta de nuevo.');
               }
               
-             
+              // Mostrar alerta de éxito
+              setAlertType('success');
+              setAlertMessage('¡Cuenta creada exitosamente! Ahora puedes iniciar sesión.');
+              setShowAlert(true);
+              
+              // Navegar después de mostrar la alerta
+              setTimeout(() => {
+                  navigate(ROUTES.LOGIN);
+              }, 1500);
+              
               if (data.data.token) {
                   localStorage.setItem('authToken', data.data.token); 
               }
-  
+
           } catch (err: any) {
-              setError(err.message);
+              setAlertType('error');
+              setAlertMessage(err.message || 'Error al crear la cuenta. Verifica los datos ingresados.');
+              setShowAlert(true);
           }
       };
   return (
     <section className="register">
+      {showAlert && (
+        <Alert 
+          message={alertMessage} 
+          type={alertType}
+          onClose={() => setShowAlert(false)} 
+        />
+      )}
       <div className="register__container">
         <h1 className="register__title">Crear Cuenta</h1>
 

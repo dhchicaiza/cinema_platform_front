@@ -3,7 +3,7 @@ import './Login.scss'
 import { ROUTES } from '../../constants';
 import { useNavigate } from 'react-router';
 import useUserStore from '../../stores/useUserStores'; 
-
+import Alert from '../../components/alert/Alert';
 import FormGroup from '../../components/form-group/FormGroup';
 
 const Login: React.FC = () => {
@@ -11,10 +11,11 @@ const Login: React.FC = () => {
   const setUser = useUserStore((state) => state.setUser); 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState<string | null>(null);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertType, setAlertType] = useState<'success' | 'error' | 'info'>('success');
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setError(null);
 
         console.log('Datos que se enviarán al backend:', { email, password });
 
@@ -39,15 +40,33 @@ const Login: React.FC = () => {
             if (data.data.token) {
                 localStorage.setItem('authToken', data.data.token);
                 setUser(data.data.user);
-                navigate(ROUTES.CATALOG); 
+                
+                // Mostrar alerta de éxito
+                setAlertType('success');
+                setAlertMessage('¡Bienvenido! Has iniciado sesión exitosamente.');
+                setShowAlert(true);
+                
+                // Navegar después de mostrar la alerta
+                setTimeout(() => {
+                    navigate(ROUTES.CATALOG);
+                }, 1500);
             }
 
         } catch (err: any) {
-            setError(err.message);
+            setAlertType('error');
+            setAlertMessage(err.message || 'Error al iniciar sesión. Verifica tus credenciales.');
+            setShowAlert(true);
         }
     };
   return (
     <section className="login">
+      {showAlert && (
+        <Alert 
+          message={alertMessage} 
+          type={alertType}
+          onClose={() => setShowAlert(false)} 
+        />
+      )}
       <div className="login__container">
         <div className="login__logo">
           <img src="/logo.png" alt="Logo" className="logo__image" />

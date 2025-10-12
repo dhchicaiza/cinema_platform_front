@@ -2,12 +2,18 @@ import React, { useState } from 'react'
 import './Profile.scss'
 import FormGroup from '../../components/form-group/FormGroup'
 import useUserStore from '../../stores/useUserStores'
+import Alert from '../../components/alert/Alert'
+import { useNavigate } from 'react-router-dom'
+import { ROUTES } from '../../constants'
 
 const Profile: React.FC = () => {
   const { user } = useUserStore()
+  const navigate = useNavigate()
   const [isEditing, setIsEditing] = useState(false)
   const setUser = useUserStore((state) => state.setUser); 
-  const [error, setError] = useState<string | null>(null);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertType, setAlertType] = useState<'success' | 'error' | 'info'>('success');
   const [formData, setFormData] = useState({
     firstName: user?.firstName || 'Laura',
     lastName: user?.lastName ||'Salazar',
@@ -28,13 +34,21 @@ const Profile: React.FC = () => {
   }
 
   const handleBack = () => {
-    window.history.back()
+    // Si el usuario está logueado, ir al catalog
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      navigate(ROUTES.CATALOG);
+    } else {
+      window.history.back();
+    }
   }
 
   const handleSave = async () => {
         const token = localStorage.getItem('authToken');
         if (!token) {
-            setError("No estás autenticado. Por favor, inicia sesión de nuevo.");
+            setAlertType('error');
+            setAlertMessage("No estás autenticado. Por favor, inicia sesión de nuevo.");
+            setShowAlert(true);
             return;
         }
 
@@ -65,8 +79,15 @@ const Profile: React.FC = () => {
             
             setIsEditing(false); 
             
+            // Mostrar alerta de éxito
+            setAlertType('success');
+            setAlertMessage('¡Tus cambios se han guardado exitosamente!');
+            setShowAlert(true);
+            
         } catch (err: any) {
-            setError(err.message);
+            setAlertType('error');
+            setAlertMessage(err.message || 'Ocurrió un error al guardar los cambios.');
+            setShowAlert(true);
         }
     };
 
@@ -83,6 +104,13 @@ const Profile: React.FC = () => {
  
   return (
     <section className="profile">
+      {showAlert && (
+        <Alert 
+          message={alertMessage} 
+          type={alertType}
+          onClose={() => setShowAlert(false)} 
+        />
+      )}
       <div className="profile__container">
         <div className="profile__card">
           {/* Header del perfil */}

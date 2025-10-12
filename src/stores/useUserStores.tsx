@@ -10,7 +10,7 @@ interface User {
 
 type Store = {
     user: User | null
-    setUser: (user: User) => void
+    setUser: (user: User | null) => void
 }
 
 const useUserStore = create<Store>()(
@@ -21,7 +21,7 @@ const useUserStore = create<Store>()(
             //email: 'laura@example.com',
             //age: 25
         //}, // Usuario de prueba para mostrar la funcionalidad
-        setUser: (user: User) =>{
+        setUser: (user: User | null) =>{
             console.log('Store está siendo actualizado con:', user);
             set(
             {

@@ -1,15 +1,22 @@
 import React from 'react'
 import './TeamCard.scss'
 
-const TeamCard: React.FC = (props: any) => {
+interface TeamCardProps {
+    initials: string
+    name: string
+    role: string
+    roleSpanish: string
+}
+
+const TeamCard: React.FC<TeamCardProps> = ({ initials, name, role, roleSpanish }) => {
     return (
         <div className="team__card">
             <div className="team__avatar">
-                <span className="avatar__initials">{props.initials}</span>
+                <span className="avatar__initials">{initials}</span>
             </div>
-            <h3 className="team__name">{props.name}</h3>
-            <p className="team__role">{props.role}</p>
-            <p className="team__role--spanish">{props.roleSpanish}</p>
+            <h3 className="team__name">{name}</h3>
+            <p className="team__role">{role}</p>
+            <p className="team__role--spanish">{roleSpanish}</p>
         </div>
     )
 }

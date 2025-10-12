@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-// Importa las herramientas de React Router
 import { Link, useNavigate } from 'react-router-dom'; 
 import './Header.scss';
 import useUserStore from '../../stores/useUserStores';
+import ConfirmAlert from '../alert/ConfirmAlert';
 
 const Header: React.FC = () => {
     // Obtiene el usuario para saber si alguien ha iniciado sesión
@@ -11,21 +11,39 @@ const Header: React.FC = () => {
 
     const navigate = useNavigate();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
     const handleLogout = () => {
         setIsMenuOpen(false);
+        setShowLogoutConfirm(true);
+    };
+
+    const confirmLogout = () => {
         localStorage.removeItem('authToken');
-        setUser(null);
-        navigate('/login'); // Navega sin recargar la página
+        setUser(null as any);
+        setShowLogoutConfirm(false);
+        navigate('/login');
+    };
+
+    const cancelLogout = () => {
+        setShowLogoutConfirm(false);
     };
 
     return (
         <header className="header">
+            {showLogoutConfirm && (
+                <ConfirmAlert 
+                    message="¿Estás seguro de que quieres cerrar sesión?"
+                    type="warning"
+                    onConfirm={confirmLogout}
+                    onCancel={cancelLogout}
+                />
+            )}
             <div className="header__container">
                 
                 {/* 👇 1. LOGO RESTAURADO 👇 */}
                 <div className="header__logo">
-                    <Link to="/"> 
+                    <Link to={user ? "/catalog" : "/"}> 
                         <span className="logo__cine">Cine</span>
                         <span className="logo__platform">Platform</span>
                     </Link>
