@@ -42,7 +42,6 @@
       height: 24px;
     }
   }
-
   &__info {
     display: flex;
     align-items: center;
@@ -172,6 +171,14 @@
    &--cancel {
      background: #33303B;
      color: #ffffff;
+     border: none;
+     box-shadow: none;
+
+   }
+
+   &--delete {
+     background: #b5a2ca;
+     color: #000000;
      border: none;
      box-shadow: none;
 

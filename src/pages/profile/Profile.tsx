@@ -79,7 +79,6 @@ const Profile: React.FC = () => {
             
             setIsEditing(false); 
             
-            // Mostrar alerta de éxito
             setAlertType('success');
             setAlertMessage('¡Tus cambios se han guardado exitosamente!');
             setShowAlert(true);
@@ -90,6 +89,18 @@ const Profile: React.FC = () => {
             setShowAlert(true);
         }
     };
+
+  const handleDelete = async () => {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      setAlertType('error');
+      setAlertMessage("No estás autenticado. Por favor, inicia sesión de nuevo.");
+      setShowAlert(true);
+      return;
+    }
+  }
+  
+  
 
   const handleCancel = () => {
     setFormData({
@@ -192,6 +203,15 @@ const Profile: React.FC = () => {
                   readOnly={!isEditing}
                 />
               </div>
+              <div className="form__column">
+                <FormGroup
+                  label="Contraseña"
+                  type="password"
+                  id="password"
+                  name="password"
+                  placeholder="Contraseña"
+                />
+              </div>
             </div>
           </div>
 
@@ -203,6 +223,14 @@ const Profile: React.FC = () => {
             >
               Guardar Cambios
             </button>
+
+            <button
+              className="btn btn--delete"
+              onClick={handleDelete}
+            >
+              Eliminar Cuenta
+            </button>
+
             <button 
               className="btn btn--cancel"
               onClick={handleCancel}
