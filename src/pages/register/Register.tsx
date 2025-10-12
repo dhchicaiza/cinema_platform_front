@@ -37,10 +37,9 @@ const Register: React.FC = () => {
                   throw new Error(data.message || 'Credenciales incorrectas. Por favor, intenta de nuevo.');
               }
               
-              // Si el login es exitoso, el backend debería devolver un token
+             
               if (data.data.token) {
-                  localStorage.setItem('authToken', data.data.token); // Guardar el token
-                   // Redirigir al usuario
+                  localStorage.setItem('authToken', data.data.token); 
               }
   
           } catch (err: any) {

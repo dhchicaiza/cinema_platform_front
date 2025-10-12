@@ -32,9 +32,6 @@ const Profile: React.FC = () => {
   }
 
   const handleSave = async () => {
-        //setError(null); // Limpia errores anteriores
-
-        // a) Obtén el token del almacenamiento local
         const token = localStorage.getItem('authToken');
         if (!token) {
             setError("No estás autenticado. Por favor, inicia sesión de nuevo.");
@@ -63,10 +60,10 @@ const Profile: React.FC = () => {
                 throw new Error(data.message || 'No se pudo actualizar el perfil.');
             }
             
-            // e) ¡Éxito! Actualiza el store de Zustand con los nuevos datos
+            
             setUser(data.data.user);
             
-            setIsEditing(false); // Sal del modo edición
+            setIsEditing(false); 
             
         } catch (err: any) {
             setError(err.message);

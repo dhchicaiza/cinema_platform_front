@@ -4,15 +4,14 @@ import FormGroup from '../../components/form-group/FormGroup';
 
 const Contraseña: React.FC = () => {
     const [email, setEmail] = useState('');
-    const [message, setMessage] = useState(''); // Para mensajes de éxito
-    const [error, setError] = useState('');     // Para mensajes de error
+    const [message, setMessage] = useState(''); 
+    const [error, setError] = useState('');     
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault(); // Evita que la página se recargue
+        e.preventDefault(); 
         setError('');
         setMessage('');
 
-        // Reemplaza esta URL con el endpoint de tu backend para recuperar contraseña
         const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/auth/forgot-password`;
 
         try {
@@ -30,7 +29,7 @@ const Contraseña: React.FC = () => {
                 throw new Error(data.message || 'No se pudo procesar la solicitud.');
             }
 
-            // Si todo sale bien, muestra el mensaje de éxito del backend
+           
             setMessage(data.message);
 
         } catch (err: any) {
