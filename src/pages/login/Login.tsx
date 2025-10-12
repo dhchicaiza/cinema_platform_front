@@ -2,11 +2,13 @@ import React, { useState } from 'react'
 import './Login.scss'
 import { ROUTES } from '../../constants';
 import { useNavigate } from 'react-router';
+import useUserStore from '../../stores/useUserStores'; 
 
 import FormGroup from '../../components/form-group/FormGroup';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
+  const setUser = useUserStore((state) => state.setUser); 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -33,10 +35,11 @@ const Login: React.FC = () => {
                 throw new Error(data.message || 'Credenciales incorrectas. Por favor, intenta de nuevo.');
             }
             
-            // Si el login es exitoso, el backend debería devolver un token
-            if (data.token) {
-                localStorage.setItem('authToken', data.token); // Guardar el token
-                navigate(ROUTES.CATALOG); // Redirigir al usuario
+          console.log('Datos que llegan al backend:', data);  
+            if (data.data.token) {
+                localStorage.setItem('authToken', data.data.token);
+                setUser(data.data.user);
+                navigate(ROUTES.CATALOG); 
             }
 
         } catch (err: any) {

@@ -1,139 +1,80 @@
-import React, { useEffect, useState } from 'react'
-import './Header.scss'
-import useUserStore from '../../stores/useUserStores'
-
+import React, { useState } from 'react';
+// Importa las herramientas de React Router
+import { Link, useNavigate } from 'react-router-dom'; 
+import './Header.scss';
+import useUserStore from '../../stores/useUserStores';
 
 const Header: React.FC = () => {
-    const { user } = useUserStore()
-    const [isMenuOpen, setIsMenuOpen] = useState(false)
-    // Inicializar con la página actual
-    const [currentPage, setCurrentPage] = useState(window.location.pathname)
+    // Obtiene el usuario para saber si alguien ha iniciado sesión
+    const user = useUserStore((state) => state.user);
+    const setUser = useUserStore((state) => state.setUser);
 
-    useEffect(() => {
-        console.log('Usuario actual:', user)
-        console.log('Página actual:', currentPage)
-    }, [user, currentPage])
-
-    // Actualizar la página cuando cambie la URL
-    useEffect(() => {
-        const updateCurrentPage = () => {
-            const path = window.location.pathname
-            console.log('Cambio de página detectado:', path)
-            setCurrentPage(path)
-        }
-
-        // Actualizar inmediatamente
-        updateCurrentPage()
-
-        // Escuchar cambios en la URL (para navegación SPA)
-        window.addEventListener('popstate', updateCurrentPage)
-        
-        // También escuchar cambios cuando se hace clic en enlaces
-        const handleLinkClick = () => {
-            // Pequeño delay para asegurar que la URL haya cambiado
-            setTimeout(updateCurrentPage, 100)
-        }
-        
-        // Escuchar clics en enlaces
-        document.addEventListener('click', (e) => {
-            const target = e.target as HTMLElement
-            if (target.tagName === 'A' || target.closest('a')) {
-                handleLinkClick()
-            }
-        })
-
-        // Verificar cambios de URL periódicamente (fallback)
-        const intervalId = setInterval(() => {
-            const newPath = window.location.pathname
-            if (newPath !== currentPage) {
-                console.log('URL cambió detectado por interval:', newPath)
-                setCurrentPage(newPath)
-            }
-        }, 500)
-        
-        return () => {
-            window.removeEventListener('popstate', updateCurrentPage)
-            document.removeEventListener('click', handleLinkClick)
-            clearInterval(intervalId)
-        }
-    }, [])
-
-    const handleAvatarClick = () => {
-        setIsMenuOpen(!isMenuOpen)
-    }
-
-    const handleViewProfile = () => {
-        window.location.href = '/profile'
-    }
+    const navigate = useNavigate();
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const handleLogout = () => {
-        window.location.href = '/login'
-    }
+        setIsMenuOpen(false);
+        localStorage.removeItem('authToken');
+        setUser(null);
+        navigate('/login'); // Navega sin recargar la página
+    };
 
-    // Páginas que deben mostrar botones de login/register
-    const showLoginButtons = ['/', '/login', '/register'].includes(currentPage)
-    console.log('¿Mostrar botones de login?', showLoginButtons, 'Página actual:', currentPage)
-    
-
-
-    
-  return (
-    <header className="header">
-        <div className="header__container">
-            <div className="header__logo">
-                <a href="/">
-                <span className="logo__cine">Cine</span>
-                <span className="logo__platform">Platform</span>
-                </a>
-            </div>
-            <nav className="header__nav">
-                <a href="/" className="nav__link">Inicio</a>
-                <a href="/#equipo" className="nav__link">Sobre nosotros</a>
-                <a href="/mapa-del-sitio" className="nav__link">Mapa del sitio</a>
-            </nav>
-            {
-                (currentPage === '/' || currentPage === '/login' || currentPage === '/register') ? (
+    return (
+        <header className="header">
+            <div className="header__container">
+                
+                {/* 👇 1. LOGO RESTAURADO 👇 */}
+                <div className="header__logo">
+                    <Link to="/"> 
+                        <span className="logo__cine">Cine</span>
+                        <span className="logo__platform">Platform</span>
+                    </Link>
+                </div>
+                
+                {/* 👇 2. NAVEGACIÓN RESTAURADA 👇 */}
+                <nav className="header__nav">
+                    <Link to="/" className="nav__link">Inicio</Link>
+                    {/* Para anclas en la misma página, <a> está bien si no usas routing para ello */}
+                    <Link to="/#equipo" className="nav__link">Sobre nosotros</Link>
+                    <Link to="/mapa-del-sitio" className="nav__link">Mapa del sitio</Link>
+                </nav>
+                
+                {/* 👇 3. LÓGICA CORRECTA BASADA EN EL USUARIO 👇 */}
+                {/* Si NO hay usuario (user es null), muestra los botones de login */}
+                {!user ? (
                     <div className="header__actions">
-                        <a href="/login" className="btn btn--login">Iniciar Sesión</a>
-                        <a href="/register" className="btn btn--register">Crea una Cuenta</a>
+                        <Link to="/login" className="btn btn--login">Iniciar Sesión</Link>
+                        <Link to="/register" className="btn btn--register">Crea una Cuenta</Link>
                     </div>
                 ) : (
+                    // Si SÍ hay usuario, muestra el menú de usuario
                     <div className="header__user">
-                        <span className="user__name">{user?.name || 'Laura'}</span>
+                        <span className="user__name">{user.firstName}</span>
                         <div className="user__dropdown">
                             <button 
                                 className="user__avatar user__avatar--button"
-                                onClick={handleAvatarClick}
+                                onClick={() => setIsMenuOpen(!isMenuOpen)}
                                 title="Menú de usuario"
                             >
-                                <span>{(user?.name || 'Laura')?.charAt(0).toUpperCase()}</span>
+                                <span>{user.firstName?.charAt(0).toUpperCase()}</span>
                             </button>
                             
                             {isMenuOpen && (
                                 <div className="dropdown__menu">
-                                    <button 
-                                        className="dropdown__item"
-                                        onClick={handleViewProfile}
-                                    >
+                                    <Link to="/profile" className="dropdown__item" onClick={() => setIsMenuOpen(false)}>
                                         Ver Perfil
-                                    </button>
-                                    <button 
-                                        className="dropdown__item dropdown__item--logout"
-                                        onClick={handleLogout}
-                                        title="Cerrar Sesión"
-                                    >
+                                    </Link>
+                                    <button className="dropdown__item dropdown__item--logout" onClick={handleLogout}>
                                         Cerrar Sesión
                                     </button>
                                 </div>
                             )}
                         </div>
                     </div>
-                )
-            }
-        </div>
-    </header>
-    
-  )
-}
+                )}
+            </div>
+        </header>
+    );
+};
 
-export default Header
+export default Header;

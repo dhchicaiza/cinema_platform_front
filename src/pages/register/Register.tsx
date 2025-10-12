@@ -31,15 +31,16 @@ const Register: React.FC = () => {
               });
   
               const data = await response.json();
+              navigate(ROUTES.LOGIN);
   
               if (!response.ok) {
                   throw new Error(data.message || 'Credenciales incorrectas. Por favor, intenta de nuevo.');
               }
               
               // Si el login es exitoso, el backend debería devolver un token
-              if (data.token) {
-                  localStorage.setItem('authToken', data.token); // Guardar el token
-                  navigate(ROUTES.CATALOG); // Redirigir al usuario
+              if (data.data.token) {
+                  localStorage.setItem('authToken', data.data.token); // Guardar el token
+                   // Redirigir al usuario
               }
   
           } catch (err: any) {

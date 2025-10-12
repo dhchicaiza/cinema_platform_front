@@ -1,19 +1,70 @@
-import React from 'react'
-import './Contraseña.scss'
-import FormGroup from '../../components/form-group/FormGroup'
+import React, { useState } from 'react';
+import './Contraseña.scss';
+import FormGroup from '../../components/form-group/FormGroup';
 
 const Contraseña: React.FC = () => {
-  return (
-    <section className="contraseña">
-      <div className="contraseña__container">
-        <h1 className="contraseña__title">Actualiza tu contraseña</h1>
-        <form className="contraseña__form">
-          <FormGroup label="Correo Electrónico" type="email" id="email" placeholder="tu@gmail.com" />
-          <button type="submit" style={{ width: '60%', margin: '0 auto' }} className="btn btn--primary">Enviar</button>
-        </form>
-      </div>
-    </section>
-  )
-}
+    const [email, setEmail] = useState('');
+    const [message, setMessage] = useState(''); // Para mensajes de éxito
+    const [error, setError] = useState('');     // Para mensajes de error
 
-export default Contraseña
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault(); // Evita que la página se recargue
+        setError('');
+        setMessage('');
+
+        // Reemplaza esta URL con el endpoint de tu backend para recuperar contraseña
+        const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/auth/forgot-password`;
+
+        try {
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email }),
+            });
+
+            const data = await response.json();
+            console.log("datos que vienen del back", data)
+            if (!response.ok) {
+                throw new Error(data.message || 'No se pudo procesar la solicitud.');
+            }
+
+            // Si todo sale bien, muestra el mensaje de éxito del backend
+            setMessage(data.message);
+
+        } catch (err: any) {
+            setError(err.message);
+        }
+    };
+
+    return (
+        <section className="contraseña">
+            <div className="contraseña__container">
+                <h1 className="contraseña__title">Recupera tu contraseña</h1>
+                <p className="contraseña__subtitle">Ingresa tu correo y te enviaremos un enlace para restablecer tu contraseña.</p>
+                
+                <form className="contraseña__form" onSubmit={handleSubmit}>
+                    <FormGroup 
+                        label="Correo Electrónico" 
+                        type="email" 
+                        id="email" 
+                        placeholder="tu@gmail.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+
+                    {/* Muestra mensajes de éxito o error */}
+                    {message && <p className="form-message success">{message}</p>}
+                    {error && <p className="form-message error">{error}</p>}
+
+                    <button type="submit" style={{ width: '60%', margin: '1rem auto' }} className="btn btn--primary">
+                        Enviar Enlace de Recuperación
+                    </button>
+                </form>
+            </div>
+        </section>
+    );
+};
+
+export default Contraseña;

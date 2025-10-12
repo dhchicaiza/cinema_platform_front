@@ -6,9 +6,11 @@ import useUserStore from '../../stores/useUserStores'
 const Profile: React.FC = () => {
   const { user } = useUserStore()
   const [isEditing, setIsEditing] = useState(false)
+  const setUser = useUserStore((state) => state.setUser); 
+  const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
-    name: user?.name || 'Laura',
-    lastName: 'Salazar',
+    firstName: user?.firstName || 'Laura',
+    lastName: user?.lastName ||'Salazar',
     email: user?.email || 'laura@gmail.com',
     age: user?.age || 25
   })
@@ -29,16 +31,51 @@ const Profile: React.FC = () => {
     window.history.back()
   }
 
-  const handleSave = () => {
-    // Aquí podrías guardar los datos
-    console.log('Guardando datos:', formData)
-    setIsEditing(false)
-  }
+  const handleSave = async () => {
+        //setError(null); // Limpia errores anteriores
+
+        // a) Obtén el token del almacenamiento local
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            setError("No estás autenticado. Por favor, inicia sesión de nuevo.");
+            return;
+        }
+
+        const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/auth/profile`;
+
+        try {
+            const response = await fetch(API_URL, {
+                method: 'PUT', 
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` 
+                },
+                body: JSON.stringify({
+                    ...formData,
+                    age: parseInt(String(formData.age), 10) 
+                }),
+            });
+            console.log("datos que se envian desde el front: ", formData)
+            const data = await response.json();
+            console.log('Respuesta del backend al actualizar perfil:', data);
+
+            if (!response.ok) {
+                throw new Error(data.message || 'No se pudo actualizar el perfil.');
+            }
+            
+            // e) ¡Éxito! Actualiza el store de Zustand con los nuevos datos
+            setUser(data.data.user);
+            
+            setIsEditing(false); // Sal del modo edición
+            
+        } catch (err: any) {
+            setError(err.message);
+        }
+    };
 
   const handleCancel = () => {
-    // Restaurar datos originales
     setFormData({
-      name: user?.name || 'Laura',
+      firstName: user?.firstName || 'Laura',
       lastName: 'Salazar',
       email: user?.email || 'laura@gmail.com',
       age: user?.age || 25
@@ -84,9 +121,9 @@ const Profile: React.FC = () => {
                   label="Nombre"
                   type="text"
                   id="name"
-                  name="name"
+                  name="firstName"
                   placeholder="Nombre"
-                  value={formData.name}
+                  value={formData.firstName}
                   onChange={handleInputChange}
                   readOnly={!isEditing}
                 />
