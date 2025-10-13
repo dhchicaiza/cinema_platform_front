@@ -111,7 +111,6 @@ const Profile: React.FC = () => {
     setShowPasswordModal(true);
   }
   
-  // En tu componente Profile.tsx
 
 const handleConfirmPasswordChange = async () => {
     
@@ -225,11 +224,9 @@ const handleConfirmDelete = async () => {
         navigate(ROUTES.LOGIN);
 
     } catch (err: any) {
-        // 5. Si falla, muestra un error específico
         setAlertType('error');
         setAlertMessage(err.message);
         setShowAlert(true);
-        // Opcional: limpiar solo el campo de la contraseña para que el usuario reintente
         setDeletePassword('');
     }
 };
