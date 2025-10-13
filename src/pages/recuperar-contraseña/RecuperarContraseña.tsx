@@ -44,11 +44,12 @@ const RecuperarContraseña: React.FC = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ token, newPassword }),
+        body: JSON.stringify({ token, newPassword, confirmPassword }),
+        
       })
-
+      console.log("esto es el body ",JSON.stringify({ token, newPassword, confirmPassword }))
       const data = await response.json()
-
+      console.log("datos que vienen del back ",data)
       if (!response.ok) {
         throw new Error(data.message || 'Error al restablecer la contraseña.')
       }

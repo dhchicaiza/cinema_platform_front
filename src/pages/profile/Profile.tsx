@@ -133,7 +133,7 @@ const Profile: React.FC = () => {
             </button>
             
             <div className="profile__avatar">
-              <span className="avatar__initials">LS</span>
+              <span>{user.firstName?.charAt(0).toUpperCase()}</span>
             </div>
             
             <div className="profile__title-section">

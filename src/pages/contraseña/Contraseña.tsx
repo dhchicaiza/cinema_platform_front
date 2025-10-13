@@ -25,7 +25,7 @@ const Contraseña: React.FC = () => {
       })
 
       const data = await response.json()
-
+      console.log("datos que vienen del back ",data)
       if (!response.ok) {
         throw new Error(data.message || 'Error al enviar el correo de recuperación.')
       }
