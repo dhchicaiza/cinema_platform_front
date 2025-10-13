@@ -111,40 +111,128 @@ const Profile: React.FC = () => {
     setShowPasswordModal(true);
   }
   
-  const handleConfirmPasswordChange = () => {
-    // Aquí iría la lógica para cambiar la contraseña
-    setAlertType('success');
-    setAlertMessage('¡Contraseña actualizada exitosamente!');
-    setShowAlert(true);
-    setShowPasswordModal(false);
+  // En tu componente Profile.tsx
+
+const handleConfirmPasswordChange = async () => {
     
-    // Limpiar campos
-    setCurrentPassword('');
-    setNewPassword('');
-    setConfirmNewPassword('');
-  }
-  
+    if (newPassword !== confirmNewPassword) {
+        setAlertType('error');
+        setAlertMessage('La nueva contraseña y su confirmación no coinciden.');
+        setShowAlert(true);
+        return; 
+    }
+
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+        setAlertType('error');
+        setAlertMessage("No estás autenticado. Por favor, inicia sesión de nuevo.");
+        setShowAlert(true);
+        return;
+    }
+
+    const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/auth/change-password`;
+
+    try {
+        const response = await fetch(API_URL, {
+            method: 'POST', 
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            
+            body: JSON.stringify({
+                currentPassword: currentPassword,
+                newPassword: newPassword,
+                confirmPassword: confirmNewPassword
+            }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            
+            throw new Error(data.message || 'No se pudo cambiar la contraseña.');
+        }
+        
+        
+        setAlertType('success');
+        setAlertMessage('¡Contraseña actualizada exitosamente!');
+        setShowAlert(true);
+        setShowPasswordModal(false); 
+        
+        
+        setCurrentPassword('');
+        setNewPassword('');
+        setConfirmNewPassword('');
+
+    } catch (err: any) {
+        
+        setAlertType('error');
+        
+        setAlertMessage(err.message || 'Ocurrió un error al guardar los cambios.');
+        setShowAlert(true);
+    }
+};
   const handleCancelPasswordChange = () => {
     setShowPasswordModal(false);
     setCurrentPassword('');
     setNewPassword('');
     setConfirmNewPassword('');
   }
-  
-  const handleConfirmDelete = () => {
-    // Aquí iría la lógica para eliminar la cuenta
-    setShowDeleteModal(false);
-    
-    // Mostrar alerta de éxito
-    setAlertType('success');
-    setAlertMessage('¡Cuenta eliminada exitosamente!');
-    setShowAlert(true);
-    
-    // Navegar al login después de mostrar la alerta
-    setTimeout(() => {
-      navigate(ROUTES.LOGIN);
-    }, 2000);
-  }
+
+const handleConfirmDelete = async () => {
+    // 1. Validar que el campo de contraseña no esté vacío
+    if (!deletePassword) {
+        setAlertType('error');
+        setAlertMessage('Por favor, ingresa tu contraseña para confirmar.');
+        setShowAlert(true);
+        return;
+    }
+
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+        setAlertType('error');
+        setAlertMessage("No se encontró tu sesión. Por favor, inicia sesión de nuevo.");
+        setShowAlert(true);
+        return;
+    }
+
+    const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/auth/account`;
+
+    try {
+        const response = await fetch(API_URL, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ password: deletePassword })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message || 'No se pudo eliminar la cuenta.');
+        }
+
+        setShowDeleteModal(false); 
+        setAlertType('success');
+        setAlertMessage('¡Cuenta eliminada exitosamente! Serás redirigido.');
+        setShowAlert(true);
+        
+        localStorage.removeItem('authToken');
+        setUser(null);
+        navigate(ROUTES.LOGIN);
+
+    } catch (err: any) {
+        // 5. Si falla, muestra un error específico
+        setAlertType('error');
+        setAlertMessage(err.message);
+        setShowAlert(true);
+        // Opcional: limpiar solo el campo de la contraseña para que el usuario reintente
+        setDeletePassword('');
+    }
+};
   
   const handleCancelDelete = () => {
     setShowDeleteModal(false);
