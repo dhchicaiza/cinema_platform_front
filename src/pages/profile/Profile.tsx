@@ -216,12 +216,16 @@ const handleConfirmDelete = async () => {
 
         setShowDeleteModal(false); 
         setAlertType('success');
-        setAlertMessage('¡Cuenta eliminada exitosamente! Serás redirigido.');
+        setAlertMessage('¡Cuenta eliminada exitosamente!');
         setShowAlert(true);
         
         localStorage.removeItem('authToken');
         setUser(null);
-        navigate(ROUTES.LOGIN);
+        
+        // Navegar al login después de mostrar la alerta
+        setTimeout(() => {
+            navigate(ROUTES.LOGIN);
+        }, 2000);
 
     } catch (err: any) {
         setAlertType('error');
@@ -268,7 +272,7 @@ const handleConfirmDelete = async () => {
             </button>
             
             <div className="profile__avatar">
-              <span>{user.firstName?.charAt(0).toUpperCase()}</span>
+              <span>{user?.firstName?.charAt(0).toUpperCase()}</span>
             </div>
             
             <div className="profile__title-section">

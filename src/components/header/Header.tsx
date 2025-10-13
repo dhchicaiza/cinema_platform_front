@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import './Header.scss';
 import useUserStore from '../../stores/useUserStores';
 import ConfirmAlert from '../alert/ConfirmAlert';
+import Alert from '../alert/Alert';
 
 const Header: React.FC = () => {
     // Obtiene el usuario para saber si alguien ha iniciado sesión
@@ -12,6 +13,9 @@ const Header: React.FC = () => {
     const navigate = useNavigate();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertType, setAlertType] = useState<'success' | 'error' | 'info'>('success');
 
     const handleLogout = () => {
         setIsMenuOpen(false);
@@ -22,7 +26,16 @@ const Header: React.FC = () => {
         localStorage.removeItem('authToken');
         setUser(null as any);
         setShowLogoutConfirm(false);
-        navigate('/login');
+        
+        // Mostrar alerta de éxito
+        setAlertType('success');
+        setAlertMessage('¡Sesión cerrada exitosamente!');
+        setShowAlert(true);
+        
+        // Navegar al login después de mostrar la alerta
+        setTimeout(() => {
+            navigate('/login');
+        }, 2000);
     };
 
     const cancelLogout = () => {
@@ -31,6 +44,13 @@ const Header: React.FC = () => {
 
     return (
         <header className="header">
+            {showAlert && (
+                <Alert 
+                    message={alertMessage} 
+                    type={alertType}
+                    onClose={() => setShowAlert(false)} 
+                />
+            )}
             {showLogoutConfirm && (
                 <ConfirmAlert 
                     message="¿Estás seguro de que quieres cerrar sesión?"
