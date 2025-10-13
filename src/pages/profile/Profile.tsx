@@ -3,6 +3,7 @@ import './Profile.scss'
 import FormGroup from '../../components/form-group/FormGroup'
 import useUserStore from '../../stores/useUserStores'
 import Alert from '../../components/alert/Alert'
+import Modal from '../../components/modal/Modal'
 import { useNavigate } from 'react-router-dom'
 import { ROUTES } from '../../constants'
 
@@ -14,6 +15,18 @@ const Profile: React.FC = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [alertType, setAlertType] = useState<'success' | 'error' | 'info'>('success');
+  
+  // Estados para modales
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  
+  // Estados para el modal de cambiar contraseña
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  
+  // Estado para el modal de eliminar cuenta
+  const [deletePassword, setDeletePassword] = useState('');
   const [formData, setFormData] = useState({
     firstName: user?.firstName || 'Laura',
     lastName: user?.lastName ||'Salazar',
@@ -91,13 +104,51 @@ const Profile: React.FC = () => {
     };
 
   const handleDelete = async () => {
-    const token = localStorage.getItem('authToken');
-    if (!token) {
-      setAlertType('error');
-      setAlertMessage("No estás autenticado. Por favor, inicia sesión de nuevo.");
-      setShowAlert(true);
-      return;
-    }
+    setShowDeleteModal(true);
+  }
+  
+  const handlePasswordChange = () => {
+    setShowPasswordModal(true);
+  }
+  
+  const handleConfirmPasswordChange = () => {
+    // Aquí iría la lógica para cambiar la contraseña
+    setAlertType('success');
+    setAlertMessage('¡Contraseña actualizada exitosamente!');
+    setShowAlert(true);
+    setShowPasswordModal(false);
+    
+    // Limpiar campos
+    setCurrentPassword('');
+    setNewPassword('');
+    setConfirmNewPassword('');
+  }
+  
+  const handleCancelPasswordChange = () => {
+    setShowPasswordModal(false);
+    setCurrentPassword('');
+    setNewPassword('');
+    setConfirmNewPassword('');
+  }
+  
+  const handleConfirmDelete = () => {
+    // Aquí iría la lógica para eliminar la cuenta
+    setShowDeleteModal(false);
+    
+    // Mostrar alerta de éxito
+    setAlertType('success');
+    setAlertMessage('¡Cuenta eliminada exitosamente!');
+    setShowAlert(true);
+    
+    // Navegar al login después de mostrar la alerta
+    setTimeout(() => {
+      navigate(ROUTES.LOGIN);
+    }, 2000);
+  }
+  
+  const handleCancelDelete = () => {
+    setShowDeleteModal(false);
+    setDeletePassword('');
   }
   
   
@@ -124,7 +175,6 @@ const Profile: React.FC = () => {
       )}
       <div className="profile__container">
         <div className="profile__card">
-          {/* Header del perfil */}
           <div className="profile__header">
             <button className="profile__back" onClick={handleBack}>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -149,7 +199,6 @@ const Profile: React.FC = () => {
             </button>
           </div>
 
-          {/* Formulario */}
           <div className="profile__form">
             <div className="form__row">
               <div className="form__column">
@@ -203,43 +252,136 @@ const Profile: React.FC = () => {
                   readOnly={!isEditing}
                 />
               </div>
-              <div className="form__column">
-                <FormGroup
-                  label="Contraseña"
-                  type="password"
-                  id="password"
-                  name="password"
-                  placeholder="Contraseña"
-                />
-              </div>
+            </div>
+
+            <div className="password__section">
+              <button 
+                className="btn btn--password"
+                onClick={handlePasswordChange}
+                type="button"
+              >
+                Editar Contraseña
+              </button>
             </div>
           </div>
 
-          {/* Botones de acción */}
           <div className="profile__actions">
+            <div className="actions__left">
+              <button 
+                className="btn btn--save"
+                onClick={handleSave}
+              >
+                Guardar Cambios
+              </button>
+
+              <button 
+                className="btn btn--cancel"
+                onClick={handleCancel}
+              >
+                Cancelar
+              </button>
+            </div>
+
+            <div className="actions__right">
+              <button
+                className="btn btn--delete"
+                onClick={handleDelete}
+              >
+                Eliminar Cuenta
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <Modal 
+        isOpen={showPasswordModal} 
+        onClose={handleCancelPasswordChange}
+        title="Editar Contraseña"
+      >
+        <div className="modal__form">
+          <FormGroup
+            label="Contraseña Actual"
+            type="password"
+            id="currentPassword"
+            placeholder="Ingresa tu contraseña actual"
+            value={currentPassword}
+            onChange={(e) => setCurrentPassword(e.target.value)}
+          />
+          
+          <FormGroup
+            label="Nueva Contraseña"
+            type="password"
+            id="newPassword"
+            placeholder="Ingresa tu nueva contraseña"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+          />
+          
+          <FormGroup
+            label="Confirmar Nueva Contraseña"
+            type="password"
+            id="confirmNewPassword"
+            placeholder="Confirma tu nueva contraseña"
+            value={confirmNewPassword}
+            onChange={(e) => setConfirmNewPassword(e.target.value)}
+          />
+          
+          <div className="modal__actions">
             <button 
               className="btn btn--save"
-              onClick={handleSave}
+              onClick={handleConfirmPasswordChange}
             >
-              Guardar Cambios
+              Confirmar
             </button>
-
-            <button
-              className="btn btn--delete"
-              onClick={handleDelete}
-            >
-              Eliminar Cuenta
-            </button>
-
+            
             <button 
               className="btn btn--cancel"
-              onClick={handleCancel}
+              onClick={handleCancelPasswordChange}
             >
               Cancelar
             </button>
           </div>
         </div>
-      </div>
+      </Modal>
+
+      {/* Modal para eliminar cuenta */}
+      <Modal 
+        isOpen={showDeleteModal} 
+        onClose={handleCancelDelete}
+        title="Eliminar Cuenta"
+      >
+        <div className="modal__form">
+          <p className="modal__warning">
+            Esta acción no se puede deshacer. Por favor, ingresa tu contraseña para confirmar.
+          </p>
+          
+          <FormGroup
+            label="Contraseña"
+            type="password"
+            id="deletePassword"
+            placeholder="Ingresa tu contraseña"
+            value={deletePassword}
+            onChange={(e) => setDeletePassword(e.target.value)}
+          />
+          
+          <div className="modal__actions">
+            <button 
+              className="btn btn--delete"
+              onClick={handleConfirmDelete}
+            >
+              Eliminar Cuenta
+            </button>
+            
+            <button 
+              className="btn btn--cancel"
+              onClick={handleCancelDelete}
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
+      </Modal>
     </section>
   )
 }
