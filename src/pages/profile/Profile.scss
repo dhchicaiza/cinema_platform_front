@@ -133,14 +133,43 @@
 
   &__actions {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
     gap: 1rem;
-    justify-content: flex-start;
+    margin-top: 2rem;
 
-    @media (max-width: 480px) {
+    @media (max-width: 768px) {
       flex-direction: column;
+      align-items: stretch;
     }
   }
 }
+
+.actions__left {
+  display: flex;
+  gap: 1rem;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+  }
+}
+
+.actions__right {
+  display: flex;
+
+  @media (max-width: 768px) {
+    justify-content: flex-end;
+  }
+
+  @media (max-width: 480px) {
+    justify-content: stretch;
+    
+    .btn {
+      width: 100%;
+    }
+  }
+}
+
 
 
 
@@ -153,19 +182,18 @@
    transition: all 0.3s ease;
    border: none;
    cursor: pointer;
+   min-width: 150px;
 
    &--edit {
      background: linear-gradient(90deg, #9d4edd, #26c6da);
      color: #ffffff;
      box-shadow: none;
-
    }
 
    &--save {
     background: linear-gradient(90deg, #9d4edd, #26c6da);
     color: #ffffff;
      box-shadow: none;
-
    }
 
    &--cancel {
@@ -173,18 +201,26 @@
      color: #ffffff;
      border: none;
      box-shadow: none;
-
    }
 
-   &--delete {
-     background: #b5a2ca;
-     color: #000000;
-     border: none;
-     box-shadow: none;
+  &--delete {
+    background: #b5a2ca;
+    color: #000000;
+    border: none;
+    box-shadow: none;
+  }
 
-
-   }
- }
+  &--password {
+    background: #4F9AAF;
+    color: #ffffff;
+    box-shadow: none;
+    
+    &:hover {
+      background: #5AACBF;
+      transform: translateY(-2px);
+    }
+  }
+}
 
 // Responsive design
 @media (max-width: 768px) {
@@ -224,6 +260,84 @@
 
     .form__row {
       gap: 0.8rem;
+    }
+  }
+}
+
+// Estilos para la sección de contraseña
+.password__section {
+  margin-top: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #4B5563;
+  display: flex;
+  justify-content: flex-start;
+}
+
+// Estilos para los modales
+.modal__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+
+  .form__group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .form__label {
+    font-size: 0.9rem;
+    color: #E5E7EB;
+    font-weight: 500;
+  }
+
+  .form__input {
+    padding: 0.8rem 1rem;
+    background: #4B5563;
+    border: 1px solid #8B5CF6;
+    border-radius: 8px;
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+
+    &::placeholder {
+      color: #9CA3AF;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: #A855F7;
+      box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+    }
+
+    &:hover {
+      border-color: #A855F7;
+    }
+  }
+}
+
+.modal__warning {
+  color: #FCA5A5;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0 0 1rem 0;
+  padding: 1rem;
+  background: rgba(252, 165, 165, 0.1);
+  border-radius: 8px;
+  border-left: 3px solid #EF4444;
+}
+
+.modal__actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  justify-content: flex-end;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    
+    .btn {
+      width: 100%;
     }
   }
 }

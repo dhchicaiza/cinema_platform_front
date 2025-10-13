@@ -5,7 +5,7 @@ interface FormGroupProps {
   label: string
   type: string
   id: string
-  placeholder: string
+  placeholder?: string
   value?: string | number
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   readOnly?: boolean
