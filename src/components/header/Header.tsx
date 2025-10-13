@@ -41,7 +41,6 @@ const Header: React.FC = () => {
             )}
             <div className="header__container">
                 
-                {/* 👇 1. LOGO RESTAURADO 👇 */}
                 <div className="header__logo">
                     <Link to={user ? "/catalog" : "/"}> 
                         <span className="logo__cine">Cine</span>
@@ -49,23 +48,19 @@ const Header: React.FC = () => {
                     </Link>
                 </div>
                 
-                {/* 👇 2. NAVEGACIÓN RESTAURADA 👇 */}
                 <nav className="header__nav">
                     <Link to="/" className="nav__link">Inicio</Link>
-                    {/* Para anclas en la misma página, <a> está bien si no usas routing para ello */}
+                  
                     <Link to="/#equipo" className="nav__link">Sobre nosotros</Link>
                     <Link to="/mapa-del-sitio" className="nav__link">Mapa del sitio</Link>
                 </nav>
                 
-                {/* 👇 3. LÓGICA CORRECTA BASADA EN EL USUARIO 👇 */}
-                {/* Si NO hay usuario (user es null), muestra los botones de login */}
                 {!user ? (
                     <div className="header__actions">
                         <Link to="/login" className="btn btn--login">Iniciar Sesión</Link>
                         <Link to="/register" className="btn btn--register">Crea una Cuenta</Link>
                     </div>
                 ) : (
-                    // Si SÍ hay usuario, muestra el menú de usuario
                     <div className="header__user">
                         <span className="user__name">{user.firstName}</span>
                         <div className="user__dropdown">

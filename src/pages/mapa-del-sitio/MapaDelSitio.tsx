@@ -2,7 +2,7 @@ import React from 'react'
 import './MapaDelSitio.scss'
 import TeamCard from '../../components/team-card/TeamCard'
 
-export const MapaDelSitio: React.FC = () => {
+const MapaDelSitio: React.FC = () => {
     return (
         <section className="mapa-del-sitio">
             <div className="mapa-del-sitio__welcome">
@@ -59,3 +59,5 @@ export const MapaDelSitio: React.FC = () => {
         </section>
     )
 }
+
+export default MapaDelSitio
