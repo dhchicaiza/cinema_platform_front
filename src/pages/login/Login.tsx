@@ -82,9 +82,9 @@ const Login: React.FC = () => {
           <FormGroup label="Contraseña" type="password" id="password" placeholder="Mínimo 8 caracteres" value={password} onChange={(e) => setPassword(e.target.value)}/>
 
  
-          <button type="submit" style={{ width: '60%', margin: '0 auto' }} className="btn btn--primary">Iniciar Sesión</button>
+          <button role="button" type="submit" style={{ width: '60%', margin: '0 auto' }} className="btn btn--primary">Iniciar Sesión</button>
 
-          <a href="/contraseña" className="form__link">¿Olvidaste tu contraseña?</a>
+          <a href="/forgot-password" className="form__link">¿Olvidaste tu contraseña?</a>
 
           <div className="form__divider"></div>
 

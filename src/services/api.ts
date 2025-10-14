@@ -7,7 +7,7 @@
  */
 
 import { API_BASE_URL, API_TIMEOUT, STORAGE_KEYS } from '../constants';
-import { ApiResponse } from '../types';
+import type { ApiResponse } from '../types';
 
 /**
  * Request configuration options

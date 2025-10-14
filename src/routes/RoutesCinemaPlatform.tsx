@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Home from '../pages/home/Home'
 import Login from '../pages/login/Login'
 import Register from '../pages/register/Register'
@@ -23,7 +23,7 @@ const RoutesCinemaPlatform: React.FC = () => {
       <Route path='/profile' element={<Profile />} />
       <Route path='/catalog' element={<Catalog />} />
       <Route path='/about' element={<About />} />
-      <Route path='/contraseña' element={<Contraseña />} />
+      <Route path='/forgot-password' element={<Contraseña />} />
       <Route path='/reset-password' element={<RecuperarContraseña />} />
       <Route path='/mapa-del-sitio' element={<MapaDelSitio />} />
       <Route path='*' element={<NotFound />} /> //renderiza la pagina 404 si no se encuentra la ruta
