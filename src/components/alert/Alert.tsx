@@ -1,12 +1,46 @@
 import React, { useEffect } from 'react'
 import './Alert.scss'
 
+/**
+ * Props interface for the Alert component
+ * @interface AlertProps
+ * @property {string} message - The message to display in the alert
+ * @property {'success' | 'error' | 'info'} [type='success'] - The type of alert (determines styling and icon)
+ * @property {function} onClose - Callback function triggered when the alert is closed
+ */
 interface AlertProps {
   message: string
   type?: 'success' | 'error' | 'info'
   onClose: () => void
 }
 
+/**
+ * Alert Component
+ * 
+ * A notification component that displays feedback messages to the user.
+ * Auto-dismisses after 2 seconds and can be manually closed by clicking.
+ * Supports three types: success, error, and info with corresponding icons and styling.
+ * 
+ * @component
+ * @param {AlertProps} props - The component props
+ * @returns {React.ReactElement} A styled alert overlay with icon, title, and message
+ * 
+ * @example
+ * // Success alert
+ * <Alert 
+ *   message="Account created successfully!" 
+ *   type="success" 
+ *   onClose={() => setShowAlert(false)} 
+ * />
+ * 
+ * @example
+ * // Error alert
+ * <Alert 
+ *   message="Failed to save changes" 
+ *   type="error" 
+ *   onClose={() => setShowAlert(false)} 
+ * />
+ */
 const Alert: React.FC<AlertProps> = ({ message, type = 'success', onClose }) => {
   useEffect(() => {
     const timer = setTimeout(() => {

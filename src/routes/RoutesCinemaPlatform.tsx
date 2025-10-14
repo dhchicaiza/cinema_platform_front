@@ -12,6 +12,39 @@ import MapaDelSitio from '../pages/mapa-del-sitio/MapaDelSitio'
 import Contraseña from '../pages/contraseña/Contraseña'
 import RecuperarContraseña from '../pages/recuperar-contraseña/RecuperarContraseña'
 
+/**
+ * RoutesCinemaPlatform Component
+ * 
+ * Main routing configuration for the CinePlatform application.
+ * Defines all application routes and wraps them in the Layout component
+ * for consistent header/footer structure across all pages.
+ * 
+ * Routes:
+ * - `/` - Home page (landing page with welcome and team section)
+ * - `/login` - User login page
+ * - `/register` - New user registration page
+ * - `/profile` - User profile management page (requires authentication)
+ * - `/catalog` - Movie catalog page (requires authentication)
+ * - `/about` - About page (placeholder)
+ * - `/contraseña` - Password recovery request page
+ * - `/reset-password` - Password reset page (with token)
+ * - `/mapa-del-sitio` - Site map page
+ * - `*` - 404 Not Found page (catch-all route)
+ * 
+ * @component
+ * @returns {React.ReactElement} The complete routing structure with BrowserRouter
+ * 
+ * @example
+ * // Used as the root component in main.tsx
+ * <RoutesCinemaPlatform />
+ * 
+ * @remarks
+ * - Uses React Router v6 for client-side routing
+ * - All routes are wrapped in Layout component for consistent structure
+ * - Protected routes (catalog, profile) should check authentication status
+ * - Catch-all route (*) handles 404 errors for undefined paths
+ * - Uses BrowserRouter for clean URLs without hash (#)
+ */
 const RoutesCinemaPlatform: React.FC = () => {
   return (
   <BrowserRouter>

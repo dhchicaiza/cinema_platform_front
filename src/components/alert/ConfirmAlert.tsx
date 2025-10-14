@@ -1,6 +1,14 @@
 import React from 'react'
 import './ConfirmAlert.scss'
 
+/**
+ * Props interface for the ConfirmAlert component
+ * @interface ConfirmAlertProps
+ * @property {string} message - The confirmation message to display
+ * @property {'warning' | 'danger' | 'info'} [type='warning'] - The type of alert (determines styling and icon)
+ * @property {function} onConfirm - Callback function triggered when user confirms the action
+ * @property {function} onCancel - Callback function triggered when user cancels the action
+ */
 interface ConfirmAlertProps {
   message: string
   type?: 'warning' | 'danger' | 'info'
@@ -8,6 +16,35 @@ interface ConfirmAlertProps {
   onCancel: () => void
 }
 
+/**
+ * ConfirmAlert Component
+ * 
+ * A confirmation dialog component that requires user action before proceeding.
+ * Displays a message with two action buttons (Cancel and Confirm).
+ * Supports three types: warning, danger, and info with corresponding visual styling.
+ * 
+ * @component
+ * @param {ConfirmAlertProps} props - The component props
+ * @returns {React.ReactElement} A styled confirmation dialog with icon, message, and action buttons
+ * 
+ * @example
+ * // Warning confirmation
+ * <ConfirmAlert 
+ *   message="Are you sure you want to proceed?" 
+ *   type="warning" 
+ *   onConfirm={handleConfirm}
+ *   onCancel={handleCancel}
+ * />
+ * 
+ * @example
+ * // Danger confirmation (e.g., delete action)
+ * <ConfirmAlert 
+ *   message="This action cannot be undone. Delete account?" 
+ *   type="danger" 
+ *   onConfirm={handleDelete}
+ *   onCancel={() => setShowConfirm(false)}
+ * />
+ */
 const ConfirmAlert: React.FC<ConfirmAlertProps> = ({ message, type = 'warning', onConfirm, onCancel }) => {
   return (
     <div className="confirm-overlay" onClick={onCancel}>

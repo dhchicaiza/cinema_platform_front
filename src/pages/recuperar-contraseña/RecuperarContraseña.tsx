@@ -5,6 +5,43 @@ import Alert from '../../components/alert/Alert'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ROUTES } from '../../constants'
 
+/**
+ * RecuperarContraseña (Reset Password) Page Component
+ * 
+ * Handles the password reset process using a token received via email.
+ * Allows users to set a new password after requesting a password reset.
+ * 
+ * Features:
+ * - Token validation from URL query parameters
+ * - New password and confirmation fields
+ * - Password matching validation
+ * - API integration to reset password
+ * - Success/error feedback through alerts
+ * - Automatic redirection to login after successful reset
+ * 
+ * Workflow:
+ * 1. User clicks reset link from email (contains token as query param)
+ * 2. User enters new password and confirmation
+ * 3. System validates passwords match and token is valid
+ * 4. API updates password with provided token
+ * 5. User redirected to login page on success
+ * 
+ * @component
+ * @returns {React.ReactElement} The password reset page
+ * 
+ * @example
+ * // Rendered through React Router with token in URL
+ * <Route path="/reset-password" element={<RecuperarContraseña />} />
+ * // Accessed via: /reset-password?token=abc123xyz
+ * 
+ * @remarks
+ * - Token is extracted from URL query string using useSearchParams
+ * - Uses environment variable VITE_API_BASE_URL for API endpoint
+ * - Sends POST request to /api/auth/reset-password with token and new password
+ * - Validates token existence before allowing password submission
+ * - Shows error if passwords don't match or token is invalid/expired
+ * - Navigates to login page after 2 seconds on successful reset
+ */
 const RecuperarContraseña: React.FC = () => {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()

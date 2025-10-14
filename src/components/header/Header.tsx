@@ -5,6 +5,30 @@ import useUserStore from '../../stores/useUserStores';
 import ConfirmAlert from '../alert/ConfirmAlert';
 import Alert from '../alert/Alert';
 
+/**
+ * Header Component
+ * 
+ * The main navigation header component displayed at the top of every page.
+ * Features different views based on authentication state:
+ * - Unauthenticated: Shows Login and Register buttons
+ * - Authenticated: Shows user avatar with dropdown menu (Profile, Logout)
+ * 
+ * Includes logout confirmation dialog and success feedback.
+ * Navigation links adapt to user authentication status.
+ * 
+ * @component
+ * @returns {React.ReactElement} The application header with logo, navigation, and user actions
+ * 
+ * @example
+ * // Typically used in the Layout component
+ * <Header />
+ * 
+ * @remarks
+ * - Uses Zustand store for global user state management
+ * - Implements logout confirmation flow with alerts
+ * - Features responsive dropdown menu for user actions
+ * - Clears authentication token from localStorage on logout
+ */
 const Header: React.FC = () => {
     // Obtiene el usuario para saber si alguien ha iniciado sesión
     const user = useUserStore((state) => state.user);

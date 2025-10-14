@@ -6,6 +6,32 @@ import useUserStore from '../../stores/useUserStores';
 import Alert from '../../components/alert/Alert';
 import FormGroup from '../../components/form-group/FormGroup';
 
+/**
+ * Login Page Component
+ * 
+ * Handles user authentication through email and password.
+ * Features:
+ * - Form validation and submission
+ * - API integration for user login
+ * - Success/error feedback through alerts
+ * - Token storage in localStorage
+ * - User state management with Zustand
+ * - Navigation to catalog on successful login
+ * - Links to registration and password recovery
+ * 
+ * @component
+ * @returns {React.ReactElement} The login page with form and authentication logic
+ * 
+ * @example
+ * // Rendered through React Router
+ * <Route path="/login" element={<Login />} />
+ * 
+ * @remarks
+ * - Uses environment variable VITE_API_BASE_URL for API endpoint
+ * - Stores JWT token in localStorage as 'authToken'
+ * - Redirects to catalog page after successful authentication
+ * - Displays error alerts for failed login attempts
+ */
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const setUser = useUserStore((state) => state.setUser); 

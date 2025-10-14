@@ -5,6 +5,34 @@ import { ROUTES } from '../../constants'
 import { useNavigate } from 'react-router'
 import Alert from '../../components/alert/Alert'
 
+/**
+ * Register Page Component
+ * 
+ * Handles new user account creation with form validation.
+ * Features:
+ * - Multi-field registration form (name, last name, email, age, password)
+ * - Client-side validation for all fields
+ * - Password confirmation matching
+ * - Age validation (must be 18 or older)
+ * - API integration for account creation
+ * - Success/error feedback through alerts
+ * - Navigation to login page after successful registration
+ * - Responsive form layout
+ * 
+ * @component
+ * @returns {React.ReactElement} The registration page with form and validation logic
+ * 
+ * @example
+ * // Rendered through React Router
+ * <Route path="/register" element={<Register />} />
+ * 
+ * @remarks
+ * - Uses environment variable VITE_API_BASE_URL for API endpoint
+ * - Validates password length (minimum 6 characters)
+ * - Ensures password and confirm password fields match
+ * - Converts age string to integer before API submission
+ * - Displays specific error messages for validation failures
+ */
 const Register: React.FC = () => {
   const navigate = useNavigate();
   const [firstName, setFirstName] = useState('');

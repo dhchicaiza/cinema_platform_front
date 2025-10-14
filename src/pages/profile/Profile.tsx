@@ -7,6 +7,39 @@ import Modal from '../../components/modal/Modal'
 import { useNavigate } from 'react-router-dom'
 import { ROUTES } from '../../constants'
 
+/**
+ * Profile Page Component
+ * 
+ * Comprehensive user profile management page with multiple features:
+ * - View and edit user information (name, last name, email, age)
+ * - Change password through modal dialog
+ * - Delete account with confirmation
+ * - Toggle between view and edit modes
+ * - Form validation and API integration
+ * - Success/error feedback through alerts
+ * 
+ * Features three main sections:
+ * 1. Profile Information (editable fields)
+ * 2. Password Management (modal-based)
+ * 3. Account Deletion (modal-based with confirmation)
+ * 
+ * @component
+ * @returns {React.ReactElement} The profile page with user information and management options
+ * 
+ * @example
+ * // Rendered through React Router (protected route)
+ * <Route path="/profile" element={<Profile />} />
+ * 
+ * @remarks
+ * - Uses Zustand store for global user state
+ * - Implements optimistic UI updates
+ * - Includes password change modal with three fields (current, new, confirm)
+ * - Account deletion requires password confirmation
+ * - All API operations use authentication token from localStorage
+ * - Navigates to login page after account deletion
+ * - Displays user avatar with first name initial
+ * - Features responsive form layout with two-column design
+ */
 const Profile: React.FC = () => {
   const { user } = useUserStore()
   const navigate = useNavigate()
