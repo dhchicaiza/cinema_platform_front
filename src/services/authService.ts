@@ -8,7 +8,7 @@
 
 import { apiClient } from './api';
 import { API_ENDPOINTS } from '../constants';
-import {
+import type {
   User,
   LoginData,
   RegisterData,
