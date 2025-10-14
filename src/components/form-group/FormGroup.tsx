@@ -10,6 +10,7 @@ interface FormGroupProps {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   readOnly?: boolean
   name?: string
+  ariaLabel?: string
 }
 
 const FormGroup: React.FC<FormGroupProps> = (props) => {
@@ -25,6 +26,7 @@ const FormGroup: React.FC<FormGroupProps> = (props) => {
               onChange={props.onChange}
               readOnly={props.readOnly}
               name={props.name}
+              aria-label={props.ariaLabel || props.label}
             />
           </div>
   )

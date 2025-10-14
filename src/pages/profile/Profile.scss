@@ -182,7 +182,36 @@
    transition: all 0.3s ease;
    border: none;
    cursor: pointer;
-   min-width: 150px;
+   min-width: 120px;
+
+  // Large tablet
+  @media (max-width: 1024px) {
+    min-width: 110px;
+  }
+
+  // Tablet
+  @media (max-width: 768px) {
+    min-width: 100px;
+  }
+
+  // Small tablet
+  @media (max-width: 640px) {
+    min-width: 90px;
+  }
+
+  // Mobile
+  @media (max-width: 480px) {
+    min-width: 80px;
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  // Small mobile
+  @media (max-width: 360px) {
+    min-width: 70px;
+    padding: 0.5rem 0.8rem;
+    font-size: 0.8rem;
+  }
 
    &--edit {
      background: linear-gradient(90deg, #9d4edd, #26c6da);
@@ -223,9 +252,27 @@
 }
 
 // Responsive design
+@media (max-width: 1024px) {
+  .profile {
+    padding: 1.75rem;
+
+    &__container {
+      max-width: 700px;
+    }
+
+    &__card {
+      padding: 1.75rem;
+    }
+  }
+}
+
 @media (max-width: 768px) {
   .profile {
     padding: 1rem;
+
+    &__container {
+      max-width: 100%;
+    }
 
     &__header {
       flex-direction: column;
@@ -240,6 +287,11 @@
     &__card {
       padding: 1.5rem;
     }
+
+    .form__row {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
   }
 
   .back__button {
@@ -248,8 +300,28 @@
   }
 }
 
+@media (max-width: 640px) {
+  .profile {
+    padding: 0.75rem;
+
+    &__card {
+      padding: 1.25rem;
+    }
+
+    &__header {
+      gap: 0.75rem;
+    }
+
+    .form__row {
+      gap: 1rem;
+    }
+  }
+}
+
 @media (max-width: 480px) {
   .profile {
+    padding: 0.5rem;
+
     &__title {
       font-size: 1.5rem;
     }
@@ -260,6 +332,30 @@
 
     .form__row {
       gap: 0.8rem;
+    }
+
+    &__actions {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.75rem;
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  .profile {
+    padding: 0.25rem;
+
+    &__card {
+      padding: 0.75rem;
+    }
+
+    &__title {
+      font-size: 1.3rem;
+    }
+
+    .form__row {
+      gap: 0.6rem;
     }
   }
 }
@@ -333,11 +429,22 @@
   margin-top: 1.5rem;
   justify-content: flex-end;
 
+  @media (max-width: 640px) {
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+  }
+
   @media (max-width: 480px) {
     flex-direction: column;
+    gap: 0.75rem;
     
     .btn {
       width: 100%;
     }
+  }
+
+  @media (max-width: 360px) {
+    gap: 0.5rem;
+    margin-top: 1rem;
   }
 }

@@ -1,9 +1,7 @@
 import React, { useState } from 'react'
 import './Catalog.scss'
-import useUserStore from '../../stores/useUserStores';
 
 const Catalog: React.FC = () => {
-  const { user } = useUserStore();
   const [searchQuery, setSearchQuery] = useState('');
   const [isFavorite, setIsFavorite] = useState(true);
 

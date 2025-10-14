@@ -19,16 +19,45 @@
     box-shadow: 0 8px 25px rgba(139, 92, 246, 0.2);
   }
 
-  // Ajustes para pantallas pequeñas
-  @media (max-width: 767px) {
-    padding: 1rem 0.8rem;
+  // Desktop mediano
+  @media (max-width: 1199px) {
     max-width: 160px;
   }
 
-  @media (max-width: 575px) {
-    padding: 0.8rem 0.6rem;
-    border-radius: 10px;
+  // Tablet grande
+  @media (max-width: 991px) {
+    padding: 0.9rem 0.8rem;
+    max-width: 150px;
+  }
+
+  // Tablet pequeño
+  @media (max-width: 767px) {
+    padding: 0.8rem 0.7rem;
     max-width: 140px;
+  }
+
+  // Móvil grande
+  @media (max-width: 639px) {
+    padding: 0.75rem 0.6rem;
+    max-width: 130px;
+  }
+
+  // Móvil pequeño - una columna
+  @media (max-width: 479px) {
+    padding: 1rem 1.5rem;
+    max-width: 280px;
+    width: 100%;
+    margin: 0 auto;
+    aspect-ratio: 3/1;
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+  }
+
+  // Móvil muy pequeño
+  @media (max-width: 359px) {
+    padding: 0.8rem 1rem;
+    max-width: 260px;
   }
 }
 
@@ -43,16 +72,41 @@
   justify-content: center;
   box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
 
-  @media (max-width: 767px) {
+  @media (max-width: 1199px) {
+    width: 55px;
+    height: 55px;
+  }
+
+  @media (max-width: 991px) {
     width: 50px;
     height: 50px;
+    margin-bottom: 0.7rem;
+  }
+
+  @media (max-width: 767px) {
+    width: 45px;
+    height: 45px;
     margin-bottom: 0.6rem;
   }
 
-  @media (max-width: 575px) {
+  @media (max-width: 639px) {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 0.5rem;
+  }
+
+  // Layout horizontal en móvil pequeño
+  @media (max-width: 479px) {
+    width: 50px;
+    height: 50px;
+    margin: 0 1rem 0 0;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 359px) {
     width: 45px;
     height: 45px;
-    margin-bottom: 0.5rem;
+    margin-right: 0.75rem;
   }
 }
 
@@ -62,14 +116,33 @@
   color: white;
   margin-bottom: 0.4rem;
 
-  @media (max-width: 767px) {
+  @media (max-width: 1199px) {
+    font-size: 1.05rem;
+  }
+
+  @media (max-width: 991px) {
     font-size: 1rem;
+    margin-bottom: 0.35rem;
+  }
+
+  @media (max-width: 767px) {
+    font-size: 0.95rem;
     margin-bottom: 0.3rem;
   }
 
-  @media (max-width: 575px) {
+  @media (max-width: 639px) {
     font-size: 0.9rem;
     margin-bottom: 0.25rem;
+  }
+
+  // Layout horizontal en móvil pequeño
+  @media (max-width: 479px) {
+    font-size: 1rem;
+    margin-bottom: 0.2rem;
+  }
+
+  @media (max-width: 359px) {
+    font-size: 0.95rem;
   }
 }
 
@@ -79,14 +152,33 @@
   font-weight: 600;
   margin-bottom: 0.3rem;
 
-  @media (max-width: 767px) {
+  @media (max-width: 1199px) {
     font-size: 0.85rem;
+  }
+
+  @media (max-width: 991px) {
+    font-size: 0.8rem;
     margin-bottom: 0.25rem;
   }
 
-  @media (max-width: 575px) {
-    font-size: 0.8rem;
+  @media (max-width: 767px) {
+    font-size: 0.75rem;
     margin-bottom: 0.2rem;
+  }
+
+  @media (max-width: 639px) {
+    font-size: 0.7rem;
+    margin-bottom: 0.15rem;
+  }
+
+  // Layout horizontal en móvil pequeño
+  @media (max-width: 479px) {
+    font-size: 0.8rem;
+    margin-bottom: 0.1rem;
+  }
+
+  @media (max-width: 359px) {
+    font-size: 0.75rem;
   }
 
   &--spanish {
@@ -95,12 +187,29 @@
     font-style: italic;
     margin-bottom: 0;
 
-    @media (max-width: 767px) {
+    @media (max-width: 1199px) {
       font-size: 0.75rem;
     }
 
-    @media (max-width: 575px) {
+    @media (max-width: 991px) {
       font-size: 0.7rem;
+    }
+
+    @media (max-width: 767px) {
+      font-size: 0.65rem;
+    }
+
+    @media (max-width: 639px) {
+      font-size: 0.6rem;
+    }
+
+    // Layout horizontal en móvil pequeño
+    @media (max-width: 479px) {
+      font-size: 0.7rem;
+    }
+
+    @media (max-width: 359px) {
+      font-size: 0.65rem;
     }
   }
 }
@@ -111,11 +220,28 @@
   color: white;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 
-  @media (max-width: 767px) {
+  @media (max-width: 1199px) {
+    font-size: 1.05rem;
+  }
+
+  @media (max-width: 991px) {
     font-size: 1rem;
   }
 
-  @media (max-width: 575px) {
+  @media (max-width: 767px) {
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 639px) {
     font-size: 0.9rem;
+  }
+
+  // Layout horizontal en móvil pequeño
+  @media (max-width: 479px) {
+    font-size: 1rem;
+  }
+
+  @media (max-width: 359px) {
+    font-size: 0.95rem;
   }
 }

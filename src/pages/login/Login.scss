@@ -7,6 +7,36 @@
     min-height: calc(100vh - 200px);
     padding: 1rem;
 
+    // Large tablet
+    @media (max-width: 1024px) {
+        min-height: calc(100vh - 180px);
+        padding: 0.75rem;
+    }
+
+    // Tablet
+    @media (max-width: 768px) {
+        min-height: calc(100vh - 160px);
+        padding: 0.5rem;
+    }
+
+    // Small tablet
+    @media (max-width: 640px) {
+        min-height: calc(100vh - 140px);
+        padding: 0.25rem;
+    }
+
+    // Mobile
+    @media (max-width: 480px) {
+        min-height: calc(100vh - 120px);
+        padding: 0.5rem 0.25rem;
+    }
+
+    // Small mobile
+    @media (max-width: 360px) {
+        min-height: calc(100vh - 100px);
+        padding: 0.25rem;
+    }
+
     &__container {
         background: #2D3236;
         border-radius: 20px;
@@ -18,20 +48,43 @@
         text-align: center;
         margin-top: 0.75rem;
 
-        // Tablet
-        @media (max-width: 768px) {
-            width: 95%;
-            padding: 2rem 1.5rem;
-            border-radius: 15px;
-        }
+    // Large tablet
+    @media (max-width: 1024px) {
+        width: 90%;
+        max-width: 450px;
+    }
 
-        // Mobile
-        @media (max-width: 480px) {
-            width: 100%;
-            padding: 1.5rem 1rem;
-            border-radius: 10px;
-            margin-top: 0.5rem;
-        }
+    // Tablet
+    @media (max-width: 768px) {
+        width: 95%;
+        padding: 2rem 1.5rem;
+        border-radius: 15px;
+        max-width: 400px;
+    }
+
+    // Small tablet
+    @media (max-width: 640px) {
+        width: 98%;
+        padding: 1.75rem 1.25rem;
+        max-width: 380px;
+    }
+
+    // Mobile
+    @media (max-width: 480px) {
+        width: 95%;
+        padding: 1.5rem 1rem;
+        border-radius: 10px;
+        margin-top: 0.5rem;
+        max-width: 400px;
+    }
+
+    // Small mobile
+    @media (max-width: 360px) {
+        width: 98%;
+        padding: 1rem 0.75rem;
+        margin-top: 0.25rem;
+        max-width: 350px;
+    }
     }
 
     &__logo {
@@ -57,6 +110,13 @@
             height: 65px;
             margin-bottom: 1rem;
         }
+
+        // Small mobile
+        @media (max-width: 360px) {
+            width: 100px;
+            height: 55px;
+            margin-bottom: 0.75rem;
+        }
     }
 
     &__back-link {
@@ -76,6 +136,12 @@
             font-size: 0.85rem;
             margin-bottom: 1.5rem;
         }
+
+        // Small mobile
+        @media (max-width: 360px) {
+            font-size: 0.8rem;
+            margin-bottom: 1.25rem;
+        }
     }
 
     &__title {
@@ -87,10 +153,22 @@
         background-clip: text;
         margin-bottom: 2.5rem;
 
+        // Large tablet
+        @media (max-width: 1024px) {
+            font-size: 2.25rem;
+            margin-bottom: 2.25rem;
+        }
+
         // Tablet
         @media (max-width: 768px) {
             font-size: 2rem;
             margin-bottom: 2rem;
+        }
+
+        // Small tablet
+        @media (max-width: 640px) {
+            font-size: 1.85rem;
+            margin-bottom: 1.75rem;
         }
 
         // Mobile
@@ -101,7 +179,8 @@
 
         // Small mobile
         @media (max-width: 360px) {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
         }
     }
 
@@ -110,31 +189,121 @@
         flex-direction: column;
         gap: 1.2rem;
 
+        // Large tablet
+        @media (max-width: 1024px) {
+            gap: 1.15rem;
+        }
+
+        // Tablet
+        @media (max-width: 768px) {
+            gap: 1.1rem;
+        }
+
+        // Small tablet
+        @media (max-width: 640px) {
+            gap: 1.05rem;
+        }
+
         // Mobile
         @media (max-width: 480px) {
             gap: 1rem;
+        }
+
+        // Small mobile
+        @media (max-width: 360px) {
+            gap: 0.8rem;
         }
     }
 
     // Landscape mobile
     @media (max-height: 600px) and (orientation: landscape) {
         min-height: auto;
-        padding: 0.5rem;
+        padding: 0.25rem;
 
         .login__container {
-            padding: 1rem;
-            margin-top: 0.25rem;
+            padding: 0.75rem;
+            margin-top: 0.125rem;
         }
 
         .login__logo {
-            width: 100px;
-            height: 55px;
-            margin-bottom: 0.5rem;
+            width: 80px;
+            height: 45px;
+            margin-bottom: 0.25rem;
         }
 
         .login__title {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .login__form {
+            gap: 0.5rem;
+        }
+
+        .login__back-link {
+            margin-bottom: 0.5rem;
+        }
+    }
+}
+
+// Estilos para botones del formulario
+.login__form {
+    .btn {
+        width: 60%;
+        margin: 0 auto;
+        
+        // Large tablet
+        @media (max-width: 1024px) {
+            width: 65%;
+        }
+
+        // Tablet
+        @media (max-width: 768px) {
+            width: 70%;
+        }
+
+        // Small tablet
+        @media (max-width: 640px) {
+            width: 75%;
+        }
+
+        // Mobile
+        @media (max-width: 480px) {
+            width: 80%;
+        }
+
+        // Small mobile
+        @media (max-width: 360px) {
+            width: 85%;
+        }
+    }
+
+    .btn--secondary {
+        width: 50%;
+        
+        // Large tablet
+        @media (max-width: 1024px) {
+            width: 55%;
+        }
+
+        // Tablet
+        @media (max-width: 768px) {
+            width: 60%;
+        }
+
+        // Small tablet
+        @media (max-width: 640px) {
+            width: 65%;
+        }
+
+        // Mobile
+        @media (max-width: 480px) {
+            width: 70%;
+        }
+
+        // Small mobile
+        @media (max-width: 360px) {
+            width: 75%;
         }
     }
 }

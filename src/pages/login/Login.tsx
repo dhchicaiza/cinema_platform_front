@@ -78,19 +78,47 @@ const Login: React.FC = () => {
 
         <form className="login__form" onSubmit={handleLogin}>
 
-          <FormGroup label="Correo Electrónico" type="email" id="email" placeholder="tu@gmail.com" value={email} onChange={(e) => setEmail(e.target.value)}/>
-          <FormGroup label="Contraseña" type="password" id="password" placeholder="Mínimo 8 caracteres" value={password} onChange={(e) => setPassword(e.target.value)}/>
+          <FormGroup 
+            label="Correo Electrónico" 
+            type="email" 
+            id="email" 
+            placeholder="tu@gmail.com" 
+            value={email} 
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <FormGroup 
+            label="Contraseña" 
+            type="password" 
+            id="password" 
+            placeholder="Mínimo 8 caracteres" 
+            value={password} 
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
  
-          <button role="button" type="submit" style={{ width: '60%', margin: '0 auto' }} className="btn btn--primary">Iniciar Sesión</button>
+          <button 
+            type="submit" 
+            style={{ width: '60%', margin: '0 auto' }} 
+            className="btn btn--primary"
+            aria-label="Iniciar sesión en CinePlatform"
+          >
+            Iniciar Sesión
+          </button>
 
-          <a href="/forgot-password" className="form__link">¿Olvidaste tu contraseña?</a>
+          <a href="/contraseña" className="form__link">¿Olvidaste tu contraseña?</a>
 
           <div className="form__divider"></div>
 
           <p className="form__question">¿No tienes cuenta?</p>
 
-          <a href="/register" style={{ width: '50%', margin: '0 auto' }} className="btn btn--secondary">Crear Cuenta Nueva</a>
+          <a 
+            href="/register" 
+            style={{ width: '50%', margin: '0 auto' }} 
+            className="btn btn--secondary"
+            aria-label="Crear una nueva cuenta en CinePlatform"
+          >
+            Crear Cuenta Nueva
+          </a>
         </form>
       </div>
     </section>

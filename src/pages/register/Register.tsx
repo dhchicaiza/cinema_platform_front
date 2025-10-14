@@ -71,20 +71,82 @@ const Register: React.FC = () => {
         <h1 className="register__title">Crear Cuenta</h1>
 
         <form className="register__form" onSubmit={handleRegister}>
-          <FormGroup label="Nombre" type="text" id="nombre" placeholder="Nombre" value={firstName} onChange={(e) => setFirstName(e.target.value)}/>
-          <FormGroup label="Apellidos" type="text" id="apellidos" placeholder="Apellidos" value={lastName} onChange={(e) => setLastName(e.target.value)}/>
-          <FormGroup label="Correo Electrónico" type="email" id="correo" placeholder="Correo Electrónico"value={email} onChange={(e) => setEmail(e.target.value)} />
-          <FormGroup label="Edad" type="number" id="edad" placeholder="Edad"value={age} onChange={(e) => setAge(e.target.value)} />
-          <FormGroup label="Contraseña" type="password" id="contraseña" placeholder="Contraseña"value={password} onChange={(e) => setPassword(e.target.value)} />
-          <FormGroup label="Confirmar Contraseña" type="password" id="confirmar_contraseña" placeholder="Confirmar Contraseña"value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+          <FormGroup 
+            label="Nombre" 
+            type="text" 
+            id="nombre" 
+            placeholder="Nombre" 
+            value={firstName} 
+            onChange={(e) => setFirstName(e.target.value)}
+            ariaLabel="Ingresa tu nombre completo"
+          />
+          <FormGroup 
+            label="Apellidos" 
+            type="text" 
+            id="apellidos" 
+            placeholder="Apellidos" 
+            value={lastName} 
+            onChange={(e) => setLastName(e.target.value)}
+            ariaLabel="Ingresa tus apellidos"
+          />
+          <FormGroup 
+            label="Correo Electrónico" 
+            type="email" 
+            id="correo" 
+            placeholder="Correo Electrónico"
+            value={email} 
+            onChange={(e) => setEmail(e.target.value)}
+            ariaLabel="Ingresa tu correo electrónico"
+          />
+          <FormGroup 
+            label="Edad" 
+            type="number" 
+            id="edad" 
+            placeholder="Edad"
+            value={age} 
+            onChange={(e) => setAge(e.target.value)}
+            ariaLabel="Ingresa tu edad"
+          />
+          <FormGroup 
+            label="Contraseña" 
+            type="password" 
+            id="contraseña" 
+            placeholder="Contraseña"
+            value={password} 
+            onChange={(e) => setPassword(e.target.value)}
+            ariaLabel="Crea una contraseña segura"
+          />
+          <FormGroup 
+            label="Confirmar Contraseña" 
+            type="password" 
+            id="confirmar_contraseña" 
+            placeholder="Confirmar Contraseña"
+            value={confirmPassword} 
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            ariaLabel="Confirma tu contraseña"
+          />
 
-          <button type="submit" style={{ width: '60%', margin: '0 auto' }} className="btn btn--primary">Crear Cuenta</button>
+          <button 
+            type="submit" 
+            style={{ width: '60%', margin: '0 auto' }} 
+            className="btn btn--primary"
+            aria-label="Crear cuenta nueva en CinePlatform"
+          >
+            Crear Cuenta
+          </button>
 
           <div className="form__divider"></div>
 
           <p className="form__question">¿Ya tienes una cuenta?</p>
 
-          <a href="/login" style={{ width: '50%', margin: '0 auto' }} className="btn btn--secondary">Iniciar Sesión</a>
+          <a 
+            href="/login" 
+            style={{ width: '50%', margin: '0 auto' }} 
+            className="btn btn--secondary"
+            aria-label="Iniciar sesión en CinePlatform"
+          >
+            Iniciar Sesión
+          </a>
 
 
         </form>

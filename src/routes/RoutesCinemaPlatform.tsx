@@ -23,7 +23,7 @@ const RoutesCinemaPlatform: React.FC = () => {
       <Route path='/profile' element={<Profile />} />
       <Route path='/catalog' element={<Catalog />} />
       <Route path='/about' element={<About />} />
-      <Route path='/forgot-password' element={<Contraseña />} />
+      <Route path='/contraseña' element={<Contraseña />} />
       <Route path='/reset-password' element={<RecuperarContraseña />} />
       <Route path='/mapa-del-sitio' element={<MapaDelSitio />} />
       <Route path='*' element={<NotFound />} /> //renderiza la pagina 404 si no se encuentra la ruta

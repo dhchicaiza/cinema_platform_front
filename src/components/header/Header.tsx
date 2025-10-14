@@ -77,8 +77,8 @@ const Header: React.FC = () => {
                 
                 {!user ? (
                     <div className="header__actions">
-                        <Link to="/login" className="btn btn--login">Iniciar Sesión</Link>
-                        <Link to="/register" className="btn btn--register">Crea una Cuenta</Link>
+                        <Link to="/login" className="btn btn--login" aria-label="Ir a página de inicio de sesión">Iniciar Sesión</Link>
+                        <Link to="/register" className="btn btn--register" aria-label="Crear una nueva cuenta">Crea una Cuenta</Link>
                     </div>
                 ) : (
                     <div className="header__user">
@@ -88,16 +88,17 @@ const Header: React.FC = () => {
                                 className="user__avatar user__avatar--button"
                                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                                 title="Menú de usuario"
+                                aria-label="Abrir menú de usuario"
                             >
                                 <span>{user.firstName?.charAt(0).toUpperCase()}</span>
                             </button>
                             
                             {isMenuOpen && (
                                 <div className="dropdown__menu">
-                                    <Link to="/profile" className="dropdown__item" onClick={() => setIsMenuOpen(false)}>
+                                    <Link to="/profile" className="dropdown__item" onClick={() => setIsMenuOpen(false)} aria-label="Ir a mi perfil">
                                         Ver Perfil
                                     </Link>
-                                    <button className="dropdown__item dropdown__item--logout" onClick={handleLogout}>
+                                    <button className="dropdown__item dropdown__item--logout" onClick={handleLogout} aria-label="Cerrar sesión de la cuenta">
                                         Cerrar Sesión
                                     </button>
                                 </div>

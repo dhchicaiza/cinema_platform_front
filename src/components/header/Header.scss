@@ -197,12 +197,31 @@
 }
 
 // Responsive design
+@media (max-width: 1024px) {
+  .header {
+    &__container {
+      padding: 1rem 1.5rem;
+    }
+
+    &__nav {
+      gap: 2rem;
+    }
+  }
+}
+
 @media (max-width: 768px) {
   .header {
     &__container {
       padding: 1rem;
       flex-wrap: wrap;
       height: auto;
+      gap: 1rem;
+    }
+
+    &__logo {
+      a {
+        font-size: 1.6rem;
+      }
     }
 
     &__nav {
@@ -211,10 +230,17 @@
       justify-content: center;
       margin-top: 1rem;
       gap: 1.5rem;
+      flex-wrap: wrap;
     }
 
     &__actions {
       gap: 0.5rem;
+    }
+
+    &__user {
+      .user__name {
+        display: none;
+      }
     }
   }
 
@@ -224,22 +250,97 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 640px) {
   .header {
-    &__nav {
+    &__container {
+      padding: 0.75rem 1rem;
       flex-direction: column;
-      gap: 0.5rem;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    &__logo {
+      order: 1;
+    }
+
+    &__nav {
+      order: 2;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
     &__actions {
-      flex-direction: column;
-      width: 100%;
-      margin-top: 1rem;
+      order: 3;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+
+    &__user {
+      order: 3;
     }
   }
 
   .btn {
-    width: 100%;
-    text-align: center;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    &__container {
+      padding: 0.5rem 0.75rem;
+      gap: 0.5rem;
+    }
+
+    &__logo {
+      a {
+        font-size: 1.3rem;
+      }
+    }
+
+    &__nav {
+      gap: 0.75rem;
+    }
+
+    &__actions {
+      gap: 0.25rem;
+    }
+  }
+
+  .btn {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .header {
+    &__container {
+      padding: 0.4rem 0.5rem;
+      gap: 0.4rem;
+    }
+
+    &__logo {
+      a {
+        font-size: 1.1rem;
+      }
+    }
+
+    &__nav {
+      gap: 0.5rem;
+    }
+
+    &__actions {
+      gap: 0.2rem;
+    }
+  }
+
+  .btn {
+    padding: 0.35rem 0.5rem;
+    font-size: 0.7rem;
   }
 }
