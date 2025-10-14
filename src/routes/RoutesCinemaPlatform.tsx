@@ -8,6 +8,9 @@ import Catalog from '../pages/catalog/Catalog'
 import About from '../pages/about/About'
 import NotFound from '../pages/not-found/NotFound'
 import Layout from '../layout/Layout'
+import MapaDelSitio from '../pages/mapa-del-sitio/MapaDelSitio'
+import Contraseña from '../pages/contraseña/Contraseña'
+import RecuperarContraseña from '../pages/recuperar-contraseña/RecuperarContraseña'
 
 const RoutesCinemaPlatform: React.FC = () => {
   return (
@@ -20,6 +23,9 @@ const RoutesCinemaPlatform: React.FC = () => {
       <Route path='/profile' element={<Profile />} />
       <Route path='/catalog' element={<Catalog />} />
       <Route path='/about' element={<About />} />
+      <Route path='/contraseña' element={<Contraseña />} />
+      <Route path='/reset-password' element={<RecuperarContraseña />} />
+      <Route path='/mapa-del-sitio' element={<MapaDelSitio />} />
       <Route path='*' element={<NotFound />} /> //renderiza la pagina 404 si no se encuentra la ruta
     </Routes>
   </Layout>

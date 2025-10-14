@@ -1,0 +1,176 @@
+.home {
+  min-height: 100vh;
+  background: #2E3338;
+  color: white;
+  font-family: 'Arial', sans-serif;
+  padding-top: 100px;
+  padding-bottom: 80px; // Espacio para el footer fijo
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__welcome {
+    padding: 4rem 2rem;
+    text-align: center;
+    background: linear-gradient(135deg, #373546, #2C3838);
+    position: relative;
+    max-width: 90%;
+    width: 62%;
+    margin: 0 auto;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    @media (max-width: 768px) {
+      padding: 3rem 1.5rem;
+      max-width: 95%;
+    }
+    
+    @media (max-width: 480px) {
+      padding: 2rem 1rem;
+      max-width: 98%;
+    }
+  }
+
+  &__title {
+    font-size: 3.5rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(90deg, #4a90e2, #20b2aa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    width: 100%;
+
+    @media (max-width: 768px) {
+      font-size: 3rem;
+      margin-bottom: 1.2rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+  }
+
+  &__description {
+    font-size: 1.2rem;
+    color: #ffffff;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.6;
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    width: 100%;
+
+    @media (max-width: 768px) {
+      font-size: 1.1rem;
+      max-width: 90%;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 1rem;
+      max-width: 95%;
+      line-height: 1.5;
+    }
+  }
+
+  &__team {
+    padding: 4rem 0;
+    background: #2E3338;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    @media (max-width: 768px) {
+      padding: 3rem 0;
+    }
+    
+    @media (max-width: 480px) {
+      padding: 2rem 0;
+    }
+  }
+}
+
+.team {
+  &__title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 3rem;
+    color: #8B5CF6;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+
+    @media (max-width: 767px) {
+      font-size: 2.2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    @media (max-width: 575px) {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+      padding: 0 1rem;
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(5, auto);
+    gap: 1rem;
+    justify-content: center;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 2rem;
+    width: fit-content;
+    
+    // Pantallas grandes (1400px+)
+    @media (min-width: 1400px) {
+      gap: 1.2rem;
+    }
+    
+    // Laptops grandes (1200px - 1399px)
+    @media (max-width: 1399px) {
+      gap: 1rem;
+    }
+    
+    // Laptops medianos (992px - 1199px)
+    @media (max-width: 1199px) {
+      gap: 1.2rem;
+    }
+    
+    // Tablets (768px - 991px)
+    @media (max-width: 991px) {
+      gap: 1rem;
+    }
+    
+    // Móviles grandes (576px - 767px)
+    @media (max-width: 767px) {
+      gap: 0.8rem;
+      padding: 0 1rem;
+    }
+    
+    // Móviles pequeños (max-width: 575px)
+    @media (max-width: 575px) {
+      gap: 0.5rem;
+      padding: 0 1rem;
+    }
+  }
+}

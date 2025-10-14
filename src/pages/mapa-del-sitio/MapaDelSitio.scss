@@ -1,0 +1,100 @@
+.mapa-del-sitio {
+    min-height: 100vh;
+    background: #2E3338;
+    color: white;
+    font-family: 'Arial', sans-serif;
+    padding-top: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    
+
+    &__welcome {
+    padding: 4rem 2rem;
+    text-align: center;
+    background: linear-gradient(135deg, #373546, #2C3838);
+    position: relative;
+    max-width: 90%;
+    width: 62%;
+    margin: 0 auto;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    @media (max-width: 768px) {
+      padding: 3rem 1.5rem;
+      max-width: 95%;
+    }
+    
+    @media (max-width: 480px) {
+      padding: 2rem 1rem;
+      max-width: 98%;
+        }
+    }
+
+    &__title {
+        font-size: 3.5rem;
+        font-weight: bold;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(90deg, #4a90e2, #20b2aa);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        width: 100%;
+
+        @media (max-width: 768px) {
+            font-size: 3rem;
+            margin-bottom: 1.2rem;
+        }
+
+        @media (max-width: 480px) {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+    }
+
+    &__description {
+        font-size: 1.2rem;
+        color: #ffffff;
+        max-width: 800px;
+        margin: 0 auto;
+        line-height: 1.6;
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        width: 100%;
+    
+        @media (max-width: 768px) {
+            font-size: 1rem;
+        }
+    }
+
+    &__content {
+        padding: 2rem 0;
+    }
+
+    &__grid {
+        display: flex;
+        gap: 1.5rem;
+        max-width: 100%;
+        margin: 0 auto;
+        overflow-x: auto;
+        padding: 1rem 0;
+
+        @media (max-width: 1200px) {
+            gap: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+    }
+
+}

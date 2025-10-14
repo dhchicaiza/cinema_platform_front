@@ -1,4 +1,4 @@
-.login {
+.recuperar-contraseña {
     color: white;
     font-family: 'Arial', sans-serif;
     display: flex;
@@ -13,7 +13,7 @@
         border: 1px solid #8B5CF6;
         padding: 2.5rem 2rem;
         width: 90%;
-        max-width: 400px;
+        max-width: 450px;
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         text-align: center;
         margin-top: 0.75rem;
@@ -85,23 +85,42 @@
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-        margin-bottom: 2.5rem;
+        margin-bottom: 1rem;
 
         // Tablet
         @media (max-width: 768px) {
             font-size: 2rem;
-            margin-bottom: 2rem;
+            margin-bottom: 0.8rem;
         }
 
         // Mobile
         @media (max-width: 480px) {
             font-size: 1.75rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 0.6rem;
         }
 
         // Small mobile
         @media (max-width: 360px) {
             font-size: 1.5rem;
+        }
+    }
+
+    &__description {
+        font-size: 1rem;
+        color: #9CA3AF;
+        margin-bottom: 2rem;
+        line-height: 1.5;
+
+        // Tablet
+        @media (max-width: 768px) {
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        // Mobile
+        @media (max-width: 480px) {
+            font-size: 0.9rem;
+            margin-bottom: 1.2rem;
         }
     }
 
@@ -121,20 +140,25 @@
         min-height: auto;
         padding: 0.5rem;
 
-        .login__container {
+        .recuperar-contraseña__container {
             padding: 1rem;
             margin-top: 0.25rem;
         }
 
-        .login__logo {
+        .recuperar-contraseña__logo {
             width: 100px;
             height: 55px;
             margin-bottom: 0.5rem;
         }
 
-        .login__title {
+        .recuperar-contraseña__title {
             font-size: 1.5rem;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .recuperar-contraseña__description {
+            font-size: 0.85rem;
+            margin-bottom: 0.8rem;
         }
     }
 }
