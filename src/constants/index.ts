@@ -39,7 +39,7 @@ export const ROUTES = {
   MOVIE_DETAIL: '/movie/:id',
   FAVORITES: '/favorites',
   ABOUT: '/about',
-  CONTRASEÑA: '/contraseña',
+  CONTRASEÑA: '/forgot-password',
   MAPA_DEL_SITIO: '/mapa-del-sitio',
   HELP: '/help',
 } as const;
