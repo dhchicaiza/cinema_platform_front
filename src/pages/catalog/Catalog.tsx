@@ -1,9 +1,40 @@
 import React, { useState } from 'react'
 import './Catalog.scss'
-import useUserStore from '../../stores/useUserStores';
 
+/**
+ * Catalog Page Component
+ * 
+ * The main catalog page for browsing and managing movies.
+ * Features:
+ * - Search functionality for movies and genres
+ * - Movie cards with detailed information
+ * - Rating system with star display and breakdown
+ * - Favorite toggle functionality
+ * - Play button for movie viewing
+ * - Responsive grid layout
+ * 
+ * Currently displays a sample movie (Avatar: The Last Airbender) with:
+ * - Title and cover information
+ * - Star rating (out of 5)
+ * - Rating breakdown by star level
+ * - Favorite heart button
+ * 
+ * @component
+ * @returns {React.ReactElement} The catalog page with search and movie display
+ * 
+ * @example
+ * // Rendered through React Router (protected route)
+ * <Route path="/catalog" element={<Catalog />} />
+ * 
+ * @remarks
+ * - Accessible only to authenticated users
+ * - Search input for filtering movies (UI only, functionality to be implemented)
+ * - "Mis Favoritos" button for filtering favorite movies
+ * - Rating system displays average rating and distribution
+ * - Responsive design adapts to various screen sizes
+ * - Future: Will integrate with backend API for actual movie data
+ */
 const Catalog: React.FC = () => {
-  const { user } = useUserStore();
   const [searchQuery, setSearchQuery] = useState('');
   const [isFavorite, setIsFavorite] = useState(true);
 

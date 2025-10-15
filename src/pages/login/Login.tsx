@@ -6,6 +6,32 @@ import useUserStore from '../../stores/useUserStores';
 import Alert from '../../components/alert/Alert';
 import FormGroup from '../../components/form-group/FormGroup';
 
+/**
+ * Login Page Component
+ * 
+ * Handles user authentication through email and password.
+ * Features:
+ * - Form validation and submission
+ * - API integration for user login
+ * - Success/error feedback through alerts
+ * - Token storage in localStorage
+ * - User state management with Zustand
+ * - Navigation to catalog on successful login
+ * - Links to registration and password recovery
+ * 
+ * @component
+ * @returns {React.ReactElement} The login page with form and authentication logic
+ * 
+ * @example
+ * // Rendered through React Router
+ * <Route path="/login" element={<Login />} />
+ * 
+ * @remarks
+ * - Uses environment variable VITE_API_BASE_URL for API endpoint
+ * - Stores JWT token in localStorage as 'authToken'
+ * - Redirects to catalog page after successful authentication
+ * - Displays error alerts for failed login attempts
+ */
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const setUser = useUserStore((state) => state.setUser); 
@@ -33,6 +59,15 @@ const Login: React.FC = () => {
             const data = await response.json();
 
             if (!response.ok) {
+                if (data.errors && Array.isArray(data.errors)) {
+                    const errorMessages = data.errors
+                        .map((error: string) => {
+                            const colonIndex = error.indexOf(':');
+                            return colonIndex !== -1 ? error.substring(colonIndex + 1).trim() : error;
+                        })
+                        .join('\n');
+                    throw new Error(errorMessages);
+                }
                 throw new Error(data.message || 'Credenciales incorrectas. Por favor, intenta de nuevo.');
             }
             
@@ -41,12 +76,10 @@ const Login: React.FC = () => {
                 localStorage.setItem('authToken', data.data.token);
                 setUser(data.data.user);
                 
-                // Mostrar alerta de éxito
                 setAlertType('success');
                 setAlertMessage('¡Bienvenido! Has iniciado sesión exitosamente.');
                 setShowAlert(true);
                 
-                // Navegar después de mostrar la alerta
                 setTimeout(() => {
                     navigate(ROUTES.CATALOG);
                 }, 1500);
@@ -78,19 +111,47 @@ const Login: React.FC = () => {
 
         <form className="login__form" onSubmit={handleLogin}>
 
-          <FormGroup label="Correo Electrónico" type="email" id="email" placeholder="tu@gmail.com" value={email} onChange={(e) => setEmail(e.target.value)}/>
-          <FormGroup label="Contraseña" type="password" id="password" placeholder="Mínimo 8 caracteres" value={password} onChange={(e) => setPassword(e.target.value)}/>
+          <FormGroup 
+            label="Correo Electrónico" 
+            type="email" 
+            id="email" 
+            placeholder="tu@gmail.com" 
+            value={email} 
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <FormGroup 
+            label="Contraseña" 
+            type="password" 
+            id="password" 
+            placeholder="Mínimo 8 caracteres" 
+            value={password} 
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
  
-          <button role="button" type="submit" style={{ width: '60%', margin: '0 auto' }} className="btn btn--primary">Iniciar Sesión</button>
+          <button 
+            type="submit" 
+            style={{ width: '60%', margin: '0 auto' }} 
+            className="btn btn--primary"
+            aria-label="Iniciar sesión en CinePlatform"
+          >
+            Iniciar Sesión
+          </button>
 
-          <a href="/forgot-password" className="form__link">¿Olvidaste tu contraseña?</a>
+          <a href="/contraseña" className="form__link">¿Olvidaste tu contraseña?</a>
 
           <div className="form__divider"></div>
 
           <p className="form__question">¿No tienes cuenta?</p>
 
-          <a href="/register" style={{ width: '50%', margin: '0 auto' }} className="btn btn--secondary">Crear Cuenta Nueva</a>
+          <a 
+            href="/register" 
+            style={{ width: '50%', margin: '0 auto' }} 
+            className="btn btn--secondary"
+            aria-label="Crear una nueva cuenta en CinePlatform"
+          >
+            Crear Cuenta Nueva
+          </a>
         </form>
       </div>
     </section>

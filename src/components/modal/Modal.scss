@@ -92,14 +92,39 @@
 }
 
 // Responsive
+@media (max-width: 1024px) {
+  .modal-container {
+    width: 90%;
+    max-width: 500px;
+    padding: 2.25rem 1.75rem;
+  }
+
+  .modal-title {
+    font-size: 1.4rem;
+  }
+}
+
 @media (max-width: 768px) {
   .modal-container {
     width: 95%;
-    padding: 1.5rem;
+    max-width: 450px;
+    padding: 1.75rem 1.5rem;
   }
 
   .modal-title {
     font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .modal-container {
+    width: 98%;
+    max-width: 400px;
+    padding: 1.5rem 1.25rem;
+  }
+
+  .modal-title {
+    font-size: 1.25rem;
   }
 }
 
@@ -113,6 +138,17 @@
 
   .modal-title {
     font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .modal-container {
+    margin: 0.5rem;
+    padding: 1rem;
+  }
+
+  .modal-title {
+    font-size: 1.1rem;
   }
 }
 

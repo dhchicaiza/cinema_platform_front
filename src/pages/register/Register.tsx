@@ -5,6 +5,34 @@ import { ROUTES } from '../../constants'
 import { useNavigate } from 'react-router'
 import Alert from '../../components/alert/Alert'
 
+/**
+ * Register Page Component
+ * 
+ * Handles new user account creation with form validation.
+ * Features:
+ * - Multi-field registration form (name, last name, email, age, password)
+ * - Client-side validation for all fields
+ * - Password confirmation matching
+ * - Age validation (must be 18 or older)
+ * - API integration for account creation
+ * - Success/error feedback through alerts
+ * - Navigation to login page after successful registration
+ * - Responsive form layout
+ * 
+ * @component
+ * @returns {React.ReactElement} The registration page with form and validation logic
+ * 
+ * @example
+ * // Rendered through React Router
+ * <Route path="/register" element={<Register />} />
+ * 
+ * @remarks
+ * - Uses environment variable VITE_API_BASE_URL for API endpoint
+ * - Validates password length (minimum 6 characters)
+ * - Ensures password and confirm password fields match
+ * - Converts age string to integer before API submission
+ * - Displays specific error messages for validation failures
+ */
 const Register: React.FC = () => {
   const navigate = useNavigate();
   const [firstName, setFirstName] = useState('');
@@ -35,6 +63,17 @@ const Register: React.FC = () => {
               const data = await response.json();
 
               if (!response.ok) {
+                  // Si hay errores de validación específicos, mostrarlos
+                  if (data.errors && Array.isArray(data.errors)) {
+                      // Limpiar los mensajes removiendo el prefijo del campo (ej: "password: ")
+                      const errorMessages = data.errors
+                          .map((error: string) => {
+                              const colonIndex = error.indexOf(':');
+                              return colonIndex !== -1 ? error.substring(colonIndex + 1).trim() : error;
+                          })
+                          .join('\n');
+                      throw new Error(errorMessages);
+                  }
                   throw new Error(data.message || 'Error al crear la cuenta. Por favor, intenta de nuevo.');
               }
               
@@ -71,20 +110,82 @@ const Register: React.FC = () => {
         <h1 className="register__title">Crear Cuenta</h1>
 
         <form className="register__form" onSubmit={handleRegister}>
-          <FormGroup label="Nombre" type="text" id="nombre" placeholder="Nombre" value={firstName} onChange={(e) => setFirstName(e.target.value)}/>
-          <FormGroup label="Apellidos" type="text" id="apellidos" placeholder="Apellidos" value={lastName} onChange={(e) => setLastName(e.target.value)}/>
-          <FormGroup label="Correo Electrónico" type="email" id="correo" placeholder="Correo Electrónico"value={email} onChange={(e) => setEmail(e.target.value)} />
-          <FormGroup label="Edad" type="number" id="edad" placeholder="Edad"value={age} onChange={(e) => setAge(e.target.value)} />
-          <FormGroup label="Contraseña" type="password" id="contraseña" placeholder="Contraseña"value={password} onChange={(e) => setPassword(e.target.value)} />
-          <FormGroup label="Confirmar Contraseña" type="password" id="confirmar_contraseña" placeholder="Confirmar Contraseña"value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+          <FormGroup 
+            label="Nombre" 
+            type="text" 
+            id="nombre" 
+            placeholder="Nombre" 
+            value={firstName} 
+            onChange={(e) => setFirstName(e.target.value)}
+            ariaLabel="Ingresa tu nombre completo"
+          />
+          <FormGroup 
+            label="Apellidos" 
+            type="text" 
+            id="apellidos" 
+            placeholder="Apellidos" 
+            value={lastName} 
+            onChange={(e) => setLastName(e.target.value)}
+            ariaLabel="Ingresa tus apellidos"
+          />
+          <FormGroup 
+            label="Correo Electrónico" 
+            type="email" 
+            id="correo" 
+            placeholder="Correo Electrónico"
+            value={email} 
+            onChange={(e) => setEmail(e.target.value)}
+            ariaLabel="Ingresa tu correo electrónico"
+          />
+          <FormGroup 
+            label="Edad" 
+            type="number" 
+            id="edad" 
+            placeholder="Edad"
+            value={age} 
+            onChange={(e) => setAge(e.target.value)}
+            ariaLabel="Ingresa tu edad"
+          />
+          <FormGroup 
+            label="Contraseña" 
+            type="password" 
+            id="contraseña" 
+            placeholder="Contraseña"
+            value={password} 
+            onChange={(e) => setPassword(e.target.value)}
+            ariaLabel="Crea una contraseña segura"
+          />
+          <FormGroup 
+            label="Confirmar Contraseña" 
+            type="password" 
+            id="confirmar_contraseña" 
+            placeholder="Confirmar Contraseña"
+            value={confirmPassword} 
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            ariaLabel="Confirma tu contraseña"
+          />
 
-          <button type="submit" style={{ width: '60%', margin: '0 auto' }} className="btn btn--primary">Crear Cuenta</button>
+          <button 
+            type="submit" 
+            style={{ width: '60%', margin: '0 auto' }} 
+            className="btn btn--primary"
+            aria-label="Crear cuenta nueva en CinePlatform"
+          >
+            Crear Cuenta
+          </button>
 
           <div className="form__divider"></div>
 
           <p className="form__question">¿Ya tienes una cuenta?</p>
 
-          <a href="/login" style={{ width: '50%', margin: '0 auto' }} className="btn btn--secondary">Iniciar Sesión</a>
+          <a 
+            href="/login" 
+            style={{ width: '50%', margin: '0 auto' }} 
+            className="btn btn--secondary"
+            aria-label="Iniciar sesión en CinePlatform"
+          >
+            Iniciar Sesión
+          </a>
 
 
         </form>

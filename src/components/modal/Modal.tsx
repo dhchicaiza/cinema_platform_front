@@ -1,6 +1,14 @@
 import React from 'react'
 import './Modal.scss'
 
+/**
+ * Props interface for the Modal component
+ * @interface ModalProps
+ * @property {boolean} isOpen - Controls the visibility of the modal
+ * @property {function} onClose - Callback function triggered when the modal is closed
+ * @property {string} title - The title displayed in the modal header
+ * @property {React.ReactNode} children - The content to be rendered inside the modal body
+ */
 interface ModalProps {
   isOpen: boolean
   onClose: () => void
@@ -8,6 +16,43 @@ interface ModalProps {
   children: React.ReactNode
 }
 
+/**
+ * Modal Component
+ * 
+ * A reusable modal dialog component that displays content in an overlay.
+ * Features a close button in the header and can be dismissed by clicking the overlay.
+ * Returns null when not open, preventing unnecessary rendering.
+ * 
+ * @component
+ * @param {ModalProps} props - The component props
+ * @returns {React.ReactElement | null} A modal dialog with header, title, close button, and body content, or null if not open
+ * 
+ * @example
+ * // Basic usage
+ * <Modal 
+ *   isOpen={showModal} 
+ *   onClose={() => setShowModal(false)} 
+ *   title="Edit Profile"
+ * >
+ *   <form>
+ *     {/* Form content *\/}
+ *   </form>
+ * </Modal>
+ * 
+ * @example
+ * // With state management
+ * const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+ * 
+ * <Modal 
+ *   isOpen={isPasswordModalOpen} 
+ *   onClose={() => setIsPasswordModalOpen(false)} 
+ *   title="Change Password"
+ * >
+ *   <div>
+ *     {/* Password change form *\/}
+ *   </div>
+ * </Modal>
+ */
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
   if (!isOpen) return null
 

@@ -7,6 +7,39 @@ import Modal from '../../components/modal/Modal'
 import { useNavigate } from 'react-router-dom'
 import { ROUTES } from '../../constants'
 
+/**
+ * Profile Page Component
+ * 
+ * Comprehensive user profile management page with multiple features:
+ * - View and edit user information (name, last name, email, age)
+ * - Change password through modal dialog
+ * - Delete account with confirmation
+ * - Toggle between view and edit modes
+ * - Form validation and API integration
+ * - Success/error feedback through alerts
+ * 
+ * Features three main sections:
+ * 1. Profile Information (editable fields)
+ * 2. Password Management (modal-based)
+ * 3. Account Deletion (modal-based with confirmation)
+ * 
+ * @component
+ * @returns {React.ReactElement} The profile page with user information and management options
+ * 
+ * @example
+ * // Rendered through React Router (protected route)
+ * <Route path="/profile" element={<Profile />} />
+ * 
+ * @remarks
+ * - Uses Zustand store for global user state
+ * - Implements optimistic UI updates
+ * - Includes password change modal with three fields (current, new, confirm)
+ * - Account deletion requires password confirmation
+ * - All API operations use authentication token from localStorage
+ * - Navigates to login page after account deletion
+ * - Displays user avatar with first name initial
+ * - Features responsive form layout with two-column design
+ */
 const Profile: React.FC = () => {
   const { user } = useUserStore()
   const navigate = useNavigate()
@@ -16,16 +49,16 @@ const Profile: React.FC = () => {
   const [alertMessage, setAlertMessage] = useState('');
   const [alertType, setAlertType] = useState<'success' | 'error' | 'info'>('success');
   
-  // Estados para modales
+
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   
-  // Estados para el modal de cambiar contraseña
+
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
   
-  // Estado para el modal de eliminar cuenta
+
   const [deletePassword, setDeletePassword] = useState('');
   const [formData, setFormData] = useState({
     firstName: user?.firstName || 'Laura',
@@ -283,6 +316,7 @@ const handleConfirmDelete = async () => {
             <button 
               className="btn btn--edit"
               onClick={handleEdit}
+              aria-label="Editar información del perfil"
             >
               Editar
             </button>
@@ -300,6 +334,7 @@ const handleConfirmDelete = async () => {
                   value={formData.firstName}
                   onChange={handleInputChange}
                   readOnly={!isEditing}
+                  ariaLabel="Campo de nombre del usuario"
                 />
               </div>
               <div className="form__column">
@@ -312,6 +347,7 @@ const handleConfirmDelete = async () => {
                   value={formData.lastName}
                   onChange={handleInputChange}
                   readOnly={!isEditing}
+                  ariaLabel="Campo de apellidos del usuario"
                 />
               </div>
             </div>
@@ -327,6 +363,7 @@ const handleConfirmDelete = async () => {
                   value={formData.email}
                   onChange={handleInputChange}
                   readOnly={!isEditing}
+                  ariaLabel="Campo de correo electrónico del usuario"
                 />
               </div>
               <div className="form__column">
@@ -339,6 +376,7 @@ const handleConfirmDelete = async () => {
                   value={formData.age}
                   onChange={handleInputChange}
                   readOnly={!isEditing}
+                  ariaLabel="Campo de edad del usuario"
                 />
               </div>
             </div>
@@ -348,6 +386,7 @@ const handleConfirmDelete = async () => {
                 className="btn btn--password"
                 onClick={handlePasswordChange}
                 type="button"
+                aria-label="Cambiar contraseña de la cuenta"
               >
                 Editar Contraseña
               </button>
@@ -359,6 +398,7 @@ const handleConfirmDelete = async () => {
               <button 
                 className="btn btn--save"
                 onClick={handleSave}
+                aria-label="Guardar cambios en el perfil"
               >
                 Guardar Cambios
               </button>
@@ -366,6 +406,7 @@ const handleConfirmDelete = async () => {
               <button 
                 className="btn btn--cancel"
                 onClick={handleCancel}
+                aria-label="Cancelar edición del perfil"
               >
                 Cancelar
               </button>
@@ -375,6 +416,7 @@ const handleConfirmDelete = async () => {
               <button
                 className="btn btn--delete"
                 onClick={handleDelete}
+                aria-label="Eliminar cuenta permanentemente"
               >
                 Eliminar Cuenta
               </button>
@@ -396,6 +438,7 @@ const handleConfirmDelete = async () => {
             placeholder="Ingresa tu contraseña actual"
             value={currentPassword}
             onChange={(e) => setCurrentPassword(e.target.value)}
+            ariaLabel="Campo para ingresar la contraseña actual"
           />
           
           <FormGroup
@@ -405,6 +448,7 @@ const handleConfirmDelete = async () => {
             placeholder="Ingresa tu nueva contraseña"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
+            ariaLabel="Campo para ingresar la nueva contraseña"
           />
           
           <FormGroup
@@ -414,12 +458,14 @@ const handleConfirmDelete = async () => {
             placeholder="Confirma tu nueva contraseña"
             value={confirmNewPassword}
             onChange={(e) => setConfirmNewPassword(e.target.value)}
+            ariaLabel="Campo para confirmar la nueva contraseña"
           />
           
           <div className="modal__actions">
             <button 
               className="btn btn--save"
               onClick={handleConfirmPasswordChange}
+              aria-label="Confirmar cambio de contraseña"
             >
               Confirmar
             </button>
@@ -427,6 +473,7 @@ const handleConfirmDelete = async () => {
             <button 
               className="btn btn--cancel"
               onClick={handleCancelPasswordChange}
+              aria-label="Cancelar cambio de contraseña"
             >
               Cancelar
             </button>
@@ -452,12 +499,14 @@ const handleConfirmDelete = async () => {
             placeholder="Ingresa tu contraseña"
             value={deletePassword}
             onChange={(e) => setDeletePassword(e.target.value)}
+            ariaLabel="Campo para ingresar contraseña para confirmar eliminación"
           />
           
           <div className="modal__actions">
             <button 
               className="btn btn--delete"
               onClick={handleConfirmDelete}
+              aria-label="Confirmar eliminación de cuenta"
             >
               Eliminar Cuenta
             </button>
@@ -465,6 +514,7 @@ const handleConfirmDelete = async () => {
             <button 
               className="btn btn--cancel"
               onClick={handleCancelDelete}
+              aria-label="Cancelar eliminación de cuenta"
             >
               Cancelar
             </button>

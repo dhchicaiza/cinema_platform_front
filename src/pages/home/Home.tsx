@@ -2,6 +2,30 @@ import React from 'react'
 import './Home.scss'
 import TeamCard from '../../components/team-card/TeamCard'
 
+/**
+ * Home Page Component
+ * 
+ * The landing page of the application featuring:
+ * - Welcome section with application introduction
+ * - Team presentation section with developer cards
+ * - Responsive grid layout for team members
+ * 
+ * Displays information about CinePlatform and showcases the development team
+ * with individual cards showing their roles and responsibilities.
+ * 
+ * @component
+ * @returns {React.ReactElement} The home page with welcome message and team section
+ * 
+ * @example
+ * // Rendered through React Router
+ * <Route path="/" element={<Home />} />
+ * 
+ * @remarks
+ * - Features an anchor link (#equipo) for direct navigation to team section
+ * - Uses TeamCard component to display individual developer information
+ * - Implements responsive grid that adapts from 5 columns (desktop) to 1 column (mobile)
+ * - Team section is accessible from header navigation ("Sobre nosotros")
+ */
 const Home: React.FC = () => {
   return (
     <section className="home">

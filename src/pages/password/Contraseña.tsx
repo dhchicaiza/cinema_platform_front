@@ -3,6 +3,38 @@ import './Contraseña.scss'
 import FormGroup from '../../components/form-group/FormGroup'
 import Alert from '../../components/alert/Alert'
 
+/**
+ * Contraseña (Forgot Password) Page Component
+ * 
+ * Handles the password recovery request process.
+ * Allows users to request a password reset link by providing their email address.
+ * 
+ * Features:
+ * - Email input field
+ * - API integration to send password reset email
+ * - Success/error feedback through alerts
+ * - Link to return to login page
+ * 
+ * Workflow:
+ * 1. User enters their registered email
+ * 2. System sends password reset link to email
+ * 3. User receives email with reset token
+ * 4. User clicks link to navigate to reset password page
+ * 
+ * @component
+ * @returns {React.ReactElement} The password recovery request page
+ * 
+ * @example
+ * // Rendered through React Router
+ * <Route path="/contraseña" element={<Contraseña />} />
+ * 
+ * @remarks
+ * - Uses environment variable VITE_API_BASE_URL for API endpoint
+ * - Sends POST request to /api/auth/forgot-password
+ * - Displays success message when email is sent
+ * - Shows error message if email is not found or request fails
+ * - Accessible from login page through "¿Olvidaste tu contraseña?" link
+ */
 const Contraseña: React.FC = () => {
   const [email, setEmail] = useState('')
   const [showAlert, setShowAlert] = useState(false)
@@ -11,6 +43,23 @@ const Contraseña: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    // Validar que el email no esté vacío
+    if (!email.trim()) {
+      setAlertType('error')
+      setAlertMessage('Por favor ingresa tu correo electrónico.')
+      setShowAlert(true)
+      return
+    }
+
+    // Validar formato de email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      setAlertType('error')
+      setAlertMessage('Por favor ingresa un correo electrónico válido.')
+      setShowAlert(true)
+      return
+    }
 
     const API_URL = import.meta.env.VITE_API_BASE_URL
     const resetUrl = `${API_URL}/api/auth/forgot-password`
@@ -27,6 +76,17 @@ const Contraseña: React.FC = () => {
       const data = await response.json()
       console.log("datos que vienen del back ",data)
       if (!response.ok) {
+        // Si hay errores de validación específicos, mostrarlos
+        if (data.errors && Array.isArray(data.errors)) {
+          // Limpiar los mensajes removiendo el prefijo del campo (ej: "email: ")
+          const errorMessages = data.errors
+            .map((error: string) => {
+              const colonIndex = error.indexOf(':')
+              return colonIndex !== -1 ? error.substring(colonIndex + 1).trim() : error
+            })
+            .join('\n')
+          throw new Error(errorMessages)
+        }
         throw new Error(data.message || 'Error al enviar el correo de recuperación.')
       }
 

@@ -5,6 +5,30 @@ import useUserStore from '../../stores/useUserStores';
 import ConfirmAlert from '../alert/ConfirmAlert';
 import Alert from '../alert/Alert';
 
+/**
+ * Header Component
+ * 
+ * The main navigation header component displayed at the top of every page.
+ * Features different views based on authentication state:
+ * - Unauthenticated: Shows Login and Register buttons
+ * - Authenticated: Shows user avatar with dropdown menu (Profile, Logout)
+ * 
+ * Includes logout confirmation dialog and success feedback.
+ * Navigation links adapt to user authentication status.
+ * 
+ * @component
+ * @returns {React.ReactElement} The application header with logo, navigation, and user actions
+ * 
+ * @example
+ * // Typically used in the Layout component
+ * <Header />
+ * 
+ * @remarks
+ * - Uses Zustand store for global user state management
+ * - Implements logout confirmation flow with alerts
+ * - Features responsive dropdown menu for user actions
+ * - Clears authentication token from localStorage on logout
+ */
 const Header: React.FC = () => {
     // Obtiene el usuario para saber si alguien ha iniciado sesión
     const user = useUserStore((state) => state.user);
@@ -77,8 +101,8 @@ const Header: React.FC = () => {
                 
                 {!user ? (
                     <div className="header__actions">
-                        <Link to="/login" className="btn btn--login">Iniciar Sesión</Link>
-                        <Link to="/register" className="btn btn--register">Crea una Cuenta</Link>
+                        <Link to="/login" className="btn btn--login" aria-label="Ir a página de inicio de sesión">Iniciar Sesión</Link>
+                        <Link to="/register" className="btn btn--register" aria-label="Crear una nueva cuenta">Crea una Cuenta</Link>
                     </div>
                 ) : (
                     <div className="header__user">
@@ -88,16 +112,17 @@ const Header: React.FC = () => {
                                 className="user__avatar user__avatar--button"
                                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                                 title="Menú de usuario"
+                                aria-label="Abrir menú de usuario"
                             >
                                 <span>{user.firstName?.charAt(0).toUpperCase()}</span>
                             </button>
                             
                             {isMenuOpen && (
                                 <div className="dropdown__menu">
-                                    <Link to="/profile" className="dropdown__item" onClick={() => setIsMenuOpen(false)}>
+                                    <Link to="/profile" className="dropdown__item" onClick={() => setIsMenuOpen(false)} aria-label="Ir a mi perfil">
                                         Ver Perfil
                                     </Link>
-                                    <button className="dropdown__item dropdown__item--logout" onClick={handleLogout}>
+                                    <button className="dropdown__item dropdown__item--logout" onClick={handleLogout} aria-label="Cerrar sesión de la cuenta">
                                         Cerrar Sesión
                                     </button>
                                 </div>

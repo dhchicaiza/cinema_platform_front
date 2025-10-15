@@ -2,6 +2,20 @@ import React from 'react'
 import './Footer.scss'
 import { Link } from 'react-router-dom'
 
+/**
+ * Footer Component
+ * 
+ * A footer component displayed at the bottom of every page in the application.
+ * Contains copyright information and a link to the site map.
+ * Features responsive design that adapts layout for different screen sizes.
+ * 
+ * @component
+ * @returns {React.ReactElement} The application footer with copyright and site map link
+ * 
+ * @example
+ * // Typically used in the Layout component
+ * <Footer />
+ */
 const Footer: React.FC = () => {
   return (
     <footer className="footer">
