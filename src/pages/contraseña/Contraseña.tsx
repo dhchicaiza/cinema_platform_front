@@ -44,6 +44,23 @@ const Contraseña: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
+    // Validar que el email no esté vacío
+    if (!email.trim()) {
+      setAlertType('error')
+      setAlertMessage('Por favor ingresa tu correo electrónico.')
+      setShowAlert(true)
+      return
+    }
+
+    // Validar formato de email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      setAlertType('error')
+      setAlertMessage('Por favor ingresa un correo electrónico válido.')
+      setShowAlert(true)
+      return
+    }
+
     const API_URL = import.meta.env.VITE_API_BASE_URL
     const resetUrl = `${API_URL}/api/auth/forgot-password`
 
@@ -59,6 +76,17 @@ const Contraseña: React.FC = () => {
       const data = await response.json()
       console.log("datos que vienen del back ",data)
       if (!response.ok) {
+        // Si hay errores de validación específicos, mostrarlos
+        if (data.errors && Array.isArray(data.errors)) {
+          // Limpiar los mensajes removiendo el prefijo del campo (ej: "email: ")
+          const errorMessages = data.errors
+            .map((error: string) => {
+              const colonIndex = error.indexOf(':')
+              return colonIndex !== -1 ? error.substring(colonIndex + 1).trim() : error
+            })
+            .join('\n')
+          throw new Error(errorMessages)
+        }
         throw new Error(data.message || 'Error al enviar el correo de recuperación.')
       }
 

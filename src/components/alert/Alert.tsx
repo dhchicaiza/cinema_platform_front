@@ -45,7 +45,7 @@ const Alert: React.FC<AlertProps> = ({ message, type = 'success', onClose }) => 
   useEffect(() => {
     const timer = setTimeout(() => {
       onClose();
-    }, 2000); 
+    }, 5000); 
 
     return () => clearTimeout(timer);
   }, [onClose]);
@@ -75,7 +75,17 @@ const Alert: React.FC<AlertProps> = ({ message, type = 'success', onClose }) => 
           {type === 'error' && 'Error'}
           {type === 'info' && 'Información'}
         </h3>
-        <p className="alert-message">{message}</p>
+        <div className="alert-message">
+          {message.includes('\n') ? (
+            <ul>
+              {message.split('\n').map((line: string, index: number) => (
+                <li key={index}>{line}</li>
+              ))}
+            </ul>
+          ) : (
+            <p>{message}</p>
+          )}
+        </div>
       </div>
     </div>
   )

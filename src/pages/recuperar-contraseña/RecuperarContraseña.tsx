@@ -88,6 +88,17 @@ const RecuperarContraseña: React.FC = () => {
       const data = await response.json()
       console.log("datos que vienen del back ",data)
       if (!response.ok) {
+        // Si hay errores de validación específicos, mostrarlos
+        if (data.errors && Array.isArray(data.errors)) {
+          // Limpiar los mensajes removiendo el prefijo del campo
+          const errorMessages = data.errors
+            .map((error: string) => {
+              const colonIndex = error.indexOf(':')
+              return colonIndex !== -1 ? error.substring(colonIndex + 1).trim() : error
+            })
+            .join('\n')
+          throw new Error(errorMessages)
+        }
         throw new Error(data.message || 'Error al restablecer la contraseña.')
       }
 
