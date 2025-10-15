@@ -49,16 +49,16 @@ const Profile: React.FC = () => {
   const [alertMessage, setAlertMessage] = useState('');
   const [alertType, setAlertType] = useState<'success' | 'error' | 'info'>('success');
   
-  // Estados para modales
+
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   
-  // Estados para el modal de cambiar contraseña
+
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
   
-  // Estado para el modal de eliminar cuenta
+
   const [deletePassword, setDeletePassword] = useState('');
   const [formData, setFormData] = useState({
     firstName: user?.firstName || 'Laura',

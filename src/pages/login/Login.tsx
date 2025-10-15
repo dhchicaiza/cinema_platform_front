@@ -59,9 +59,7 @@ const Login: React.FC = () => {
             const data = await response.json();
 
             if (!response.ok) {
-                // Si hay errores de validación específicos, mostrarlos
                 if (data.errors && Array.isArray(data.errors)) {
-                    // Limpiar los mensajes removiendo el prefijo del campo (ej: "email: ")
                     const errorMessages = data.errors
                         .map((error: string) => {
                             const colonIndex = error.indexOf(':');
@@ -78,12 +76,10 @@ const Login: React.FC = () => {
                 localStorage.setItem('authToken', data.data.token);
                 setUser(data.data.user);
                 
-                // Mostrar alerta de éxito
                 setAlertType('success');
                 setAlertMessage('¡Bienvenido! Has iniciado sesión exitosamente.');
                 setShowAlert(true);
                 
-                // Navegar después de mostrar la alerta
                 setTimeout(() => {
                     navigate(ROUTES.CATALOG);
                 }, 1500);
