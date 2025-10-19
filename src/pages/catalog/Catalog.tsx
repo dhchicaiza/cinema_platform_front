@@ -1,5 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './Catalog.scss'
+import Movie from '../../components/movie/Movie';
 
 /**
  * Catalog Page Component
@@ -35,6 +37,8 @@ import './Catalog.scss'
  * - Future: Will integrate with backend API for actual movie data
  */
 const Catalog: React.FC = () => {
+  const navigate = useNavigate();
+  const [movies, setMovies] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isFavorite, setIsFavorite] = useState(true);
 
@@ -45,6 +49,17 @@ const Catalog: React.FC = () => {
   const toggleFavorite = () => {
     setIsFavorite(!isFavorite);
   };
+
+  const handlePlayMovie = (movie: any) => {
+    navigate('/view-movie', { state: { movie: movie } });
+  };
+
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/api/movies/popular`)
+      .then(res => res.json())
+      .then(data => setMovies(data.data.movies))
+      .catch(err => console.error(err))
+  }, [])
 
   return (
     <section className="catalog">
@@ -62,73 +77,61 @@ const Catalog: React.FC = () => {
               value={searchQuery}
               onChange={handleSearch}
             />
-            <button className="btn btn--favorites">Mis Favoritos</button>
+            <button className="btn btn--favorites" onClick={() => navigate('/favorite')}>Mis Favoritos</button>
           </div>
 
-          <div className="movie__card">
-            <div className="movie__header">
-              <h3 className="movie__title">Avatar: La leyenda de Aang</h3>
-            </div>
-            
-            <div className="movie__content">
-              <div className="movie__info">
-                <div className="movie__title-section">
-                  <h4 className="movie__name">Avatar: La leyenda de Aang</h4>
-                  <button 
-                    className={`favorite__btn ${isFavorite ? 'active' : ''}`}
-                    onClick={toggleFavorite}
-                  >
-                    ❤️
-                  </button>
+          <div className="movies__grid">
+            {movies.map((movie: any) => (
+              <div key={movie._id || movie.id} className="movie__card">
+                <div className="movie__header">
+                  <h3 className="movie__title">{movie.title}</h3>
                 </div>
                 
-                <div className="movie__rating">
-                  <div className="stars">
-                    <span className="star">★</span>
-                    <span className="star">★</span>
-                    <span className="star">★</span>
-                    <span className="star">★</span>
-                    <span className="star half">★</span>
+                <div className="movie__content">
+                  <div className="movie__poster">
+                    <Movie movie={movie} />
                   </div>
-                  <span className="rating__number">4.86</span>
+                  
+                  <div className="movie__info">
+                    <div className="movie__title-section">
+                      <h4 className="movie__name">{movie.title}</h4>
+                      <button 
+                        className={`favorite__btn ${isFavorite ? 'active' : ''}`}
+                        onClick={toggleFavorite}
+                      >
+                        ❤️
+                      </button>
+                    </div>
+                    
+                    <div className="movie__details">
+                      <p className="movie__description">{movie.description}</p>
+                      <div className="movie__meta">
+                        <span className="movie__duration">{movie.duration} min</span>
+                        <span className="movie__genre">{movie.genre?.join(', ')}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="movie__rating">
+                      <div className="stars">
+                        <span className="star">★</span>
+                        <span className="star">★</span>
+                        <span className="star">★</span>
+                        <span className="star">★</span>
+                        <span className="star half">★</span>
+                      </div>
+                      <span className="rating__number">4.5</span>
+                    </div>
+                  </div>
+
+                  <button 
+                    className="btn btn--play"
+                    onClick={() => handlePlayMovie(movie)}
+                  >
+                    Reproducir
+                  </button>
                 </div>
               </div>
-
-              <div className="rating__breakdown">
-                <div className="rating__item">
-                  <span className="rating__label">5</span>
-                  <div className="rating__bar">
-                    <div className="rating__fill rating__fill--high"></div>
-                  </div>
-                </div>
-                <div className="rating__item">
-                  <span className="rating__label">4</span>
-                  <div className="rating__bar">
-                    <div className="rating__fill rating__fill--medium"></div>
-                  </div>
-                </div>
-                <div className="rating__item">
-                  <span className="rating__label">3</span>
-                  <div className="rating__bar">
-                    <div className="rating__fill rating__fill--low"></div>
-                  </div>
-                </div>
-                <div className="rating__item">
-                  <span className="rating__label">2</span>
-                  <div className="rating__bar">
-                    <div className="rating__fill rating__fill--low"></div>
-                  </div>
-                </div>
-                <div className="rating__item">
-                  <span className="rating__label">1</span>
-                  <div className="rating__bar">
-                    <div className="rating__fill rating__fill--low"></div>
-                  </div>
-                </div>
-              </div>
-
-              <button className="btn btn--play">Reproducir</button>
-            </div>
+            ))}
           </div>
         </div>
       </div>

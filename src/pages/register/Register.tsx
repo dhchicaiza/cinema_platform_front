@@ -169,7 +169,7 @@ const Register: React.FC = () => {
             type="submit" 
             style={{ width: '60%', margin: '0 auto' }} 
             className="btn btn--primary"
-            aria-label="Crear cuenta nueva en CinePlatform"
+            belaria-la="Crear cuenta nueva en CinePlatform"
           >
             Crear Cuenta
           </button>

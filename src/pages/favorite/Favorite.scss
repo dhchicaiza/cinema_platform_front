@@ -1,0 +1,68 @@
+.favorite {
+    background: #2E3338;
+    min-height: 100vh;
+    color: white;
+    font-family: 'Arial', sans-serif;
+    padding: 100px 1rem 2rem;
+
+  &__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  &__title {
+    color: #FFFFFF;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 30px;
+    text-align: left;
+    line-height: 1.2;
+  }
+
+  &__movies {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    justify-items: center;
+    align-items: start;
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .favorite {
+    padding: 15px;
+    padding-top: 80px;
+
+    &__container {
+      padding: 0 10px;
+    }
+
+    &__title {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    &__movies {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .favorite {
+    padding: 10px;
+    padding-top: 70px;
+
+    &__title {
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
+
+    &__movies {
+      gap: 16px;
+    }
+  }
+}
