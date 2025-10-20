@@ -1,0 +1,151 @@
+.view-movie {
+  background: #2E3338;
+  min-height: 100vh;
+  color: white;
+  font-family: 'Arial', sans-serif;
+  padding: 2rem 1rem;
+
+  &__container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  &__title {
+    font-size: 3rem;
+    font-weight: bold;
+    background: linear-gradient(90deg, #8B5CF6, #20b2aa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+
+    @media (max-width: 768px) {
+      font-size: 2.5rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 2rem;
+    }
+  }
+
+  &__content {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 3rem;
+    margin-bottom: 3rem;
+
+    @media (max-width: 1024px) {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+
+  &__video-section {
+    background: #374151;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  }
+
+  &__video {
+    width: 100%;
+    max-width: 800px;
+    height: 450px;
+    border-radius: 10px;
+    background: #1f2937;
+
+    @media (max-width: 768px) {
+      height: 300px;
+    }
+  }
+
+  &__info {
+    background: #374151;
+    border-radius: 15px;
+    padding: 3rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    height: fit-content;
+  }
+
+  &__movie-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: white;
+  }
+
+  &__description {
+    color: #d1d5db;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+  }
+
+  &__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  &__meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+  }
+
+  &__meta-label {
+    font-weight: 600;
+    color: #4F9AAF;
+    min-width: 80px;
+  }
+
+  &__meta-value {
+    color: #d1d5db;
+  }
+
+  &__genres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  &__genre {
+    background: #6b7280;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    color: white;
+  }
+
+
+  // Responsive
+  @media (max-width: 768px) {
+    padding: 1rem 0.5rem;
+
+    &__content {
+      gap: 1.5rem;
+    }
+
+    &__video-section,
+    &__info {
+      padding: 1.5rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    &__title {
+      font-size: 1.8rem;
+    }
+
+    &__movie-title {
+      font-size: 1.5rem;
+    }
+  }
+}

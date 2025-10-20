@@ -52,8 +52,14 @@ const Alert: React.FC<AlertProps> = ({ message, type = 'success', onClose }) => 
 
   return (
     <div className="alert-overlay" onClick={onClose}>
-      <div className="alert-container" onClick={(e) => e.stopPropagation()}>
-        <div className={`alert-icon alert-icon--${type}`}>
+      <div 
+        className="alert-container" 
+        onClick={(e) => e.stopPropagation()}
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+      >
+        <div className={`alert-icon alert-icon--${type}`} aria-hidden="true">
           {type === 'success' && (
             <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
               <path d="M20 6L9 17L4 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>

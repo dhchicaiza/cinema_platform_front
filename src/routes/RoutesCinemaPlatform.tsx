@@ -11,6 +11,10 @@ import Layout from '../layout/Layout'
 import MapaDelSitio from '../pages/mapa-del-sitio/MapaDelSitio'
 import Contraseña from '../pages/password/Contraseña'
 import RecuperarContraseña from '../pages/reset-password/RecuperarContraseña'
+import ViewMovie from '../pages/view-movie/ViewMovie'
+import Favorite from '../pages/favorite/Favorite'
+
+
 
 /**
  * RoutesCinemaPlatform Component
@@ -59,6 +63,9 @@ const RoutesCinemaPlatform: React.FC = () => {
       <Route path='/contraseña' element={<Contraseña />} />
       <Route path='/reset-password' element={<RecuperarContraseña />} />
       <Route path='/mapa-del-sitio' element={<MapaDelSitio />} />
+      <Route path='/view-movie' element={<ViewMovie/>} />  
+      <Route path='/favorite' element={<Favorite />} />
+
       <Route path='*' element={<NotFound />} /> //renderiza la pagina 404 si no se encuentra la ruta
     </Routes>
   </Layout>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import './RecuperarContraseña.scss'
 import FormGroup from '../../components/form-group/FormGroup'
+import PasswordInputWithValidation from '../../components/password-input/PasswordInputWithValidation'
 import Alert from '../../components/alert/Alert'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ROUTES } from '../../constants'
@@ -138,13 +139,13 @@ const RecuperarContraseña: React.FC = () => {
         </p>
 
         <form className="recuperar-contraseña__form" onSubmit={handleSubmit}>
-          <FormGroup 
+          <PasswordInputWithValidation
             label="Nueva Contraseña" 
-            type="password" 
             id="newPassword" 
             placeholder="Mínimo 8 caracteres" 
             value={newPassword} 
             onChange={(e) => setNewPassword(e.target.value)}
+            ariaLabel="Ingresa tu nueva contraseña"
           />
 
           <FormGroup 

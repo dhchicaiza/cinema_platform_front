@@ -92,7 +92,7 @@ const Header: React.FC = () => {
                     </Link>
                 </div>
                 
-                <nav className="header__nav">
+                <nav className="header__nav" aria-label="Navegación principal">
                     <Link to="/" className="nav__link">Inicio</Link>
                   
                     <Link to="/#equipo" className="nav__link">Sobre nosotros</Link>
@@ -113,16 +113,18 @@ const Header: React.FC = () => {
                                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                                 title="Menú de usuario"
                                 aria-label="Abrir menú de usuario"
+                                aria-expanded={isMenuOpen}
+                                aria-haspopup="true"
                             >
                                 <span>{user.firstName?.charAt(0).toUpperCase()}</span>
                             </button>
                             
                             {isMenuOpen && (
-                                <div className="dropdown__menu">
-                                    <Link to="/profile" className="dropdown__item" onClick={() => setIsMenuOpen(false)} aria-label="Ir a mi perfil">
+                                <div className="dropdown__menu" role="menu">
+                                    <Link to="/profile" className="dropdown__item" onClick={() => setIsMenuOpen(false)} role="menuitem" aria-label="Ir a mi perfil">
                                         Ver Perfil
                                     </Link>
-                                    <button className="dropdown__item dropdown__item--logout" onClick={handleLogout} aria-label="Cerrar sesión de la cuenta">
+                                    <button className="dropdown__item dropdown__item--logout" onClick={handleLogout} role="menuitem" aria-label="Cerrar sesión de la cuenta">
                                         Cerrar Sesión
                                     </button>
                                 </div>
