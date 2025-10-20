@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useUserStore from '../../stores/useUserStores'
 import './Favorite.scss'
-import MovieCard from '../../components/movie-card/MovieCard'
+import Movie from '../../components/movie/Movie'
+
 /**
  * Favorite Page Component
  * 
@@ -16,11 +17,8 @@ import MovieCard from '../../components/movie-card/MovieCard'
  * - Responsive design that adapts to different screen sizes
  * - Dark theme with purple accents matching the application design
  * - Each movie card shows title, rating stars, and navigation button
- * 
- * Current Implementation:
- * - Uses mock data with Avatar movies as examples
- * - Displays 2 sample favorite movies
- * - Ready for integration with backend API for real user favorites
+ * - Remove favorite functionality
+ * - Navigation to movie details page
  * 
  * @component
  * @returns {React.ReactElement} Complete favorites page with movie cards grid
@@ -29,15 +27,11 @@ import MovieCard from '../../components/movie-card/MovieCard'
  * // Route usage in React Router
  * <Route path="/favorite" element={<Favorite />} />
  * 
- * @example
- * // Direct component usage
- * <Favorite />
- * 
  * @remarks
- * - Page uses the Layout component for consistent header/footer
- * - Movie cards are rendered using the MovieCard component
+ * - Page uses the same styling as Catalog for consistency
+ * - Movie cards are rendered using the Movie component
  * - Grid layout automatically adjusts based on screen size
- * - Currently uses static data but ready for dynamic favorites from API
+ * - Integrated with backend API for real user favorites
  * - Styled with SCSS using BEM methodology
  * - Accessible via /favorite route
  */
@@ -93,14 +87,12 @@ const Favorite: React.FC = () => {
 
   /**
    * Función que se encarga de eliminar un favorito.
-   * Se pasará como prop a cada MovieCard.
    */
   const handleRemoveFavorite = async (movieId: string) => {
     const token = localStorage.getItem('authToken');
     if (!token) return; 
 
     try {
-     
       const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/favorites/${movieId}`, {
         method: 'DELETE',
         headers: {
@@ -113,7 +105,7 @@ const Favorite: React.FC = () => {
         throw new Error(errData.message || "Error al eliminar el favorito.");
       }
 
-     
+      // Eliminar de la lista local
       setFavorites(currentFavorites => 
         currentFavorites.filter(fav => fav.movie.id !== movieId)
       );
@@ -123,24 +115,81 @@ const Favorite: React.FC = () => {
     }
   };
 
+  const handlePlayMovie = (movie: any) => {
+    navigate('/view-movie', { state: { movie: movie } });
+  };
+
   const renderContent = () => {
     if (isLoading) {
       return <p className="favorite__message">Cargando tus favoritos...</p>;
     }
     
     if (!isLoading && favorites.length === 0) {
-      return <p className="favorite__message">Aún no has añadido ninguna película a favoritos.</p>;
+      return (
+        <div className="favorite__empty">
+          <div className="favorite__empty-icon">📽️</div>
+          <h2 className="favorite__empty-title">Lista de Favoritos Vacía</h2>
+          <p className="favorite__message">Aún no has añadido ninguna película a favoritos.</p>
+          <button className="btn btn--catalog" onClick={() => navigate('/catalog')}>
+            Ir al Catálogo
+          </button>
+        </div>
+      );
     }
     
     return (
-      <div className="favorite__movies">
+      <div className="movies__grid">
         {favorites.map((fav) => (
-          <MovieCard 
-            key={fav.favoriteId} 
-            movie={fav.movie} 
+          <div key={fav.favoriteId} className="movie__card">
+            <div className="movie__header">
+              <h3 className="movie__title">{fav.movie.title}</h3>
+            </div>
             
-            onRemoveFavorite={handleRemoveFavorite}
-          />
+            <div className="movie__content">
+              <div className="movie__poster">
+                <Movie movie={fav.movie} />
+              </div>
+              
+              <div className="movie__info">
+                <div className="movie__title-section">
+                  <h4 className="movie__name">{fav.movie.title}</h4>
+                  <button 
+                    className="favorite__btn active"
+                    onClick={() => handleRemoveFavorite(fav.movie.id)}
+                    title="Quitar de favoritos"
+                  >
+                    ❤️
+                  </button>
+                </div>
+                
+                <div className="movie__details">
+                  <p className="movie__description">{fav.movie.description}</p>
+                  <div className="movie__meta">
+                    <span className="movie__duration">{fav.movie.duration} min</span>
+                    <span className="movie__genre">{fav.movie.genre?.join(', ')}</span>
+                  </div>
+                </div>
+                
+                <div className="movie__rating">
+                  <div className="stars">
+                    <span className="star">★</span>
+                    <span className="star">★</span>
+                    <span className="star">★</span>
+                    <span className="star">★</span>
+                    <span className="star half">★</span>
+                  </div>
+                  <span className="rating__number">4.5</span>
+                </div>
+              </div>
+
+              <button 
+                className="btn btn--play"
+                onClick={() => handlePlayMovie(fav.movie)}
+              >
+                Reproducir
+              </button>
+            </div>
+          </div>
         ))}
       </div>
     );
@@ -150,14 +199,17 @@ const Favorite: React.FC = () => {
     <section className="favorite">
       <div className="favorite__container">
         <h1 className="favorite__title">Lista de Favoritos</h1>
+        
         {error && (
-          <p className="favorite__message favorite__message--error">{error}</p>
+          <div className="favorite__error">
+            <p className="favorite__message favorite__message--error">{error}</p>
+          </div>
         )}
         
         {renderContent()}
       </div>
     </section>
-  )
+  );
 }
 
 export default Favorite
