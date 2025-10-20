@@ -1,6 +1,7 @@
 import React , { useState }from 'react'
 import './Register.scss'
 import FormGroup from '../../components/form-group/FormGroup'
+import PasswordInputWithValidation from '../../components/password-input/PasswordInputWithValidation'
 import { ROUTES } from '../../constants'
 import { useNavigate } from 'react-router'
 import Alert from '../../components/alert/Alert'
@@ -146,11 +147,10 @@ const Register: React.FC = () => {
             onChange={(e) => setAge(e.target.value)}
             ariaLabel="Ingresa tu edad"
           />
-          <FormGroup 
+          <PasswordInputWithValidation
             label="Contraseña" 
-            type="password" 
             id="contraseña" 
-            placeholder="Contraseña"
+            placeholder="Mínimo 8 caracteres"
             value={password} 
             onChange={(e) => setPassword(e.target.value)}
             ariaLabel="Crea una contraseña segura"
