@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import useUserStore from '../../stores/useUserStores'
 import './Favorite.scss'
 import MovieCard from '../../components/movie-card/MovieCard'
-
 /**
  * Favorite Page Component
  * 
@@ -40,36 +41,120 @@ import MovieCard from '../../components/movie-card/MovieCard'
  * - Styled with SCSS using BEM methodology
  * - Accessible via /favorite route
  */
-const Favorite: React.FC = () => {
-  /**
-   * Mock data for favorite movies
-   * In a real application, this would be fetched from an API
-   * or retrieved from user's saved favorites
-   */
-  const favoriteMovies = [
-    {
-      id: 1,
-      title: "Avatar: La leyenda de Aang",
-      rating: 4,
-      poster: "/placeholder-movie.jpg"
-    },
-    {
-      id: 2,
-      title: "Avatar 2: La leyenda de Korra",
-      rating: 4,
-      poster: "/placeholder-movie.jpg"
-    }
-  ]
 
+const Favorite: React.FC = () => {
+  const [favorites, setFavorites] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  
+  const { user } = useUserStore();
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    
+    if (!user || !token) {
+      navigate('/login?message=Inicia-sesion-para-ver-tus-favoritos');
+      return;
+    }
+    
+    const fetchFavorites = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/favorites?limit=100`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!response.ok) {
+          const errData = await response.json();
+          throw new Error(errData.message || 'No se pudieron cargar los favoritos.');
+        }
+
+        const data = await response.json();
+        
+        if (data.success && Array.isArray(data.data.favorites)) {
+          setFavorites(data.data.favorites);
+        } else {
+          throw new Error('Formato de datos inválido.');
+        }
+
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchFavorites();
+
+  }, [user, navigate]);
+
+  /**
+   * Función que se encarga de eliminar un favorito.
+   * Se pasará como prop a cada MovieCard.
+   */
+  const handleRemoveFavorite = async (movieId: string) => {
+    const token = localStorage.getItem('authToken');
+    if (!token) return; 
+
+    try {
+     
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/favorites/${movieId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        const errData = await response.json();
+        throw new Error(errData.message || "Error al eliminar el favorito.");
+      }
+
+     
+      setFavorites(currentFavorites => 
+        currentFavorites.filter(fav => fav.movie.id !== movieId)
+      );
+
+    } catch (err: any) {
+      setError(err.message); 
+    }
+  };
+
+  const renderContent = () => {
+    if (isLoading) {
+      return <p className="favorite__message">Cargando tus favoritos...</p>;
+    }
+    
+    if (!isLoading && favorites.length === 0) {
+      return <p className="favorite__message">Aún no has añadido ninguna película a favoritos.</p>;
+    }
+    
+    return (
+      <div className="favorite__movies">
+        {favorites.map((fav) => (
+          <MovieCard 
+            key={fav.favoriteId} 
+            movie={fav.movie} 
+            
+            onRemoveFavorite={handleRemoveFavorite}
+          />
+        ))}
+      </div>
+    );
+  };
+  
   return (
     <section className="favorite">
       <div className="favorite__container">
         <h1 className="favorite__title">Lista de Favoritos</h1>
-        <div className="favorite__movies">
-          {favoriteMovies.map((movie) => (
-            <MovieCard key={movie.id} movie={movie} />
-          ))}
-        </div>
+        {error && (
+          <p className="favorite__message favorite__message--error">{error}</p>
+        )}
+        
+        {renderContent()}
       </div>
     </section>
   )

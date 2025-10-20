@@ -305,12 +305,18 @@
   cursor: pointer;
   transition: transform 0.3s ease;
   
-  &.active {
-    color: #ef4444;
-  }
+  filter: grayscale(100%);
+  opacity: 0.7; // Opcional: hacerlo un poco más tenue
 
   &:hover {
     transform: scale(1.1);
+    opacity: 1;
+  }
+  
+  // 2. Cuando tenga la clase .active, quita el filtro
+  &.active {
+    filter: none; // O filter: grayscale(0%);
+    opacity: 1;
   }
 }
 

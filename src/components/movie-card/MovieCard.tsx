@@ -4,24 +4,18 @@ import './MovieCard.scss'
 
 /**
  * Props interface for MovieCard component
- * @interface MovieCardProps
  */
 interface MovieCardProps {
-  /** Movie object containing all necessary information */
   movie: {
-    /** Unique identifier for the movie */
-    id: number
-    /** Movie title */
-    title: string
-    /** Movie rating from 0 to 5 stars */
-    rating: number
-    /** Optional movie poster image URL */
-    poster?: string
-    /** Optional alternative movie image URL */
-    image?: string
-  }
+    id: string;
+    title: string;
+    // 👇 1. CORRECCIÓN: Tu API envía 'averageRating'
+    averageRating: number; 
+    poster?: string;
+    image?: string;
+  };
+  onRemoveFavorite: (movieId: string) => void;
 }
-
 /**
  * MovieCard Component
  * 
@@ -73,21 +67,19 @@ interface MovieCardProps {
  * - Component is fully responsive and includes hover animations
  * - Styled with SCSS using BEM methodology
  */
-const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
+// 👇 2. CORRECCIÓN: Recibe 'onRemoveFavorite' como prop
+const MovieCard: React.FC<MovieCardProps> = ({ movie, onRemoveFavorite }) => {
   const navigate = useNavigate()
 
   /**
    * Renders star rating display
-   * Creates an array of 5 stars where filled stars represent the movie rating
-   * 
-   * @param {number} rating - Movie rating from 0 to 5
-   * @returns {React.ReactElement[]} Array of star span elements
    */
   const renderStars = (rating: number) => {
+    const roundedRating = Math.round(rating); 
     return Array.from({ length: 5 }, (_, index) => (
       <span 
         key={index} 
-        className={`star ${index < rating ? 'filled' : ''}`}
+        className={`star ${index < roundedRating ? 'filled' : ''}`}
       >
         ★
       </span>
@@ -96,10 +88,17 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
 
   /**
    * Handles navigation to movie details page
-   * Passes the movie data as state to the destination route
    */
   const handleViewMovie = () => {
     navigate('/view-movie', { state: { movie: movie } })
+  }
+
+  /**
+   * Handles deleting the movie from favorites
+   * Calls the onRemoveFavorite prop passed from the parent.
+   */
+  const handleDeleteMovie = () => {
+    onRemoveFavorite(movie.id);
   }
 
   return (
@@ -107,13 +106,19 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
       <div className="movie-card__content">
         <h3 className="movie-card__title">{movie.title}</h3>
         <div className="movie-card__rating">
-          {renderStars(movie.rating)}
+          {renderStars(4)}
         </div>
         <button 
           className="movie-card__button"
           onClick={handleViewMovie}
         >
           Ver
+        </button>
+        <button 
+          className="movie-card__button movie-card__button--delete"
+          onClick={handleDeleteMovie}
+        >
+          Eliminar
         </button>
       </div>
     </div>
