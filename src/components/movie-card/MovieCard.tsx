@@ -105,18 +105,20 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie, onRemoveFavorite }) => {
     <div className="movie-card">
       <div className="movie-card__content">
         <h3 className="movie-card__title">{movie.title}</h3>
-        <div className="movie-card__rating">
+        <div className="movie-card__rating" aria-label={`Calificación: ${Math.round(movie.averageRating)} de 5 estrellas`}>
           {renderStars(4)}
         </div>
         <button 
           className="movie-card__button"
           onClick={handleViewMovie}
+          aria-label={`Ver detalles de ${movie.title}`}
         >
           Ver
         </button>
         <button 
           className="movie-card__button movie-card__button--delete"
           onClick={handleDeleteMovie}
+          aria-label={`Eliminar ${movie.title} de favoritos`}
         >
           Eliminar
         </button>
