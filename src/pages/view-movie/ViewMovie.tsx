@@ -17,6 +17,8 @@ interface MovieData {
   genre?: string[]
   /** Optional video URL for playback */
   videoUrl?: string
+  /** Alternative video URL property */
+  url?: string
   /** Optional movie poster image URL */
   poster?: string
   /** Optional alternative movie image URL */
@@ -24,6 +26,27 @@ interface MovieData {
   /** Additional movie properties (can be extended as needed) */
   [key: string]: any
 }
+
+/**
+ * Comment interface for display
+ * @remarks Uncomment when implementing comment functionality
+ */
+// interface Comment {
+//   /** Comment ID */
+//   id: string
+//   /** Comment content */
+//   content: string
+//   /** User who made the comment */
+//   user: {
+//     name: string
+//     avatar?: string
+//     initials: string
+//   }
+//   /** Timestamp */
+//   createdAt: string
+//   /** Whether comment was edited */
+//   edited?: boolean
+// }
 
 /**
  * ViewMovie Page Component
@@ -92,9 +115,10 @@ const ViewMovie: React.FC = () => {
    * @returns {React.ReactElement} Video player or fallback message
    */
   const renderVideoPlayer = (movieData: MovieData) => {
-    return movieData.videoUrl ? (
+    const videoUrl = movieData.videoUrl || movieData.url;
+    return videoUrl ? (
       <video 
-        src={movieData.videoUrl} 
+        src={videoUrl} 
         controls 
         className="view-movie__video"
         poster={movieData.poster || movieData.image}
@@ -150,6 +174,85 @@ const ViewMovie: React.FC = () => {
                   ))}
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Comments Section */}
+        <div className="view-movie__comments-section">
+          <h2 className="view-movie__comments-title">Comentarios</h2>
+          
+          {/* Comment Input Area */}
+          <div className="view-movie__comment-form">
+            <h3 className="view-movie__comment-form-title">Comparte tu opinión</h3>
+            <textarea
+              className="view-movie__comment-input"
+              placeholder="¿Qué te pareció esta película? Comparte tu experiencia..."
+              rows={4}
+            />
+            <button className="view-movie__comment-submit">
+              Publicar Comentario
+            </button>
+          </div>
+
+          {/* Comments List */}
+          <div className="view-movie__comments-list">
+            {/* Comment Card 1 */}
+            <div className="view-movie__comment-card">
+              <div className="view-movie__comment-header">
+                <div className="view-movie__comment-user">
+                  <div className="view-movie__comment-avatar">
+                    <span>LS</span>
+                  </div>
+                  <div className="view-movie__comment-user-info">
+                    <p className="view-movie__comment-name">Laura Salazar</p>
+                    <p className="view-movie__comment-time">
+                      hace 2 horas
+                      {false && <span className="view-movie__comment-edited">Editado</span>}
+                    </p>
+                  </div>
+                </div>
+                <div className="view-movie__comment-actions">
+                  <button className="view-movie__comment-action view-movie__comment-action--edit">
+                    Editar
+                  </button>
+                  <button className="view-movie__comment-action view-movie__comment-action--delete">
+                    Eliminar
+                  </button>
+                </div>
+              </div>
+              <p className="view-movie__comment-text">
+                Una película visualmente espectacular que redefine lo que es posible en el cine. Los años de espera valieron la pena.
+              </p>
+            </div>
+
+            {/* Comment Card 2 */}
+            <div className="view-movie__comment-card">
+              <div className="view-movie__comment-header">
+                <div className="view-movie__comment-user">
+                  <div className="view-movie__comment-avatar">
+                    <span>LI</span>
+                  </div>
+                  <div className="view-movie__comment-user-info">
+                    <p className="view-movie__comment-name">Laura Isabel</p>
+                    <p className="view-movie__comment-time">
+                      hace 1 día
+                      <span className="view-movie__comment-edited">Editado</span>
+                    </p>
+                  </div>
+                </div>
+                <div className="view-movie__comment-actions">
+                  <button className="view-movie__comment-action view-movie__comment-action--edit">
+                    Editar
+                  </button>
+                  <button className="view-movie__comment-action view-movie__comment-action--delete">
+                    Eliminar
+                  </button>
+                </div>
+              </div>
+              <p className="view-movie__comment-text">
+                Una película visualmente espectacular que redefine lo que es posible en el cine. Los años de espera valieron la pena.
+              </p>
             </div>
           </div>
         </div>

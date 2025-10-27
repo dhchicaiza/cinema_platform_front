@@ -124,6 +124,200 @@
     color: white;
   }
 
+  // Comments Section
+  &__comments-section {
+    background: #374151;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    margin-top: 2rem;
+  }
+
+  &__comments-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 2rem;
+  }
+
+  // Comment Form
+  &__comment-form {
+    background: #2E3338;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    overflow: hidden;
+
+    &::after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+  }
+
+  &__comment-form-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 1rem;
+  }
+
+  &__comment-input {
+    width: 100%;
+    box-sizing: border-box;
+    background: #1f2937;
+    border: 1px solid #6b7280;
+    border-radius: 8px;
+    padding: 1rem;
+    color: white;
+    font-size: 1rem;
+    font-family: inherit;
+    resize: vertical;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+
+    &:focus {
+      outline: none;
+      border-color: #8B5CF6;
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+    }
+
+    &::placeholder {
+      color: #9ca3af;
+    }
+  }
+
+  &__comment-submit {
+    background: linear-gradient(90deg, #8B5CF6, #20b2aa);
+    color: white;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    float: right;
+    clear: right;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  // Comments List
+  &__comments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  &__comment-card {
+    background: #2E3338;
+    border-radius: 10px;
+    padding: 1.5rem;
+    border: 1px solid rgba(139, 92, 246, 0.2);
+  }
+
+  &__comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+  }
+
+  &__comment-user {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  &__comment-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #20b2aa, #8B5CF6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+
+  &__comment-user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  &__comment-name {
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  &__comment-time {
+    color: #9ca3af;
+    font-size: 0.85rem;
+    margin: 0;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  &__comment-edited {
+    color: #fbbf24;
+    font-size: 0.85rem;
+    margin-left: 0.5rem;
+  }
+
+  &__comment-actions {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  &__comment-action {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    border: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &--edit {
+      background: #A198CF;
+      color: white;
+
+      &:hover {
+        background: #895ead;
+      }
+    }
+
+    &--delete {
+      background: #EBA3A3;
+      color: white;
+
+      &:hover {
+        background: rgb(207, 93, 93);
+      }
+    }
+  }
+
+  &__comment-text {
+    color: #d1d5db;
+    line-height: 1.6;
+    font-size: 1rem;
+    margin: 0;
+  }
 
   // Responsive
   @media (max-width: 768px) {
@@ -137,6 +331,25 @@
     &__info {
       padding: 1.5rem;
     }
+
+    &__comments-section {
+      padding: 1.5rem;
+    }
+
+    &__comment-form {
+      padding: 1rem;
+    }
+
+    &__comment-input {
+      width: 100%;
+      padding: 0.75rem;
+    }
+
+    &__comment-submit {
+      width: 100%;
+      padding: 0.75rem 1.5rem;
+      margin-top: 0.5rem;
+    }
   }
 
   @media (max-width: 480px) {
@@ -146,6 +359,34 @@
 
     &__movie-title {
       font-size: 1.5rem;
+    }
+
+    &__comments-title {
+      font-size: 1.5rem;
+    }
+
+    &__comment-card {
+      padding: 1rem;
+    }
+
+    &__comment-user {
+      gap: 0.75rem;
+    }
+
+    &__comment-avatar {
+      width: 40px;
+      height: 40px;
+      font-size: 1rem;
+    }
+
+    &__comment-actions {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    &__comment-action {
+      width: 100%;
+      font-size: 0.85rem;
     }
   }
 }

@@ -33,6 +33,7 @@ interface PasswordInputWithValidationProps {
  * - At least one uppercase letter (A-Z)
  * - At least one lowercase letter (a-z)
  * - At least one number (0-9)
+ * - At least one special character (!@#$%^&*)
  * 
  * Features:
  * - Real-time validation with visual feedback
@@ -89,6 +90,7 @@ const PasswordInputWithValidation: React.FC<PasswordInputWithValidationProps> = 
   const hasUpperCase = /[A-Z]/.test(value)
   const hasLowerCase = /[a-z]/.test(value)
   const hasNumber = /[0-9]/.test(value)
+  const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(value)
 
   return (
     <div className="password-input">
@@ -138,6 +140,14 @@ const PasswordInputWithValidation: React.FC<PasswordInputWithValidationProps> = 
               </span>
               <span className="password-validation__text">
                 Al menos un número
+              </span>
+            </li>
+            <li className={`password-validation__item ${hasSpecialChar ? 'valid' : ''}`}>
+              <span className="password-validation__icon">
+                {hasSpecialChar ? '✓' : '○'}
+              </span>
+              <span className="password-validation__text">
+                Al menos un carácter especial (!@#$%^&*)
               </span>
             </li>
           </ul>

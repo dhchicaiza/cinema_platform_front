@@ -85,9 +85,7 @@ const Favorite: React.FC = () => {
 
   }, [user, navigate]);
 
-  /**
-   * Función que se encarga de eliminar un favorito.
-   */
+
   const handleRemoveFavorite = async (movieId: string) => {
     const token = localStorage.getItem('authToken');
     if (!token) return; 
@@ -105,7 +103,6 @@ const Favorite: React.FC = () => {
         throw new Error(errData.message || "Error al eliminar el favorito.");
       }
 
-      // Eliminar de la lista local
       setFavorites(currentFavorites => 
         currentFavorites.filter(fav => fav.movie.id !== movieId)
       );
@@ -116,7 +113,24 @@ const Favorite: React.FC = () => {
   };
 
   const handlePlayMovie = (movie: any) => {
-    navigate('/view-movie', { state: { movie: movie } });
+    // Ensure we have a complete movie object with all necessary properties
+    const completeMovie = {
+      id: movie.id,
+      title: movie.title,
+      description: movie.description,
+      duration: movie.duration,
+      genre: movie.genre,
+      poster: movie.poster,
+      image: movie.image,
+      videoUrl: movie.videoUrl,
+      url: movie.url,
+      averageRating: movie.averageRating,
+      totalRatings: movie.totalRatings,
+      createdAt: movie.createdAt,
+      ...movie // Spread all other properties
+    };
+    
+    navigate('/view-movie', { state: { movie: completeMovie } });
   };
 
   const renderContent = () => {

@@ -70,13 +70,33 @@ interface MovieProps {
 const Movie: React.FC<MovieProps> = ({ movie }) => {
   const navigate = useNavigate()
  
+  const handleMovieClick = () => {
+    // Ensure we have a complete movie object with all necessary properties
+    const completeMovie = {
+      ...movie, // Spread all properties first
+      // Ensure these specific properties are defined
+      id: movie.id,
+      title: movie.title,
+      description: movie.description,
+      duration: movie.duration,
+      genre: movie.genre,
+      poster: movie.poster,
+      image: movie.image,
+      videoUrl: movie.videoUrl,
+      url: movie.url,
+      averageRating: movie.averageRating,
+      totalRatings: movie.totalRatings,
+      createdAt: movie.createdAt
+    };
+    
+    navigate('/view-movie', { state: { movie: completeMovie } });
+  };
+ 
   return (
     <img 
       src={movie.poster || movie.image || '/placeholder-movie.jpg'} 
       alt={movie.title} 
-      onClick={() => { 
-        navigate('/view-movie', { state: { movie: movie } })
-      }} 
+      onClick={handleMovieClick}
     />
   )
 }
