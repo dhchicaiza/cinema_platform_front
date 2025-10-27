@@ -286,7 +286,13 @@ const ViewMovie: React.FC = () => {
     )
   }
 
-  
+  // En ViewMovie.tsx
+
+// --- FUNCIONES PARA EDITAR COMENTARIOS ---
+ /**
+   * Inicia el modo de edición para un comentario específico.
+   * Se llama al hacer clic en el botón "Editar".
+   */
  const startEditing = (comment: Comment) => {
    setEditingCommentId(comment._id); 
    setEditText(comment.content);
@@ -298,58 +304,54 @@ const ViewMovie: React.FC = () => {
      setEditText("");    
      };
 
-  const handleEditComment = async () => {
-    const token = localStorage.getItem('authToken');
-    if (!editingCommentId || !token || !user) return; 
-
+  /**
+   * Guarda los cambios del comentario editado.
+   * Se llama al hacer clic en el botón "Guardar" (que añadiremos luego).
+   */
+ const handleEditComment = async () => {
+  const token = localStorage.getItem('authToken');
+    if (!editingCommentId || !token || !user) return;
     if (editText.trim().length === 0) {
       setCommentError("El comentario no puede estar vacío.");
       return;
-  } 
+    }
+
    try {
-     setCommentError(null);
+    setCommentError(null);
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/comments/${editingCommentId}`, {
+      method: 'PUT',
+       headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+        body: JSON.stringify({ content: editText }) // Enviar el nuevo contenido
+     });
 
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/comments/${editingCommentId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-       },
-        body: JSON.stringify({ content: editText })
-      });
+    if (!response.ok) {
+      const errData = await response.json();
+      throw new Error(errData.message || "No se pudo guardar el comentario.");
+      }
 
-      if (!response.ok) {
-       const errData = await response.json();
-       throw new Error(errData.message || "No se pudo guardar el comentario.");
-    }
-
-      const data = await response.json();
-      console.log("Respuesta de editar comentario:", data);
-
-      if (data.success && data.data && data.data.userId) {
-
-        const updatedCommentData = data.data;
-
+     const data = await response.json();
+    
+     if (data.success && data.data.comment) {
+        const updatedComment = data.data.comment;
+      
         setComments(prevComments =>
-          prevComments.map(comment => {
-             if (comment._id !== editingCommentId) {
-              return comment;
-            }
-             return {
-              ...comment, 
-              ...updatedCommentData 
-             };
-             })
-             );
-  cancelEditing();
-    } else {
-    console.error("Respuesta inesperada del PUT:", data);
-    throw new Error("La respuesta del servidor no fue válida al editar.");
-    }
-  } catch (err: any) {
-      setCommentError(err.message);
-    }
-  };
+          prevComments.map(comment =>
+            comment._id === editingCommentId ? updatedComment : comment
+          )
+        );
+    
+    cancelEditing();
+     } else {
+       throw new Error("La respuesta del servidor no fue válida.");
+  }
+
+   } catch (err: any) {
+     setCommentError(err.message);
+ }
+ };
 
   const handleDeleteComment = async (commentId: string) => {
     const token = localStorage.getItem('authToken');
@@ -359,6 +361,7 @@ const ViewMovie: React.FC = () => {
  }
   
   if (!window.confirm("¿Estás seguro de que quieres eliminar este comentario?")) {
+      return; // Si el usuario cancela, no hacemos nada
 }
 
     try {
@@ -367,12 +370,12 @@ const ViewMovie: React.FC = () => {
        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/comments/${commentId}`, {
        method: 'DELETE',
        headers: {
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${token}` // Enviar el token para autenticación
    }
 });
 
      if (!response.ok) {
-        const errData = await response.json(); 
+        const errData = await response.json(); // Intentar leer el mensaje de error del backend
         throw new Error(errData.message || "No se pudo eliminar el comentario.");
   }
 
@@ -388,8 +391,11 @@ const ViewMovie: React.FC = () => {
   const handleAddComment = async () => {
     const token = localStorage.getItem('authToken');
 
+    // --- Validaciones ---
     if (!user || !token) {
       setCommentError("Debes iniciar sesión para publicar un comentario.");
+      // Opcional: redirigir al login
+      // navigate('/login?message=Inicia-sesion-para-comentar');
       return;
     }
     if (!movie || !movie.id) {
@@ -410,7 +416,7 @@ const ViewMovie: React.FC = () => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ content: newComment })
+        body: JSON.stringify({ content: newComment }) // Enviar el contenido
       });
 
       if (!response.ok) {
@@ -436,6 +442,7 @@ const ViewMovie: React.FC = () => {
           }
         };
 
+        // 3. Añadir el comentario adaptado al inicio de la lista
         setComments(prevComments => [newCommentFromApi, ...prevComments]);
         setNewComment(""); 
 
@@ -448,171 +455,92 @@ const ViewMovie: React.FC = () => {
       setCommentError(err.message);
     }
   };
+
+  // Show error state if no movie data is available
   if (!movie) {
     return renderErrorState()
   }
 
   return (
-  <div className="view-movie">
+   <div className="view-movie">
     <div className="view-movie__container">
-      {/* --- SECCIÓN DEL ENCABEZADO Y VIDEO --- */}
-      <div className="view-movie__header">
-        <h1 className="view-movie__title">Reproductor</h1>
-      </div>
+       <div className="view-movie__comments-section">
+          <h2 className="view-movie__comments-title">Comentarios</h2>
+          <div className="view-movie__comment-form">
+             <h3 className="view-movie__comment-form-title">Comparte tu opinión</h3>
+             <textarea
+              className="view-movie__comment-input"
+              placeholder="¿Qué te pareció esta película? Comparte tu experiencia..."
+               rows={4}
+              value={newComment} // Conectar al estado
+              onChange={(e) => setNewComment(e.target.value)} 
+             />
+            
+            {/* Mostrar errores de comentario */}
+            {commentError && <p className="view-movie__comment-error">{commentError}</p>}
+            
+            <button 
+              className="view-movie__comment-submit"
+              onClick={handleAddComment} 
+            >
+             Publicar Comentario
+             </button>
+           </div>
+           {/* Comments List */}
+           <div className="view-movie__comments-list">
+    
+            {/* --- Lógica de renderizado dinámico --- */}
+            {isLoadingComments && (
+              <p className="view-movie__comments-message">Cargando comentarios...</p>
+            )}
 
-      <div className="view-movie__content">
-        <div className="view-movie__video-section">
-          {renderVideoPlayer(movie)}
-        </div>
+            {!isLoadingComments && !commentError && comments.length === 0 && (
+              <p className="view-movie__comments-message">No hay comentarios. ¡Sé el primero en opinar!</p>
+            )}
 
-        {/* --- SECCIÓN DE INFORMACIÓN DE LA PELÍCULA --- */}
-        <div className="view-movie__info">
-          <h2 className="view-movie__movie-title">{movie.title}</h2>
-          <p className="view-movie__description">{movie.description}</p>
-          <div className="view-movie__meta">
-            <div className="view-movie__meta-item">
-              <span className="view-movie__meta-label">Duración:</span>
-              <span className="view-movie__meta-value">{movie.duration} minutos</span>
-            </div>
-            <div className="view-movie__meta-item">
-              <span className="view-movie__meta-label">Géneros:</span>
-              <div className="view-movie__genres">
-                {movie.genre?.map((genre: string, index: number) => (
-                  <span key={index} className="view-movie__genre">{genre}</span>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* --- SECCIÓN DE COMENTARIOS --- */}
-      <div className="view-movie__comments-section">
-        <h2 className="view-movie__comments-title">Comentarios</h2>
-
-        {/* --- FORMULARIO PARA NUEVO COMENTARIO --- */}
-        <div className="view-movie__comment-form">
-          <h3 className="view-movie__comment-form-title">Comparte tu opinión</h3>
-          <textarea
-            className="view-movie__comment-input"
-            placeholder="¿Qué te pareció esta película? Comparte tu experiencia..."
-            rows={4}
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-          />
-          {commentError && !editingCommentId && <p className="view-movie__comment-error">{commentError}</p>}
-          <button
-            className="view-movie__comment-submit"
-            onClick={handleAddComment}
-          >
-            Publicar Comentario
-          </button>
-        </div>
-
-        {/* --- LISTA DE COMENTARIOS --- */}
-        <div className="view-movie__comments-list">
-
-          {isLoadingComments && (
-            <p className="view-movie__comments-message">Cargando comentarios...</p>
-          )}
-
-          {/* Mensaje si no hay comentarios */}
-          {!isLoadingComments && !commentError && comments.length === 0 && (
-            <p className="view-movie__comments-message">No hay comentarios. ¡Sé el primero en opinar!</p>
-          )}
-
-          {/* Mapeo de comentarios existentes */}
-          {!isLoadingComments && comments.map((comment) => (
-            <div key={comment._id} className="view-movie__comment-card">
-              <div className="view-movie__comment-header">
-                <div className="view-movie__comment-user">
-                  <div className="view-movie__comment-avatar">
-                    <span>
-                      {(comment.userId && typeof comment.userId === 'object')
-                        ? `${comment.userId.firstName?.[0] || ''}${comment.userId.lastName?.[0] || ''}`
-                        : 'U'
-                      }
-                    </span>
+            {!isLoadingComments && comments.map((comment) => (
+              <div key={comment._id} className="view-movie__comment-card">
+                <div className="view-movie__comment-header">
+                  <div className="view-movie__comment-user">
+                    <div className="view-movie__comment-avatar">
+                      {/* Generar iniciales */}
+                      <span>{comment.userId.firstName?.[0]}{comment.userId.lastName?.[0]}</span>
+                      </div>
+                      <div className="view-movie__comment-user-info">
+                       <p className="view-movie__comment-name">{comment.userId.firstName} {comment.userId.lastName}</p>
+                       <p className="view-movie__comment-time">
+                        {/* Formatear la fecha (puedes usar una librería como date-fns) */}
+                         {new Date(comment.createdAt).toLocaleString('es-ES')}
+                         {comment.edited && <span className="view-movie__comment-edited">Editado</span>}
+                      </p>
+                    </div>
                   </div>
-                  <div className="view-movie__comment-user-info">
-                    <p className="view-movie__comment-name">
-                      {(comment.userId && typeof comment.userId === 'object')
-                        ? `${comment.userId.firstName} ${comment.userId.lastName}`
-                        : 'Usuario Eliminado'
-                      }
-                    </p>
-                    <p className="view-movie__comment-time">
-                      {new Date(comment.createdAt).toLocaleString('es-ES')}
-                      {comment.edited && <span className="view-movie__comment-edited"> (Editado)</span>}
-                    </p>
-                  </div>
+                  
+                  {/* Mostrar botones solo si el usuario es el autor */}
+                  {user && user.id === comment.userId._id && (
+                    <div className="view-movie__comment-actions">
+                      <button className="view-movie__comment-action view-movie__comment-action--edit">
+                       Editar
+                     </button>
+                     <button className="view-movie__comment-action view-movie__comment-action--delete"
+                      onClick={() => handleDeleteComment(comment._id)} 
+                      >
+                       Eliminar 
+                      </button>
+                   </div>
+                  )}
                 </div>
-
-                {user && comment.userId && typeof comment.userId === 'object' && user.id === comment.userId._id && (
-                  <div className="view-movie__comment-actions">
-                    {editingCommentId === comment._id ? (
-                      <>
-                        <button
-                          className="view-movie__comment-action view-movie__comment-action--save"
-                          onClick={handleEditComment}
-                        >
-                          Guardar
-                        </button>
-                        <button
-                          className="view-movie__comment-action view-movie__comment-action--cancel"
-                          onClick={cancelEditing} 
-                        >
-                          Cancelar
-                        </button>
-                      </>
-                    ) : (
-                      // --- ESTADO NORMAL ---
-                      <>
-                        <button
-                          className="view-movie__comment-action view-movie__comment-action--edit"
-                          onClick={() => startEditing(comment)} // Llama a iniciar edición
-                        >
-                          Editar
-                        </button>
-                        <button
-                          className="view-movie__comment-action view-movie__comment-action--delete"
-                          onClick={() => handleDeleteComment(comment._id)} // Llama a eliminar
-                        >
-                          Eliminar
-                        </button>
-                      </>
-                    )}
-                  </div>
-                )}
-              </div>
-
-              {/* --- CONTENIDO DEL COMENTARIO (Texto o Textarea) --- */}
-              {editingCommentId === comment._id ? (
-                // --- ESTADO DE EDICIÓN: Mostrar Textarea ---
-                <>
-                  <textarea
-                    className="view-movie__comment-edit-input" // Necesitarás estilos para esto
-                    value={editText}
-                    onChange={(e) => setEditText(e.target.value)}
-                    rows={3}
-                  />
-                  {/* Mostrar error específico de edición aquí */}
-                  {commentError && <p className="view-movie__comment-error view-movie__comment-error--edit">{commentError}</p>}
-                </>
-              ) : (
-                // --- ESTADO NORMAL: Mostrar Texto ---
-                <p className="view-movie__comment-text">
-                  {comment.content}
+                 <p className="view-movie__comment-text">
+                {comment.content}
                 </p>
-              )}
+               </div>
+            ))}
 
-            </div>
-          ))}
-        </div>
-      </div> 
-    </div> 
-  </div> 
-);
+          </div>
+          </div>
+ </div>
+ </div>
+ )
 }
 
 export default ViewMovie
