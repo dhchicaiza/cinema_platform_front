@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import './ViewMovie.scss'
 
@@ -21,6 +21,11 @@ interface MovieData {
   url?: string
   /** Optional movie poster image URL */
   poster?: string
+  /** Optional subtitles URLs */	
+  subtitles?: {
+    spanish?: string
+    english?: string
+  }
   /** Optional alternative movie image URL */
   image?: string
   /** Additional movie properties (can be extended as needed) */
@@ -91,6 +96,40 @@ interface MovieData {
 const ViewMovie: React.FC = () => {
   const location = useLocation()
   const movie: MovieData | undefined = location.state?.movie
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const [subtitleLanguage, setSubtitleLanguage] = React.useState<'es' | 'en' | 'off'>('off')
+
+  console.log(movie)
+
+  /**
+   * Handle subtitle language change
+   */
+  const handleSubtitleChange = (lang: 'es' | 'en' | 'off') => {
+    setSubtitleLanguage(lang)
+    
+    if (videoRef.current && videoRef.current.textTracks) {
+      // Hide all tracks first
+      for (let i = 0; i < videoRef.current.textTracks.length; i++) {
+        const track = videoRef.current.textTracks[i]
+        track.mode = 'hidden'
+      }
+      
+      // Show selected track
+      if (lang !== 'off') {
+        for (let i = 0; i < videoRef.current.textTracks.length; i++) {
+          const track = videoRef.current.textTracks[i]
+          console.log('Track found:', i, 'language:', track.language, 'kind:', track.kind)
+          // Match by index: 0 = spanish (es), 1 = english (en)
+          const shouldShow = (lang === 'es' && i === 0) || (lang === 'en' && i === 1)
+          if (shouldShow) {
+            track.mode = 'showing'
+            console.log('Subtitle track activated:', track.language)
+            break
+          }
+        }
+      }
+    }
+  }
 
   /**
    * Error state component when no movie data is available
@@ -116,13 +155,74 @@ const ViewMovie: React.FC = () => {
    */
   const renderVideoPlayer = (movieData: MovieData) => {
     const videoUrl = movieData.videoUrl || movieData.url;
+    const spanishSubtitles = movieData.subtitles?.spanish;
+    const englishSubtitles = movieData.subtitles?.english;
+    const hasSubtitles = spanishSubtitles || englishSubtitles;
+    
     return videoUrl ? (
-      <video 
-        src={videoUrl} 
-        controls 
-        className="view-movie__video"
-        poster={movieData.poster || movieData.image}
-      />
+      <div className="view-movie__player-wrapper">
+        <video 
+          ref={videoRef}
+          controls 
+          className="view-movie__video"
+          poster={movieData.poster || movieData.image}
+          crossOrigin="anonymous"
+        >
+          <source src={videoUrl} type="video/mp4" />
+          {spanishSubtitles && (
+            <track
+              kind="subtitles"
+              srcLang="es"
+              label="Español"
+              src={spanishSubtitles}
+            />
+          )}
+          {englishSubtitles && (
+            <track
+              kind="subtitles"
+              srcLang="en"
+              label="English"
+              src={englishSubtitles}
+            />
+          )}
+        </video>
+        {hasSubtitles && (
+          <div className="view-movie__subtitle-controls">
+            <p className="view-movie__subtitle-label">Subtítulos:</p>
+            <div className="view-movie__subtitle-buttons">
+              <button 
+                onClick={() => handleSubtitleChange('es')}
+                className={`view-movie__subtitle-btn ${subtitleLanguage === 'es' ? 'view-movie__subtitle-btn--active' : ''}`}
+                disabled={!spanishSubtitles}
+                title="Español"
+              >
+           
+                ESP
+              </button>
+              <button 
+                onClick={() => handleSubtitleChange('en')}
+                className={`view-movie__subtitle-btn ${subtitleLanguage === 'en' ? 'view-movie__subtitle-btn--active' : ''}`}
+                disabled={!englishSubtitles}
+                title="English"
+              >
+
+                ENG
+              </button>
+              <button 
+                onClick={() => handleSubtitleChange('off')}
+                className={`view-movie__subtitle-btn view-movie__subtitle-btn--off ${subtitleLanguage === 'off' ? 'view-movie__subtitle-btn--active' : ''}`}
+                title="Sin Subtítulos"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+                OFF
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
     ) : (
       <div 
         className="view-movie__video" 
