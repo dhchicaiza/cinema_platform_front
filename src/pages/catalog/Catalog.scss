@@ -179,6 +179,25 @@
   }
 }
 
+.no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem 2rem;
+  background: rgba(139, 92, 246, 0.1);
+  border-radius: 12px;
+  border: 2px solid #8B5CF6;
+  
+  p {
+    color: #ffffff;
+    font-size: 1.2rem;
+    margin: 0;
+    
+    @media (max-width: 768px) {
+      font-size: 1rem;
+    }
+  }
+}
+
 .movie__card {
   background: #374151;
   border-radius: 15px;

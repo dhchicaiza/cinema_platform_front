@@ -17,12 +17,21 @@ import { Link } from 'react-router-dom'
  * <Footer />
  */
 const Footer: React.FC = () => {
+  const handleOpenManual = () => {
+    window.open('/manual-usuario.html', '_blank');
+  };
+
   return (
     <footer className="footer">
         <div className="footer__container">
             <div className="footer__content">
                 <p className="footer__text">© 2025 CinePlatform. Todos los derechos reservados.</p>
-                <Link to="/mapa-del-sitio" className="footer__link">Mapa del sitio</Link>
+                <div className="footer__links">
+                    <button onClick={handleOpenManual} className="footer__link footer__button" aria-label="Abrir manual de usuario">
+                        Manual de usuario
+                    </button>
+                    <Link to="/mapa-del-sitio" className="footer__link">Mapa del sitio</Link>
+                </div>
             </div>
         </div>
     </footer>

@@ -48,6 +48,32 @@ const Catalog: React.FC = () => {
         setSearchQuery(e.target.value);
     };
 
+    // Filtrar películas basándose en la búsqueda (por igualdad y similitud)
+    const filteredMovies = movies.filter((movie: any) => {
+        if (!searchQuery.trim()) return true;
+        
+        const query = searchQuery.toLowerCase().trim();
+        const title = movie.title?.toLowerCase() || '';
+        const description = movie.description?.toLowerCase() || '';
+        const genres = movie.genre?.join(', ')?.toLowerCase() || '';
+        
+        // Búsqueda por igualdad exacta
+        const exactMatch = title === query || description === query || genres === query;
+        
+        // Búsqueda por similitud (contiene la palabra completa)
+        const containsMatch = title.includes(query) || 
+                             description.includes(query) || 
+                             genres.includes(query);
+        
+        // Búsqueda por palabras individuales (divide la búsqueda en palabras)
+        const queryWords = query.split(' ').filter(word => word.length > 0);
+        const allWordsMatch = queryWords.every(word => 
+            title.includes(word) || description.includes(word) || genres.includes(word)
+        );
+        
+        return exactMatch || containsMatch || allWordsMatch;
+    });
+
   const toggleFavorite = async (movieId: string, isCurrentlyFavorite: boolean) => {
         const token = localStorage.getItem('authToken');
         if (!user || !token) {
@@ -185,8 +211,15 @@ const Catalog: React.FC = () => {
                     <div className="movies__grid">
 
                         {
-                        
-                        movies.map((movie: any) => {
+                        filteredMovies.length === 0 ? (
+                            <div className="no-results">
+                                <p>No se encontraron películas que coincidan con tu búsqueda.</p>
+                                <p style={{ fontSize: '0.9em', opacity: 0.8, marginTop: '10px' }}>
+                                    Intenta buscar por título, descripción o género.
+                                </p>
+                            </div>
+                        ) : (
+                        filteredMovies.map((movie: any) => {
                             const isFavorited = favoriteMap.has(movie.id)
                             return (
                                 <div key={movie.id} className="movie__card">
@@ -240,7 +273,8 @@ const Catalog: React.FC = () => {
                                     </div>
                                 </div>
                             );
-                        })}
+                        })
+                        )}
                     </div>
                 </div>
             </div>

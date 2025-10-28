@@ -126,6 +126,7 @@ const Favorite: React.FC = () => {
       url: movie.url,
       averageRating: movie.averageRating,
       totalRatings: movie.totalRatings,
+      
       createdAt: movie.createdAt,
       ...movie // Spread all other properties
     };
