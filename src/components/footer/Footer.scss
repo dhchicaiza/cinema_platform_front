@@ -127,6 +127,18 @@
   }
 }
 
+.footer__links {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+
+  // Tablet
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
 .footer__link {
   color: #8B5CF6;
   text-decoration: none;
@@ -189,4 +201,10 @@
     font-size: 0.65rem;
     padding: 0.25rem 0.5rem;
   }
+}
+
+.footer__button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
 }

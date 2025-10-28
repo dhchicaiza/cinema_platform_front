@@ -45,7 +45,7 @@ const Alert: React.FC<AlertProps> = ({ message, type = 'success', onClose }) => 
   useEffect(() => {
     const timer = setTimeout(() => {
       onClose();
-    }, 5000); 
+    }, 2000); // Reducido de 5000 a 2000 ms (2 segundos)
 
     return () => clearTimeout(timer);
   }, [onClose]);

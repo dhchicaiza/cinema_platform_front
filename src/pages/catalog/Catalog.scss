@@ -179,6 +179,25 @@
   }
 }
 
+.no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem 2rem;
+  background: rgba(139, 92, 246, 0.1);
+  border-radius: 12px;
+  border: 2px solid #8B5CF6;
+  
+  p {
+    color: #ffffff;
+    font-size: 1.2rem;
+    margin: 0;
+    
+    @media (max-width: 768px) {
+      font-size: 1rem;
+    }
+  }
+}
+
 .movie__card {
   background: #374151;
   border-radius: 15px;
@@ -332,14 +351,18 @@
 }
 
 .star {
-  color: #fbbf24;
-  font-size: 1.2rem;
+  color: #6b7280; 
+  font-size: 1.2rem; 
+  margin-right: 1px; 
 
+  &.filled {
+    color: #fbbf24; 
+  }
   &.half {
     background: linear-gradient(90deg, #fbbf24 50%, #6b7280 50%);
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
     background-clip: text;
+    color: transparent; 
   }
 }
 

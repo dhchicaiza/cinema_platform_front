@@ -42,11 +42,58 @@ const Catalog: React.FC = () => {
   const [movies, setMovies] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [favoriteMap, setFavoriteMap] = useState(new Map<string, string>());
+  const [isLoading, setIsLoading] = useState(true);
   const { user } = useUserStore();
+
+  const renderStars = (rating: number) => {
+    if (typeof rating !== 'number' || isNaN(rating)) {
+      return null;
+    }
+    const stars = [];
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+
+    for (let i = 0; i < 5; i++) {
+      if (i < fullStars) {
+        stars.push(<span key={i} className="star filled">★</span>);
+      } else if (i === fullStars && hasHalfStar) {
+        stars.push(<span key={i} className="star half">★</span>);
+      } else {
+        stars.push(<span key={i} className="star">★</span>); 
+      }
+    }
+    return stars;
+    };
   
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(e.target.value);
     };
+
+    // Filtrar películas basándose en la búsqueda (por igualdad y similitud)
+    const filteredMovies = movies.filter((movie: any) => {
+        if (!searchQuery.trim()) return true;
+        
+        const query = searchQuery.toLowerCase().trim();
+        const title = movie.title?.toLowerCase() || '';
+        const description = movie.description?.toLowerCase() || '';
+        const genres = movie.genre?.join(', ')?.toLowerCase() || '';
+        
+        // Búsqueda por igualdad exacta
+        const exactMatch = title === query || description === query || genres === query;
+        
+        // Búsqueda por similitud (contiene la palabra completa)
+        const containsMatch = title.includes(query) || 
+                             description.includes(query) || 
+                             genres.includes(query);
+        
+        // Búsqueda por palabras individuales (divide la búsqueda en palabras)
+        const queryWords = query.split(' ').filter(word => word.length > 0);
+        const allWordsMatch = queryWords.every(word => 
+            title.includes(word) || description.includes(word) || genres.includes(word)
+        );
+        
+        return exactMatch || containsMatch || allWordsMatch;
+    });
 
   const toggleFavorite = async (movieId: string, isCurrentlyFavorite: boolean) => {
         const token = localStorage.getItem('authToken');
@@ -139,6 +186,7 @@ const Catalog: React.FC = () => {
             .then(([movieData, favData]) => {
                 // Carga las películas
                 if (movieData.success) {
+                    console.log("Resultado de fetchMovies:", movieData);
                     setMovies(movieData.data.movies);
                     console.log("Datos que vienen del back: ", movieData);
 
@@ -154,8 +202,14 @@ const Catalog: React.FC = () => {
                     });
                     setFavoriteMap(newMap);
                 }
+                
+                // Marcar como cargado
+                setIsLoading(false);
             })
-            .catch(err => console.error(err));
+            .catch(err => {
+                console.error(err);
+                setIsLoading(false);
+            });
 
     }, [user]); 
 
@@ -185,8 +239,19 @@ const Catalog: React.FC = () => {
                     <div className="movies__grid">
 
                         {
-                        
-                        movies.map((movie: any) => {
+                        isLoading ? (
+                            <div className="no-results">
+                                <p>Cargando películas...</p>
+                            </div>
+                        ) : filteredMovies.length === 0 ? (
+                            <div className="no-results">
+                                <p>No se encontraron películas que coincidan con tu búsqueda.</p>
+                                <p style={{ fontSize: '0.9em', opacity: 0.8, marginTop: '10px' }}>
+                                    Intenta buscar por título, descripción o género.
+                                </p>
+                            </div>
+                        ) : (
+                        filteredMovies.map((movie: any) => {
                             const isFavorited = favoriteMap.has(movie.id)
                             return (
                                 <div key={movie.id} className="movie__card">
@@ -221,14 +286,14 @@ const Catalog: React.FC = () => {
                                             
                                             <div className="movie__rating">
                                                 <div className="stars">
-                                                    <span className="star">★</span>
-                                                    <span className="star">★</span>
-                                                    <span className="star">★</span>
-                                                    <span className="star">★</span>
-                                                    <span className="star half">★</span>
+                       {/* Llama a renderStars con el dato del backend */}
+                                                {renderStars(movie.averageRating)}
                                                 </div>
-                                                <span className="rating__number">4.5</span>
-                                            </div>
+                                                <span className="rating__number">
+                       {/* Muestra el número (si existe) con un decimal */}
+                                                {typeof movie.averageRating === 'number' ? movie.averageRating.toFixed(1) : 'N/A'}
+                                                </span>
+                                                </div>
                                         </div>
 
                                         <button 
@@ -240,7 +305,8 @@ const Catalog: React.FC = () => {
                                     </div>
                                 </div>
                             );
-                        })}
+                        })
+                        )}
                     </div>
                 </div>
             </div>

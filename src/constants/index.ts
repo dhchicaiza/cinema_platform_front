@@ -169,4 +169,7 @@ export const SUCCESS_MESSAGES = {
   PROFILE_UPDATED: 'Perfil actualizado correctamente.',
   PASSWORD_CHANGED: 'Contraseña cambiada exitosamente.',
   PASSWORD_RESET_SENT: 'Instrucciones enviadas a tu correo.',
+  COMMENT_DELETED: '¡Comentario eliminado exitosamente!',
+  COMMENT_EDITED: '¡Comentario editado exitosamente!',
+  COMMENT_PUBLISHED: '¡Comentario publicado exitosamente!',
 } as const;
