@@ -42,6 +42,7 @@ const Catalog: React.FC = () => {
   const [movies, setMovies] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [favoriteMap, setFavoriteMap] = useState(new Map<string, string>());
+  const [isLoading, setIsLoading] = useState(true);
   const { user } = useUserStore();
 
   const renderStars = (rating: number) => {
@@ -201,8 +202,14 @@ const Catalog: React.FC = () => {
                     });
                     setFavoriteMap(newMap);
                 }
+                
+                // Marcar como cargado
+                setIsLoading(false);
             })
-            .catch(err => console.error(err));
+            .catch(err => {
+                console.error(err);
+                setIsLoading(false);
+            });
 
     }, [user]); 
 
@@ -232,7 +239,11 @@ const Catalog: React.FC = () => {
                     <div className="movies__grid">
 
                         {
-                        filteredMovies.length === 0 ? (
+                        isLoading ? (
+                            <div className="no-results">
+                                <p>Cargando películas...</p>
+                            </div>
+                        ) : filteredMovies.length === 0 ? (
                             <div className="no-results">
                                 <p>No se encontraron películas que coincidan con tu búsqueda.</p>
                                 <p style={{ fontSize: '0.9em', opacity: 0.8, marginTop: '10px' }}>

@@ -4,6 +4,7 @@ import useUserStore from '../../stores/useUserStores'
 import Modal from '../../components/modal/Modal'; 
 import Alert from '../../components/alert/Alert';
 import ConfirmAlert from '../../components/alert/ConfirmAlert';
+import { SUCCESS_MESSAGES } from '../../constants';
 import './ViewMovie.scss'
 
 /**
@@ -433,9 +434,9 @@ const ViewMovie: React.FC = () => {
              };
              })
              );
-         cancelEditing();
-         setSuccessMessage("Comment edited successfully!");
-         setShowSuccessAlert(true);
+        cancelEditing();
+        setSuccessMessage(SUCCESS_MESSAGES.COMMENT_EDITED);
+        setShowSuccessAlert(true);
     } else {
     throw new Error("Server response was not valid when editing.");
     }
@@ -470,7 +471,7 @@ const ViewMovie: React.FC = () => {
     prevComments.filter(comment => comment._id !== commentToDelete)
  );
 
-    setSuccessMessage("Comment deleted successfully!");
+    setSuccessMessage(SUCCESS_MESSAGES.COMMENT_DELETED);
     setShowSuccessAlert(true);
     setShowDeleteConfirm(false);
     setCommentToDelete(null);
@@ -544,7 +545,7 @@ const ViewMovie: React.FC = () => {
         setComments(prevComments => [newCommentFromApi, ...prevComments]);
         setNewComment(""); 
 
-        setSuccessMessage("Comment published successfully!");
+        setSuccessMessage(SUCCESS_MESSAGES.COMMENT_PUBLISHED);
         setShowSuccessAlert(true);
 
       } else {
