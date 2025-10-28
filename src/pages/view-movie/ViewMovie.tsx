@@ -205,7 +205,7 @@ const ViewMovie: React.FC = () => {
 
     try {
         const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/ratings`, {
-            method: 'POST', // O PUT si tu API actualiza
+            method: 'POST', 
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
@@ -221,7 +221,8 @@ const ViewMovie: React.FC = () => {
         }
 
         if (data.success && data.data && typeof data.data.rating === 'number') {
-            setDbUserRating(data.data.rating.value); 
+            console.log("Calificación guardada con éxito:", data.data.rating);
+            setDbUserRating(data.data.rating);
             setSuccessMessage("¡Calificación guardada!");
             setShowSuccessAlert(true);
             setTimeout(() => setShowSuccessAlert(false), 2000);
