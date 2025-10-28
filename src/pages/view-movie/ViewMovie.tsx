@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect} from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import useUserStore from '../../stores/useUserStores'
 import Modal from '../../components/modal/Modal'; 
 import Alert from '../../components/alert/Alert';
@@ -102,11 +102,13 @@ interface Comment {
  */
 const ViewMovie: React.FC = () => {
   const location = useLocation()
+  const navigate = useNavigate();
   const movie: MovieData | undefined = location.state?.movie
   const videoRef = useRef<HTMLVideoElement>(null)
   const [subtitleLanguage, setSubtitleLanguage] = React.useState<'es' | 'en' | 'off'>('off')
 
   const { user } = useUserStore();
+  
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState("");
   const [isLoadingComments, setIsLoadingComments] = useState(true);
@@ -119,6 +121,9 @@ const ViewMovie: React.FC = () => {
   const [commentToDelete, setCommentToDelete] = useState<string | null>(null);
   const [userRating, setUserRating] = useState<number>(0);
   const [hoveredRating, setHoveredRating] = useState<number>(0); 
+  const [dbUserRating, setDbUserRating] = useState<number | null>(null);
+  const [isSubmittingRating, setIsSubmittingRating] = useState(false); 
+  const [ratingError, setRatingError] = useState<string | null>(null);
 
   console.log(movie)
   console.log("Usuario logueado en ViewMovie:", user);
@@ -128,6 +133,7 @@ const ViewMovie: React.FC = () => {
    */
   useEffect(() => {
     if (movie && movie.id) {
+      const token = localStorage.getItem('authToken');
       const fetchComments = async () => {
         try {
           setIsLoadingComments(true);
@@ -150,10 +156,85 @@ const ViewMovie: React.FC = () => {
           setIsLoadingComments(false);
         }
       };
-
+      const fetchUserRating = async () => {
+        if (user && token) {
+          try {
+            setRatingError(null);
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/ratings/movie/${movie.id}/user`, {
+              headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (response.ok) {
+              const data = await response.json();
+              if (data.success && data.data && data.data.hasRating) {
+                setDbUserRating(data.data.rating);
+              } else {
+                setDbUserRating(null); 
+              }
+            } else if (response.status !== 404) { 
+              console.error("Error fetching user rating:", response.statusText);
+              setDbUserRating(null);
+            } else {
+                 setDbUserRating(null); 
+            }
+          } catch (err) {
+            console.error("Error fetching user rating:", err);
+            setDbUserRating(null); 
+          }
+        } else {
+           setDbUserRating(null); 
+        }
+      };
+      fetchUserRating();
       fetchComments();
     }
-  }, [movie])
+  }, [movie, user])
+
+  const handleSubmitRating = async (ratingValue: number) => {
+    const token = localStorage.getItem('authToken');
+    if (!user || !token) {
+        setRatingError("Debes iniciar sesión para calificar.");
+        return;
+    }
+    if (!movie || !movie.id) {
+        setRatingError("No se encontró la película para calificar.");
+        return;
+    }
+
+    setIsSubmittingRating(true);
+    setRatingError(null);
+
+    try {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/ratings`, {
+            method: 'POST', // O PUT si tu API actualiza
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ movieId: movie.id, rating: ratingValue })
+        });
+
+        const data = await response.json();
+        console.log("Respuesta de guardar calificación:", data);
+
+        if (!response.ok) {
+            throw new Error(data.message || "No se pudo guardar la calificación.");
+        }
+
+        if (data.success && data.data && typeof data.data.rating === 'number') {
+            setDbUserRating(data.data.rating.value); 
+            setSuccessMessage("¡Calificación guardada!");
+            setShowSuccessAlert(true);
+            setTimeout(() => setShowSuccessAlert(false), 2000);
+        } else {
+            throw new Error("Respuesta inválida del servidor al guardar calificación.");
+        }
+
+    } catch (err: any) {
+        setRatingError(err.message);
+    } finally {
+        setIsSubmittingRating(false);
+    }
+  };
 
   /**
    * Handles subtitle language change
@@ -512,34 +593,43 @@ const ViewMovie: React.FC = () => {
           <div className="view-movie__rating-section">
             <h3 className="view-movie__rating-title">Califica esta película</h3>
             <p className="view-movie__rating-subtitle">¿Qué te pareció?</p>
+            {ratingError && <Alert type="error" message={ratingError} onClose={()=> setRatingError(null)} />}
             <div className="view-movie__stars-container">
-              {[1, 2, 3, 4, 5].map((star) => (
+              {[1, 2, 3, 4, 5].map((starValue) => {
+
+                const currentRatingFill = hoveredRating || dbUserRating || 0;
+                return (
                 <button
-                  key={star}
+                  
+                  key={starValue}
                   type="button"
                   className="view-movie__star"
-                  onClick={() => setUserRating(star)}
-                  onMouseEnter={() => setHoveredRating(star)}
+                  onClick={() => handleSubmitRating(starValue)}
+                  onMouseEnter={() => setHoveredRating(starValue)}
                   onMouseLeave={() => setHoveredRating(0)}
+                  disabled={isSubmittingRating}
+                  
                 >
                   <span
                     className={`view-movie__star-icon ${
-                      star <= (hoveredRating || userRating) ? 'view-movie__star-icon--active' : ''
-                    }`}
+                       starValue <= currentRatingFill ? 'view-movie__star-icon--active' : ''
+                      }`}
                   >
                     ★
                   </span>
                 </button>
-              ))}
+              ); 
+        })}
             </div>
-            {userRating > 0 && (
+            {dbUserRating !== null && dbUserRating > 0 && (
               <p className="view-movie__rating-feedback">
-                {userRating === 5 && "¡Excelente! ⭐"}
-                {userRating === 4 && "Muy buena 👍"}
-                {userRating === 3 && "Buena 👍"}
-                {userRating === 2 && "Regular 👌"}
-                {userRating === 1 && "No me gustó 😕"}
-              </p>
+                Tu calificación:
+                {dbUserRating === 5 && " ¡Excelente! ⭐"}
+                {dbUserRating === 4 && " Muy buena 👍"}
+                {dbUserRating === 3 && " Buena 👍"}
+                {dbUserRating === 2 && " Regular 👌"}
+                {dbUserRating === 1 && " No me gustó 😕"}
+                </p>
             )}
           </div>
         </div>
