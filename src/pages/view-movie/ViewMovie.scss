@@ -194,6 +194,68 @@
     color: white;
   }
 
+  // Rating Section
+  &__rating-section {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 2px solid rgba(139, 92, 246, 0.3);
+  }
+
+  &__rating-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 0.5rem;
+  }
+
+  &__rating-subtitle {
+    color: #9ca3af;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  &__stars-container {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  &__star {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: scale(1.2);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+
+  &__star-icon {
+    font-size: 2.5rem;
+    color: #6b7280;
+    transition: all 0.3s ease;
+    display: block;
+
+    &--active {
+      color: #fbbf24;
+      text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+    }
+  }
+
+  &__rating-feedback {
+    color: #4fc3f7;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-top: 0.5rem;
+    text-align: center;
+  }
+
   // Comments Section
   &__comments-section {
     background: #374151;

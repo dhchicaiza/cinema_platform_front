@@ -67,9 +67,7 @@ const ConfirmAlert: React.FC<ConfirmAlertProps> = ({ message, type = 'warning', 
           )}
         </div>
         <h3 className="confirm-title">
-          {type === 'warning' && 'Confirmar Acción'}
-          {type === 'danger' && 'Acción Peligrosa'}
-          {type === 'info' && 'Confirmar'}
+          Confirmar Acción
         </h3>
         <p className="confirm-message">{message}</p>
         

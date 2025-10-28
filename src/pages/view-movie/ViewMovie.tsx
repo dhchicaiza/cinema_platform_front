@@ -2,7 +2,8 @@ import React, { useRef, useState, useEffect} from 'react'
 import { useLocation } from 'react-router-dom'
 import useUserStore from '../../stores/useUserStores'
 import Modal from '../../components/modal/Modal'; 
-import Alert from '../../components/alert/Alert'; 
+import Alert from '../../components/alert/Alert';
+import ConfirmAlert from '../../components/alert/ConfirmAlert';
 import './ViewMovie.scss'
 
 /**
@@ -105,37 +106,41 @@ const ViewMovie: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [subtitleLanguage, setSubtitleLanguage] = React.useState<'es' | 'en' | 'off'>('off')
 
-  const { user } = useUserStore(); // Obtener el usuario logueado
-  const [comments, setComments] = useState<Comment[]>([]); // Lista de comentarios
-  const [newComment, setNewComment] = useState(""); // Texto del textarea
+  const { user } = useUserStore();
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [newComment, setNewComment] = useState("");
   const [isLoadingComments, setIsLoadingComments] = useState(true);
   const [commentError, setCommentError] = useState<string | null>(null);
-
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null); 
-  const [editText, setEditText] = useState(""); 
+  const [editText, setEditText] = useState("");
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [commentToDelete, setCommentToDelete] = useState<string | null>(null);
+  const [userRating, setUserRating] = useState<number>(0);
+  const [hoveredRating, setHoveredRating] = useState<number>(0); 
 
   console.log(movie)
   console.log("Usuario logueado en ViewMovie:", user);
 
+  /**
+   * Fetch comments when component mounts or movie changes
+   */
   useEffect(() => {
-    // Solo cargar comentarios si tenemos un ID de película
     if (movie && movie.id) {
       const fetchComments = async () => {
         try {
           setIsLoadingComments(true);
           setCommentError(null);
           
-          // Ruta de tu API: GET /api/comments/movie/:movieId
           const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/comments/movie/${movie.id}`);
-          console.log("vuelve a cargar")
           if (!response.ok) {
-            throw new Error("No se pudieron cargar los comentarios.");
+            throw new Error("Failed to load comments.");
           }
 
           const data = await response.json();
-          console.log("get all movies of back: ", data);
           if (data.success && Array.isArray(data.data.comments)) {
-            setComments(data.data.comments); // Guardar comentarios en el estado
+            setComments(data.data.comments);
           } else {
             setComments([]);
           }
@@ -151,28 +156,24 @@ const ViewMovie: React.FC = () => {
   }, [movie])
 
   /**
-   * Handle subtitle language change
+   * Handles subtitle language change
+   * @param {('es'|'en'|'off')} lang - The subtitle language to display
    */
   const handleSubtitleChange = (lang: 'es' | 'en' | 'off') => {
     setSubtitleLanguage(lang)
     
     if (videoRef.current && videoRef.current.textTracks) {
-      // Hide all tracks first
       for (let i = 0; i < videoRef.current.textTracks.length; i++) {
         const track = videoRef.current.textTracks[i]
         track.mode = 'hidden'
       }
       
-      // Show selected track
       if (lang !== 'off') {
         for (let i = 0; i < videoRef.current.textTracks.length; i++) {
           const track = videoRef.current.textTracks[i]
-          console.log('Track found:', i, 'language:', track.language, 'kind:', track.kind)
-          // Match by index: 0 = spanish (es), 1 = english (en)
           const shouldShow = (lang === 'es' && i === 0) || (lang === 'en' && i === 1)
           if (shouldShow) {
             track.mode = 'showing'
-            console.log('Subtitle track activated:', track.language)
             break
           }
         }
@@ -288,24 +289,33 @@ const ViewMovie: React.FC = () => {
     )
   }
 
-  
- const startEditing = (comment: Comment) => {
-   setEditingCommentId(comment._id); 
-   setEditText(comment.content);
-   setCommentError(null); 
+  /**
+   * Starts editing a comment
+   * @param {Comment} comment - The comment to edit
+   */
+  const startEditing = (comment: Comment) => {
+    setEditingCommentId(comment._id); 
+    setEditText(comment.content);
+    setCommentError(null); 
   };
 
+  /**
+   * Cancels the editing operation
+   */
   const cancelEditing = () => {
-     setEditingCommentId(null);
-     setEditText("");    
-     };
+    setEditingCommentId(null);
+    setEditText("");    
+  };
 
+  /**
+   * Handles comment editing
+   */
   const handleEditComment = async () => {
     const token = localStorage.getItem('authToken');
     if (!editingCommentId || !token || !user) return; 
 
     if (editText.trim().length === 0) {
-      setCommentError("El comentario no puede estar vacío.");
+      setCommentError("Comment cannot be empty.");
       return;
   } 
    try {
@@ -322,20 +332,16 @@ const ViewMovie: React.FC = () => {
 
       if (!response.ok) {
        const errData = await response.json();
-       throw new Error(errData.message || "No se pudo guardar el comentario.");
+       throw new Error(errData.message || "Failed to save comment.");
     }
 
       const data = await response.json();
-      console.log("Respuesta de editar comentario:", data);
 
       if (data.success && data.data && data.data.userId) {
 
         const updatedCommentData = data.data;
-        console.log("Updated comment data:", updatedCommentData);
         setComments(prevComments =>
           prevComments.map(comment => {
-            console.log("Updated comment data from API:", comment)
-            console.log("editingCommentId:", editingCommentId)
              if (comment._id !== editingCommentId) {
               return comment;
             }
@@ -347,30 +353,28 @@ const ViewMovie: React.FC = () => {
              };
              })
              );
-  cancelEditing();
+         cancelEditing();
+         setSuccessMessage("Comment edited successfully!");
+         setShowSuccessAlert(true);
     } else {
-    console.error("Respuesta inesperada del PUT:", data);
-    throw new Error("La respuesta del servidor no fue válida al editar.");
+    throw new Error("Server response was not valid when editing.");
     }
   } catch (err: any) {
       setCommentError(err.message);
     }
   };
 
-  const handleDeleteComment = async (commentId: string) => {
+  /**
+   * Handles comment deletion
+   */
+  const handleDeleteComment = async () => {
+    if (!commentToDelete) return;
     const token = localStorage.getItem('authToken');
-    if (!user || !token) {
-     setCommentError("Debes iniciar sesión para eliminar comentarios.");
-    return;
- }
-  
-  if (!window.confirm("¿Estás seguro de que quieres eliminar este comentario?")) {
-}
-
+    
     try {
       setCommentError(null); 
       
-       const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/comments/${commentId}`, {
+       const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/comments/${commentToDelete}`, {
        method: 'DELETE',
        headers: {
         'Authorization': `Bearer ${token}`
@@ -379,37 +383,53 @@ const ViewMovie: React.FC = () => {
 
      if (!response.ok) {
         const errData = await response.json(); 
-        throw new Error(errData.message || "No se pudo eliminar el comentario.");
+        throw new Error(errData.message || "Failed to delete comment.");
   }
 
     setComments(prevComments =>
-    prevComments.filter(comment => comment._id !== commentId)
+    prevComments.filter(comment => comment._id !== commentToDelete)
  );
+
+    setSuccessMessage("Comment deleted successfully!");
+    setShowSuccessAlert(true);
+    setShowDeleteConfirm(false);
+    setCommentToDelete(null);
 
   } catch (err: any) {
      setCommentError(err.message);
   }
  };
 
+  /**
+   * Shows delete confirmation dialog
+   * @param {string} commentId - The comment ID to delete
+   */
+  const showDeleteConfirmation = (commentId: string) => {
+    setCommentToDelete(commentId);
+    setShowDeleteConfirm(true);
+  };
+
+  /**
+   * Handles adding a new comment
+   */
   const handleAddComment = async () => {
     const token = localStorage.getItem('authToken');
 
     if (!user || !token) {
-      setCommentError("Debes iniciar sesión para publicar un comentario.");
+      setCommentError("You must log in to post a comment.");
       return;
     }
     if (!movie || !movie.id) {
-      setCommentError("No se puede encontrar la película para comentar.");
+      setCommentError("Cannot find movie to comment on.");
       return;
     }
     if (newComment.trim().length === 0) {
-      setCommentError("El comentario no puede estar vacío.");
+      setCommentError("Comment cannot be empty.");
       return;
     }
 
     try {
       setCommentError(null); 
-      console.log("Movie id:", movie.id);
       const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/comments/${movie.id}`, {
         method: 'POST',
         headers: {
@@ -421,11 +441,10 @@ const ViewMovie: React.FC = () => {
 
       if (!response.ok) {
         const errData = await response.json();
-        throw new Error(errData.message || "No se pudo publicar el comentario.");
+        throw new Error(errData.message || "Failed to publish comment.");
       }
 
       const data = await response.json();
-      console.log("Comentario del back: ", data);
 
       if (data.success && data.data && data.data._id && data.data.userId) {
 
@@ -445,9 +464,11 @@ const ViewMovie: React.FC = () => {
         setComments(prevComments => [newCommentFromApi, ...prevComments]);
         setNewComment(""); 
 
+        setSuccessMessage("Comment published successfully!");
+        setShowSuccessAlert(true);
+
       } else {
-        console.error("Respuesta inesperada del servidor:", data);
-        throw new Error("El servidor no devolvió un comentario válido.");
+        throw new Error("Server did not return a valid comment.");
       }
 
     } catch (err: any) {
@@ -461,7 +482,6 @@ const ViewMovie: React.FC = () => {
   return (
   <div className="view-movie">
     <div className="view-movie__container">
-      {/* --- SECCIÓN DEL ENCABEZADO Y VIDEO --- */}
       <div className="view-movie__header">
         <h1 className="view-movie__title">Reproductor</h1>
       </div>
@@ -471,7 +491,6 @@ const ViewMovie: React.FC = () => {
           {renderVideoPlayer(movie)}
         </div>
 
-        {/* --- SECCIÓN DE INFORMACIÓN DE LA PELÍCULA --- */}
         <div className="view-movie__info">
           <h2 className="view-movie__movie-title">{movie.title}</h2>
           <p className="view-movie__description">{movie.description}</p>
@@ -489,14 +508,46 @@ const ViewMovie: React.FC = () => {
               </div>
             </div>
           </div>
+
+          <div className="view-movie__rating-section">
+            <h3 className="view-movie__rating-title">Califica esta película</h3>
+            <p className="view-movie__rating-subtitle">¿Qué te pareció?</p>
+            <div className="view-movie__stars-container">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                  key={star}
+                  type="button"
+                  className="view-movie__star"
+                  onClick={() => setUserRating(star)}
+                  onMouseEnter={() => setHoveredRating(star)}
+                  onMouseLeave={() => setHoveredRating(0)}
+                >
+                  <span
+                    className={`view-movie__star-icon ${
+                      star <= (hoveredRating || userRating) ? 'view-movie__star-icon--active' : ''
+                    }`}
+                  >
+                    ★
+                  </span>
+                </button>
+              ))}
+            </div>
+            {userRating > 0 && (
+              <p className="view-movie__rating-feedback">
+                {userRating === 5 && "¡Excelente! ⭐"}
+                {userRating === 4 && "Muy buena 👍"}
+                {userRating === 3 && "Buena 👍"}
+                {userRating === 2 && "Regular 👌"}
+                {userRating === 1 && "No me gustó 😕"}
+              </p>
+            )}
+          </div>
         </div>
       </div>
 
-      {/* --- SECCIÓN DE COMENTARIOS --- */}
       <div className="view-movie__comments-section">
         <h2 className="view-movie__comments-title">Comentarios</h2>
 
-        {/* --- FORMULARIO PARA NUEVO COMENTARIO --- */}
         <div className="view-movie__comment-form">
           <h3 className="view-movie__comment-form-title">Comparte tu opinión</h3>
           <textarea
@@ -515,19 +566,15 @@ const ViewMovie: React.FC = () => {
           </button>
         </div>
 
-        {/* --- LISTA DE COMENTARIOS --- */}
         <div className="view-movie__comments-list">
 
           {isLoadingComments && (
             <p className="view-movie__comments-message">Cargando comentarios...</p>
           )}
 
-          {/* Mensaje si no hay comentarios */}
           {!isLoadingComments && !commentError && comments.length === 0 && (
             <p className="view-movie__comments-message">No hay comentarios. ¡Sé el primero en opinar!</p>
           )}
-
-          {/* Mapeo de comentarios existentes */}
           {!isLoadingComments && comments.map((comment) => (
             <div key={comment._id} className="view-movie__comment-card">
               <div className="view-movie__comment-header">
@@ -563,7 +610,7 @@ const ViewMovie: React.FC = () => {
                       </button>
                       <button
                       className="view-movie__comment-action view-movie__comment-action--delete"
-                      onClick={() => handleDeleteComment(comment._id)}
+                      onClick={() => showDeleteConfirmation(comment._id)}
                     >
                       Eliminar 
                       </button>
@@ -616,6 +663,26 @@ const ViewMovie: React.FC = () => {
           </div>
         </div>
       </Modal>
+
+      {showSuccessAlert && (
+        <Alert
+          message={successMessage}
+          type="success"
+          onClose={() => setShowSuccessAlert(false)}
+        />
+      )}
+
+      {showDeleteConfirm && (
+        <ConfirmAlert
+          message="¿Estás seguro de que quieres eliminar este comentario?"
+          type="danger"
+          onConfirm={handleDeleteComment}
+          onCancel={() => {
+            setShowDeleteConfirm(false);
+            setCommentToDelete(null);
+          }}
+        />
+      )}
     </div> 
   </div> 
 );
