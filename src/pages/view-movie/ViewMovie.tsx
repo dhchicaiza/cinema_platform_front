@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect} from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import useUserStore from '../../stores/useUserStores'
 import Modal from '../../components/modal/Modal'; 
 import Alert from '../../components/alert/Alert';
@@ -102,7 +102,6 @@ interface Comment {
  */
 const ViewMovie: React.FC = () => {
   const location = useLocation()
-  const navigate = useNavigate();
   const movie: MovieData | undefined = location.state?.movie
   const videoRef = useRef<HTMLVideoElement>(null)
   const [subtitleLanguage, setSubtitleLanguage] = React.useState<'es' | 'en' | 'off'>('off')
@@ -119,7 +118,6 @@ const ViewMovie: React.FC = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState<string | null>(null);
-  const [userRating, setUserRating] = useState<number>(0);
   const [hoveredRating, setHoveredRating] = useState<number>(0); 
   const [dbUserRating, setDbUserRating] = useState<number | null>(null);
   const [isSubmittingRating, setIsSubmittingRating] = useState(false); 
