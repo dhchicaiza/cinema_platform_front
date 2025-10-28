@@ -1,6 +1,8 @@
 import React, { useRef, useState, useEffect} from 'react'
 import { useLocation } from 'react-router-dom'
 import useUserStore from '../../stores/useUserStores'
+import Modal from '../../components/modal/Modal'; 
+import Alert from '../../components/alert/Alert'; 
 import './ViewMovie.scss'
 
 /**
@@ -125,7 +127,7 @@ const ViewMovie: React.FC = () => {
           
           // Ruta de tu API: GET /api/comments/movie/:movieId
           const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/comments/movie/${movie.id}`);
-          
+          console.log("vuelve a cargar")
           if (!response.ok) {
             throw new Error("No se pudieron cargar los comentarios.");
           }
@@ -294,7 +296,7 @@ const ViewMovie: React.FC = () => {
   };
 
   const cancelEditing = () => {
-    setEditingCommentId(null);
+     setEditingCommentId(null);
      setEditText("");    
      };
 
@@ -329,15 +331,19 @@ const ViewMovie: React.FC = () => {
       if (data.success && data.data && data.data.userId) {
 
         const updatedCommentData = data.data;
-
+        console.log("Updated comment data:", updatedCommentData);
         setComments(prevComments =>
           prevComments.map(comment => {
+            console.log("Updated comment data from API:", comment)
+            console.log("editingCommentId:", editingCommentId)
              if (comment._id !== editingCommentId) {
               return comment;
             }
              return {
               ...comment, 
-              ...updatedCommentData 
+              content: updatedCommentData.content, 
+              edited: updatedCommentData.edited,
+              updatedAt: updatedCommentData.updatedAt 
              };
              })
              );
@@ -525,7 +531,7 @@ const ViewMovie: React.FC = () => {
           {!isLoadingComments && comments.map((comment) => (
             <div key={comment._id} className="view-movie__comment-card">
               <div className="view-movie__comment-header">
-                <div className="view-movie__comment-user">
+                 <div className="view-movie__comment-user">
                   <div className="view-movie__comment-avatar">
                     <span>
                       {(comment.userId && typeof comment.userId === 'object')
@@ -547,69 +553,69 @@ const ViewMovie: React.FC = () => {
                     </p>
                   </div>
                 </div>
-
-                {user && comment.userId && typeof comment.userId === 'object' && user.id === comment.userId._id && (
-                  <div className="view-movie__comment-actions">
-                    {editingCommentId === comment._id ? (
-                      <>
-                        <button
-                          className="view-movie__comment-action view-movie__comment-action--save"
-                          onClick={handleEditComment}
-                        >
-                          Guardar
-                        </button>
-                        <button
-                          className="view-movie__comment-action view-movie__comment-action--cancel"
-                          onClick={cancelEditing} 
-                        >
-                          Cancelar
-                        </button>
-                      </>
-                    ) : (
-                      // --- ESTADO NORMAL ---
-                      <>
-                        <button
-                          className="view-movie__comment-action view-movie__comment-action--edit"
-                          onClick={() => startEditing(comment)} // Llama a iniciar edición
-                        >
-                          Editar
-                        </button>
-                        <button
-                          className="view-movie__comment-action view-movie__comment-action--delete"
-                          onClick={() => handleDeleteComment(comment._id)} // Llama a eliminar
-                        >
-                          Eliminar
-                        </button>
-                      </>
+                    {user && comment.userId && typeof comment.userId === 'object' && user.id === comment.userId._id && ( // <-- CORREGIDO: user.userId
+                   <div className="view-movie__comment-actions">
+                     <button
+                      className="view-movie__comment-action view-movie__comment-action--edit"
+                      onClick={() => startEditing(comment)} 
+                    >
+                       Editar 
+                      </button>
+                      <button
+                      className="view-movie__comment-action view-movie__comment-action--delete"
+                      onClick={() => handleDeleteComment(comment._id)}
+                    >
+                      Eliminar 
+                      </button>
+                      </div>
                     )}
+                    </div>
+                    <p className="view-movie__comment-text">
+                      {comment.content}
+                      </p>
                   </div>
-                )}
-              </div>
-
-              {/* --- CONTENIDO DEL COMENTARIO (Texto o Textarea) --- */}
-              {editingCommentId === comment._id ? (
-                // --- ESTADO DE EDICIÓN: Mostrar Textarea ---
-                <>
-                  <textarea
-                    className="view-movie__comment-edit-input" // Necesitarás estilos para esto
-                    value={editText}
-                    onChange={(e) => setEditText(e.target.value)}
-                    rows={3}
-                  />
-                  {/* Mostrar error específico de edición aquí */}
-                  {commentError && <p className="view-movie__comment-error view-movie__comment-error--edit">{commentError}</p>}
-                </>
-              ) : (
-                // --- ESTADO NORMAL: Mostrar Texto ---
-                <p className="view-movie__comment-text">
-                  {comment.content}
-                </p>
-              )}
-
-            </div>
           ))}
         </div>
       </div> 
+      <Modal
+        isOpen={editingCommentId !== null} 
+        onClose={cancelEditing} 
+        title="Editar Comentario"
+      >
+        <div className="modal__form"> 
+
+         
+          {commentError && editingCommentId && (
+            <Alert
+              message={commentError}
+              type="error"
+              onClose={() => setCommentError(null)}
+            />
+          )}
+
+          <textarea
+            className="view-movie__comment-input" 
+            rows={5} 
+            value={editText} 
+            onChange={(e) => setEditText(e.target.value)}
+          />
+
+          <div className="modal__actions">
+            <button
+              className="btn btn--save" 
+              onClick={handleEditComment} 
+            >
+              Guardar Cambios
+            </button>
+            <button
+              className="btn btn--cancel"
+              onClick={cancelEditing} 
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div> 
   </div> 
 );
