@@ -346,14 +346,18 @@
 }
 
 .star {
-  color: #fbbf24;
-  font-size: 1.2rem;
+  color: #6b7280; 
+  font-size: 1.2rem; 
+  margin-right: 1px; 
 
+  &.filled {
+    color: #fbbf24; 
+  }
   &.half {
     background: linear-gradient(90deg, #fbbf24 50%, #6b7280 50%);
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
     background-clip: text;
+    color: transparent; 
   }
 }
 
